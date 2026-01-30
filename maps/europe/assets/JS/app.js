@@ -1,0 +1,382 @@
+
+// ==================== VARIABLES D'ÉTAT ====================
+let quizLaunched = false;
+let randCountry = null;
+let answer = null;
+let consecutiveScore = 0;
+let modalTimeout = null;
+
+let selection;
+let paths;
+let questionBtn;
+
+let nameEl, capitalEl, populationEl, areaEl, languagesEl, flagEl, fullNameEl;
+let congrats, loser, btnQuiz, leQuiz, questionElement, trueAnswerElement;
+let mapElement, contentSection, infoLineEl;
+let modalOverlay, modalFeedback, modalQuestion, modalErrorOverlay, modalErrorFeedback;
+
+// ==================== INITIALISATION ====================
+document.addEventListener("DOMContentLoaded", function() {
+  console.log("🚀 Initialisation de l'app...");
+  initializeApp();
+});
+
+function initializeApp() {
+  // ==================== SÉLECTEURS DOM ====================
+  selection = document.querySelector(".selection");
+  paths = document.querySelectorAll(".land");
+  questionBtn = document.querySelector(".question-btn");
+
+  nameEl = document.getElementById("name");
+  capitalEl = document.getElementById("capital");
+  populationEl = document.getElementById("population");
+  areaEl = document.getElementById("area");
+  languagesEl = document.getElementById("languages");
+  flagEl = document.getElementById("flag");
+  fullNameEl = document.getElementById("full-name");
+
+  // Éléments du quiz
+  congrats = document.getElementById("congrats");
+  loser = document.getElementById("loser");
+  btnQuiz = document.getElementById("btn-quiz");
+  leQuiz = document.getElementById("le-quiz");
+  questionElement = document.getElementById("question");
+  trueAnswerElement = document.getElementById("true-answer");
+  
+  // Éléments de la modale
+  modalOverlay = document.getElementById("modalOverlay");
+  modalFeedback = document.getElementById("modalFeedback");
+  modalQuestion = document.getElementById("modalQuestion");
+  modalErrorOverlay = document.getElementById("modalErrorOverlay");
+  modalErrorFeedback = document.getElementById("modalErrorFeedback");
+  
+  console.log("✅ Modale elements:", { modalOverlay, modalFeedback, modalQuestion, modalErrorOverlay, modalErrorFeedback });
+  
+  mapElement = document.querySelector(".map-section");
+  contentSection = document.querySelector(".content-section");
+  infoLineEl = document.querySelector(".info-line");
+
+  // Masquer les messages de résultat au démarrage
+  congrats.classList.remove("active");
+  loser.classList.remove("active");
+  leQuiz.classList.remove("active");
+  modalOverlay.classList.remove("active");
+
+  // Initialiser les event listeners
+  showCountryOnClick();
+  btnQuiz.addEventListener("click", launchQuiz);
+  
+  // Fermer la modale en cliquant sur l'overlay
+  if (modalOverlay) {
+    modalOverlay.addEventListener("click", function(e) {
+      if (e.target === modalOverlay) {
+        hideModal();
+      }
+    });
+  }
+  
+  // Fermer la modale d'erreur en cliquant sur l'overlay
+  if (modalErrorOverlay) {
+    modalErrorOverlay.addEventListener("click", function(e) {
+      if (e.target === modalErrorOverlay) {
+        hideErrorModal();
+      }
+    });
+  }
+  
+  // Mettre à jour le score initial
+  updateConsecutiveScore();
+}
+
+// ==================== FONCTIONS ====================
+
+// Clique principal sur les pays pour avoir les infos
+function showCountryOnClick() {
+  paths.forEach(function(path) {
+    path.addEventListener("click", function() {
+      const code = this.id;
+      const name = countryMap[code];
+      
+      console.log("🖱️ Clic sur:", name, "quizLaunched:", quizLaunched);
+      
+      // Si le quiz n'est PAS lancé, réinitialiser l'apparence
+      if (!quizLaunched) {
+        resetVisualState();
+      }
+      
+      // Afficher les informations du pays
+      displayCountry(code, name);
+      answer = name;
+      
+      // Vérifier la réponse si le quiz est lancé
+      if (quizLaunched) {
+        console.log("Vérification de la réponse...");
+        checkAnswer(name);
+      } else {
+        console.log("❌ Quiz non lancé, pas de vérification");
+      }
+    });
+  });
+}
+
+function displayCountry(code, name) {
+  selection.textContent = name;
+  selection.style.animation = "none";
+  setTimeout(() => {
+    selection.style.animation = "slideIn 0.3s ease";
+  }, 10);
+  
+  fullNameEl.textContent = countriesData[code].fullName;
+  capitalEl.textContent = countriesData[code].capital;
+  populationEl.textContent = countriesData[code].population;
+  areaEl.textContent = countriesData[code].area;
+  languagesEl.textContent = countriesData[code].languages;
+  flagEl.src = "assets/flags/" + countriesData[code].flag;
+  
+  // Drapeau suisse carré
+  if (code === "CH") {
+    flagEl.style.width = "80px";
+    flagEl.style.height = "80px";
+  } else {
+    flagEl.style.width = "120px";
+    flagEl.style.height = "80px";
+  }
+}
+
+// ==================== SYSTÈME DE QUIZ ====================
+function launchQuiz() {
+  console.log("🎯 Quiz lancé!");
+  quizLaunched = true;
+  randCountry = countries[Math.floor(Math.random() * countries.length)];
+  console.log("Pays choisi:", randCountry);
+  
+  // Réinitialiser l'apparence pour la nouvelle question
+  resetVisualState();
+  
+  questionElement.textContent = randCountry;
+  
+  // Annuler le timeout précédent s'il existe
+  if (modalTimeout) {
+    clearTimeout(modalTimeout);
+  }
+  
+  // Afficher la modale avec la question
+  modalQuestion.textContent = randCountry;
+  modalOverlay.classList.add("active");
+  
+  // Vider le feedback de la modale
+  modalFeedback.innerHTML = "";
+  
+  // Masquer les anciens messages
+  congrats.classList.remove("active");
+  loser.classList.remove("active");
+  leQuiz.classList.remove("active");
+
+  // Animation du bouton
+  btnQuiz.style.transform = "scale(0.98)";
+  setTimeout(() => {
+    btnQuiz.style.transform = "scale(1)";
+  }, 100);
+}
+
+function checkAnswer(userAnswer) {
+  console.log("✓ Réponse vérifiée:", userAnswer, "vs", randCountry, "quizLaunched:", quizLaunched);
+  const isCorrect = userAnswer === randCountry;
+  console.log("isCorrect:", isCorrect);
+
+  quizLaunched = false;
+
+  if (isCorrect) {
+    console.log("✅ CORRECT!");
+    showSuccess();
+    consecutiveScore++;
+    updateConsecutiveScore();
+    
+    // 🟢 SUCCÈS: Auto-lancer après 600ms
+    setTimeout(() => {
+      resetQuiz();
+      launchQuiz();
+    }, 600);
+  } else {
+    console.log("❌ FAUX!");
+    showError(userAnswer);
+    consecutiveScore = 0;
+    updateConsecutiveScore();
+    
+    // 🔴 ERREUR: Réinitialiser après 1.5s
+    setTimeout(() => {
+      resetQuiz();
+    }, 1500);
+  }
+}
+
+function showSuccess() {
+  console.log("✅ Réponse correcte!");
+  
+  // Fermer la modale immédiatement
+  modalOverlay.classList.remove("active");
+  
+  // 🎮 ANIMATION +1
+  triggerPlusOneAnimation();
+  
+  // Animation de la map en vert
+  mapElement.classList.remove("error-flash");
+  mapElement.classList.add("success-flash");
+  
+  // Retirer après 800ms
+  setTimeout(() => {
+    mapElement.classList.remove("success-flash");
+  }, 800);
+}
+
+function showError(wrongAnswer) {
+  console.log("❌ Réponse fausse:", wrongAnswer);
+  
+  // Fermer la modale de question immédiatement
+  modalOverlay.classList.remove("active");
+  
+  // Animation de la map en rouge
+  mapElement.classList.remove("success-flash");
+  mapElement.classList.add("error-flash");
+  
+  // Afficher la modale d'erreur tout de suite
+  showErrorModal(wrongAnswer);
+  
+  // Retirer l'animation
+  setTimeout(() => {
+    mapElement.classList.remove("error-flash");
+  }, 800);
+}
+
+// ==================== FONCTIONS MODALE ====================
+function showModal(isSuccess, wrongAnswer) {
+  console.log("📱 Affichage modale:", { isSuccess, wrongAnswer });
+  // Afficher la modale
+  modalOverlay.classList.add("active");
+  
+  // Remplir les informations de la question
+  modalQuestion.textContent = randCountry;
+  
+  // Vider le contenu précédent du feedback
+  modalFeedback.innerHTML = "";
+  
+  // Annuler le timeout précédent s'il existe
+  if (modalTimeout) {
+    clearTimeout(modalTimeout);
+  }
+  
+  // Masquer la modale après 2 secondes
+  modalTimeout = setTimeout(() => {
+    hideModal();
+  }, 2000);
+}
+
+function hideModal() {
+  modalOverlay.classList.remove("active");
+  if (modalTimeout) {
+    clearTimeout(modalTimeout);
+    modalTimeout = null;
+  }
+}
+
+function showErrorModal(wrongAnswer) {
+  console.log("📱 Affichage modale erreur:", wrongAnswer);
+  
+  modalErrorOverlay.classList.add("active");
+  
+  modalErrorFeedback.innerHTML = `
+    <div class="modal-feedback-item modal-error">
+      <span class="icon">❌</span>
+      <p>C'est faux!</p>
+      <p>Tu as cliqué sur <b>${wrongAnswer}</b></p>
+    </div>
+  `;
+}
+
+function hideErrorModal() {
+  modalErrorOverlay.classList.remove("active");
+  if (modalTimeout) {
+    clearTimeout(modalTimeout);
+    modalTimeout = null;
+  }
+}
+
+// ==================== UTILITAIRES ====================
+function resetVisualState() {
+  // Retirer les animations en cours
+  mapElement.classList.remove("success-flash", "error-flash");
+  
+  if (infoLineEl) {
+    infoLineEl.classList.remove("success-state", "error-state");
+  }
+}
+
+function resetQuiz() {
+  quizLaunched = false;
+  randCountry = null;
+  answer = null;
+  
+  // Fermer les modales
+  modalOverlay.classList.remove("active");
+  modalErrorOverlay.classList.remove("active");
+  
+  // Nettoyer les animations
+  leQuiz.classList.remove("active");
+  congrats.classList.remove("active");
+  loser.classList.remove("active");
+  mapElement.classList.remove("success-flash", "error-flash");
+  
+  // Annuler les timeouts
+  if (modalTimeout) {
+    clearTimeout(modalTimeout);
+    modalTimeout = null;
+  }
+}
+
+function updateConsecutiveScore() {
+  const scoreValueEl = document.querySelector(".score-value");
+  if (scoreValueEl) {
+    scoreValueEl.textContent = consecutiveScore;
+  }
+}
+
+// ==================== ANIMATION +1 JEU VIDÉO ====================
+function triggerPlusOneAnimation() {
+  const container = document.getElementById('plus-one-container');
+  if (!container) return;
+  
+  // Créer l'élément +1
+  const plusOne = document.createElement('div');
+  plusOne.className = 'plus-one-animation';
+  
+  // Variantes de couleurs aléatoires
+  const variants = ['', 'variant-1', 'variant-2', 'variant-3'];
+  const randomVariant = variants[Math.floor(Math.random() * variants.length)];
+  if (randomVariant) {
+    plusOne.classList.add(randomVariant);
+  }
+  
+  plusOne.textContent = '+1';
+  
+  // Position aléatoire sur la largeur de l'écran (zone centrale)
+  const randomX = 30 + Math.random() * 40; // Entre 30% et 70%
+  const randomY = 40 + Math.random() * 20; // Entre 40% et 60%
+  
+  plusOne.style.left = `${randomX}%`;
+  plusOne.style.top = `${randomY}%`;
+  
+  // Ajouter au container
+  container.appendChild(plusOne);
+  
+  // Supprimer après l'animation (1.5s)
+  setTimeout(() => {
+    plusOne.remove();
+  }, 1500);
+}
+
+// ==================== RACCOURCIS CLAVIER ====================
+document.addEventListener("keydown", function(event) {
+  if (event.key === "s" || event.key === "S") {
+    console.log(`🔥 Bonnes réponses consécutives: ${consecutiveScore}`);
+  }
+});

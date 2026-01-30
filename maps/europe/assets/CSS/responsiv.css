@@ -1,0 +1,373 @@
+/* ==================== RESPONSIVNESS ==================== */
+
+/* Tablettes et petits écrans */
+@media (max-width: 900px) {
+  * {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    order: 1;
+  }
+
+  main {
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0.5rem;
+  }
+
+  .map-section {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .content-section {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  #plus-one-container {
+    order: 3;
+  }
+
+  .quiz-section {
+    order: 4;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .question-btn {
+    margin: 0.5rem auto;
+    width: 90%;
+    max-width: 600px;
+  }
+
+  .quiz-container,
+  .result-message {
+    order: 10;
+  }
+
+  footer {
+    order: 20;
+  }
+
+  header h1 {
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+  }
+
+  .score-display {
+    margin-top: 0.6rem;
+    padding: 0.4rem 0.8rem;
+    gap: 0.4rem;
+  }
+
+  .score-label {
+    font-size: 0.75rem;
+  }
+
+  .score-value {
+    font-size: 1rem;
+    padding: 0.15rem 0.5rem;
+  }
+
+  footer {
+    gap: 0.6rem;
+    padding: 0.8rem 0.5rem 0.4rem 0.5rem;
+  }
+
+  .footer-top {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .footer-top p {
+    margin: 0.2rem 0;
+    font-size: 0.85rem;
+  }
+
+  .footer-swiss-link {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    gap: 0.5rem;
+  }
+
+  .swiss-flag-icon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Desktop - Largeurs fixes pour grands écrans */
+@media (min-width: 900px) {
+  main {
+    flex-wrap: nowrap;
+  }
+  
+  .map-section {
+    width: 40%;
+    min-height: 500px;
+  }
+  
+  .content-section {
+    width: 30%;
+    min-height: 500px;
+  }
+}
+
+/* Tablette */
+@media (max-width: 899px) and (min-width: 641px) {
+  .map-section {
+    width: 95%;
+    max-width: 700px;
+  }
+  
+  .content-section {
+    width: 95%;
+    max-width: 700px;
+  }
+  
+  .selection-line {
+    gap: 0.4rem;
+  }
+  
+  .country-flag {
+    max-width: 100px;
+  }
+}
+
+/* Mobile - Optimisation pour petits écrans */
+@media (max-width: 640px) {
+  /* Header compact */
+  header {
+    padding: 0.8rem 0.5rem;
+  }
+
+  header h1 {
+    font-size: clamp(1.1rem, 4vw, 1.3rem);
+    margin: 0 0 0.4rem 0;
+  }
+
+
+  /* Score compact */
+  .score-display {
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.7rem;
+    gap: 0.4rem;
+    border-radius: 15px;
+  }
+
+  .score-label {
+    font-size: 0.7rem;
+  }
+
+  .score-value {
+    font-size: 0.95rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 10px;
+  }
+
+  /* Selection line */
+  .selection-line {
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .text-selection {
+    margin-right: 0;
+    font-size: 0.85rem;
+  }
+
+  .selection {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.7rem;
+    max-width: 100%;
+  }
+
+  /* Map section et content section */
+  .map-section {
+    width: 98%;
+    max-width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+  }
+  
+  .content-section {
+    width: 98%;
+    max-width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+  }
+  
+  .country-flag {
+    max-width: 90px;
+    margin-left: 0.2rem;
+  }
+  
+  .info-line p {
+    font-size: 0.9rem;
+  }
+
+  .map {
+    padding: 0.5rem;
+    padding-top: 1rem;
+  }
+
+  svg {
+    border-radius: 8px;
+  }
+
+  /* Button */
+  .question-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+    margin: 1rem auto;
+  }
+
+  /* Footer compact */
+  footer {
+    padding: 0.7rem 0.5rem 0.3rem 0.5rem;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .footer-top {
+    flex-direction: column;
+    gap: 0.4rem;
+    text-align: center;
+  }
+
+  .footer-top p {
+    margin: 0.15rem 0;
+    font-size: 0.8rem;
+  }
+
+  .footer-swiss-link {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.7rem;
+    gap: 0.4rem;
+  }
+
+  .swiss-flag-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .footer-link {
+    font-size: 0.8rem;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+  header {
+    padding: 0.6rem 0.4rem;
+  }
+
+  header h1 {
+    font-size: 1.1rem;
+  }
+
+ 
+
+  .score-display {
+    padding: 0.35rem 0.6rem;
+    gap: 0.3rem;
+  }
+
+  .score-label {
+    font-size: 0.65rem;
+  }
+
+  .score-value {
+    font-size: 0.85rem;
+    padding: 0.1rem 0.4rem;
+  }
+
+  .map-section {
+    width: 98%;
+    max-width: 100%;
+    padding: 0.6rem;
+    margin: 0.3rem 0;
+  }
+  
+  .content-section {
+    width: 98%;
+    padding: 0.6rem 0.4rem 0.3rem 0.4rem;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+  }
+
+  .footer-top {
+    gap: 0.3rem;
+  }
+
+  .footer-top p {
+    margin: 0.1rem 0;
+    font-size: 0.75rem;
+  }
+
+  .footer-swiss-link {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.6rem;
+    gap: 0.35rem;
+  }
+
+  .swiss-flag-icon {
+    width: 22px;
+    height: 22px;
+  }  
+  .selection-line {
+    gap: 0.3rem;
+  }
+
+  .question-btn {
+    padding: 0.55rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
+      font-size: 0.75rem;
+    gap: 0.5rem;
+}
+
+}
+
+/* ==================== PRINT ==================== */
+@media print {
+  header::before {
+    display: none;
+  }
+  
+  footer, .question-btn {
+    display: none !important;
+  }
+  
+  body, .map, svg {
+    background: #fff !important;
+  }
+  
+  .map-section {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+}

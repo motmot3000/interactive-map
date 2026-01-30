@@ -1,0 +1,366 @@
+/* ==================== 10) RESPONSIVE ==================== */
+
+/* Tablettes et petits écrans */
+@media (max-width: 900px) {
+  * {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  html {
+    font-size: 100%; /* Réduire le zoom de base */
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    order: 1;
+  }
+
+  main {
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .map-section {
+    grid-template-columns: 1fr;
+    margin: 1rem auto 0;
+    width: 100%;
+  }
+
+  .content-section {
+    width: 100%;
+  }
+
+  #plus-one-container {
+    order: 3;
+  }
+
+  .quiz-section {
+    order: 4;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .question-btn {
+    margin: 0.5rem auto;
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .quiz-container,
+  .result-message {
+    order: 10;
+  }
+
+  footer {
+    order: 20;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1rem 0.5rem 0.5rem;
+    align-items: center;
+  }
+
+  .footer-top {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .footer-top p {
+    margin: 0.2rem 0;
+    font-size: 0.8rem;
+  }
+
+  .footer-europe-link {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    gap: 0.4rem;
+  }
+
+  .europe {
+    width: 24px;
+    height: 24px;
+  }
+
+  .map {
+    padding: 0.9rem;
+  }
+
+  .btn-start {
+    width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  .header-container h1 {
+    font-size: 1.3rem;
+  }
+
+  .score-display {
+    margin-top: 0.6rem;
+    padding: 0.4rem 0.8rem;
+    gap: 0.4rem;
+  }
+
+  .score-label {
+    font-size: 0.75rem;
+  }
+
+  .score-value {
+    font-size: 1rem;
+    padding: 0.15rem 0.5rem;
+  }
+}
+
+/* Mobile - Optimisation pour petits écrans */
+@media (max-width: 480px) {
+
+  html {
+    font-size: 100%; /* Agrandir pour mobile */
+  }
+
+  body {
+    line-height: 1.4;
+    background-color: #fff;
+  }
+
+
+  /* Header très compact */
+  header {
+    padding: 0.6rem 0.5rem;
+  }
+
+  .header-container h1 {
+    font-size: 1.1rem;
+    margin: 0 0 0.4rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  .header-container .tagline {
+    display: none; /* Masquer le sous-titre sur mobile */
+  }
+
+
+  /* Score très compact */
+  .score-display {
+    margin-top: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    gap: 0.3rem;
+    border-radius: 15px;
+    border-width: 1px;
+  }
+
+  .score-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+  }
+
+  .score-value {
+    font-size: 0.9rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 8px;
+    min-width: 1.5rem;
+  }
+
+  /* Info section très compacte */
+  .info-section {
+    padding: 0.5rem 0.5rem;
+  }
+
+  .canton-info {
+    gap: 0.4rem;
+    justify-content: center;
+  }
+
+  .info-label {
+    font-size: 0.7rem;
+  }
+
+  .canton-name {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.6rem;
+  }
+
+  /* Map GRANDE sur mobile - prend plus de place */
+  .map-section {
+    margin: 0.3rem auto 0;
+    padding: 0 0.3rem;
+    max-width: 100%;
+  }
+
+  .map {
+    padding: 0.4rem;
+    border-radius: 12px;
+    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .map__image {
+    padding: 0.2rem;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  .map__image svg {
+    max-height: none;
+    min-height: 45vh;
+    transform: scale(1.6) translateX(3.5%);
+    transform-origin: center center;
+  }
+
+  /* Quiz section au-dessus de la map */
+  .quiz-section {
+    position: relative;
+    z-index: 10;
+    margin-top: 1rem;
+  }
+
+  .btn-start {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Quiz compact */
+  .quiz-card {
+    padding: 0.7rem;
+    border-radius: 12px;
+  }
+
+  .quiz-header h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .question-text {
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+
+  .quiz-answers {
+    gap: 0.5rem;
+  }
+
+  .quiz-answer {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-start,
+  .btn-next {
+    font-size: 0.7rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .result-message {
+    padding: 0.8rem;
+    border-radius: 12px;
+  }
+
+  .result-message h3 {
+    font-size: 1.2rem;
+  }
+
+  .result-message p {
+    font-size: 0.85rem;
+  }
+
+  /* Animation +1 plus petite sur mobile */
+  .plus-one-animation {
+    font-size: 2rem;
+  }
+
+  footer {
+    padding: 0.8rem 0.4rem 0.3rem;
+    gap: 0.5rem;
+  }
+
+  .footer-top {
+    gap: 0.3rem;
+  }
+
+  .footer-top p {
+    margin: 0.1rem 0;
+    font-size: 0.7rem;
+  }
+
+  .footer-europe-link {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+    gap: 0.3rem;
+  }
+
+  .europe {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 360px) {
+  html {
+    font-size: 100%;
+  }
+
+  header {
+    padding: 0.5rem 0.4rem;
+  }
+
+  .header-container h1 {
+    font-size: 1rem;
+  }
+
+  .score-display {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .score-label {
+    font-size: 0.6rem;
+  }
+
+  .score-value {
+    font-size: 0.8rem;
+  }
+
+  .info-section {
+    padding: 0.4rem;
+  }
+
+  .info-label {
+    font-size: 0.65rem;
+  }
+
+  .canton-name {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .map {
+    padding: 0.4rem;
+  }
+
+  .plus-one-animation {
+    font-size: 1.5rem;
+  }
+}
+
+
+/* ==================== 12) PRINT ==================== */
+@media print {
+  header, footer, .quiz-section { display: none !important; }
+  body, .map, .map__image { background: #fff !important; }
+  .map { box-shadow: none !important; border: 1px solid #ccc !important; }
+}
