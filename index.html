@@ -10,7 +10,7 @@
     <!-- En-tête / Header -->
     <header class="header">
         <div class="container">
-            <h1 class="logo">🗺️ Cartes Interactives</h1>
+            <h1 class="logo">Cartes Interactives</h1>
             <p class="tagline">Explorez les régions de manière interactive</p>
         </div>
     </header>
@@ -31,15 +31,17 @@
                 <!-- Carte 1 : Europe -->
                 <div class="map-card">
                     <div class="map-card__image">
-                        <div class="map-icon">🇪🇺</div>
+                        <div class="map-icon">
+                            <img src="maps/europe/assets/flags/eu.png" alt="Drapeau de l'Europe">
+                        </div>
                     </div>
                     <div class="map-card__content">
                         <h3>Carte de l'Europe</h3>
                         <p>Explorez les pays européens, leurs drapeaux et leurs caractéristiques géographiques.</p>
                         <ul class="features-list">
-                            <li>✓ Tous les pays d'Europe</li>
-                            <li>✓ Drapeaux et symboles</li>
-                            <li>✓ Informations détaillées</li>
+                            <li>✓ les pays d'Europe</li>
+                            <li>✓ Drapeaux </li>
+                            <li>✓ Informations générales</li>
                         </ul>
                         <a href="maps/europe/index.html" class="btn btn--primary">Ouvrir la carte</a>
                     </div>
@@ -48,17 +50,19 @@
                 <!-- Carte 2 : Suisse -->
                 <div class="map-card">
                     <div class="map-card__image">
-                        <div class="map-icon">🇨🇭</div>
+                        <div class="map-icon">
+                            <img src="maps/suisse/assets/flags/ch.png" alt="Drapeau de la Suisse">
+                        </div>
                     </div>
                     <div class="map-card__content">
                         <h3>Carte de la Suisse</h3>
                         <p>Découvrez les cantons suisses avec leurs drapeaux, cultures et informations régionales.</p>
                         <ul class="features-list">
                             <li>✓ Tous les cantons</li>
-                            <li>✓ Cultures régionales</li>
-                            <li>✓ Données interactives</li>
+                            <li>✓ Drapeaux</li>
+                            <li>✓ Informations générales</li>
                         </ul>
-                        <a href="maps/switzerland-map/index.html" class="btn btn--primary">Ouvrir la carte</a>
+                        <a href="maps/suisse/index.html" class="btn btn--primary">Ouvrir la carte</a>
                     </div>
                 </div>
             </section>
@@ -93,9 +97,21 @@
     </main>
 
     <!-- Pied de page / Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 Cartes Interactives. Tous droits réservés.</p>
+    <footer>
+        <div class="footer-top">
+            <p class="footer-signature">Créé avec ❤️ par <a class="footer-link" href="https://www.lecagibi.ch">Le Cagibi</a></p>
+            <p class="footer-content">© Usage pédagogique autorisé.</p>
+        </div>
+
+        <div class="footer-links">
+            <a href="maps/europe/index.html" class="footer-europe-link">
+                <img src="maps/europe/assets/pictures/europe.svg" alt="Carte de l'Europe" class="europe">
+                <span>Découvre la carte de l'Europe!</span>
+            </a>
+            <a href="maps/suisse/index.html" class="footer-swiss-link">
+                <img src="maps/suisse/assets/images/switzerland.svg" alt="Carte de la Suisse" class="swiss-flag-icon">
+                <span>Découvre la carte de la Suisse!</span>
+            </a>
         </div>
     </footer>
 
