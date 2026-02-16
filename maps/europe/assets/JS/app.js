@@ -10,7 +10,7 @@ let selection;
 let paths;
 let questionBtn;
 
-let nameEl, capitalEl, populationEl, areaEl, languagesEl, flagEl, fullNameEl;
+let nameEl, capitalEl, populationEl, areaEl, languagesEl, flagEl, flagBottomEl, fullNameEl;
 let congrats, loser, btnQuiz, leQuiz, questionElement, trueAnswerElement;
 let mapElement, contentSection, infoLineEl;
 let modalOverlay, modalFeedback, modalQuestion, modalErrorOverlay, modalErrorFeedback;
@@ -33,6 +33,7 @@ function initializeApp() {
   areaEl = document.getElementById("area");
   languagesEl = document.getElementById("languages");
   flagEl = document.getElementById("flag");
+  flagBottomEl = document.getElementById("flag-bottom");
   fullNameEl = document.getElementById("full-name");
 
   // Éléments du quiz
@@ -86,9 +87,19 @@ function initializeApp() {
   
   // Mettre à jour le score initial
   updateConsecutiveScore();
+
+  // S'assurer que le bouton est bien actif au démarrage
+  setQuizButtonState(false);
 }
 
 // ==================== FONCTIONS ====================
+
+// Active/désactive le bouton de quiz pour empêcher le spam
+function setQuizButtonState(isDisabled) {
+  if (!btnQuiz) return;
+  btnQuiz.disabled = isDisabled;
+  btnQuiz.classList.toggle("is-disabled", isDisabled);
+}
 
 // Clique principal sur les pays pour avoir les infos
 function showCountryOnClick() {
@@ -131,22 +142,32 @@ function displayCountry(code, name) {
   populationEl.textContent = countriesData[code].population;
   areaEl.textContent = countriesData[code].area;
   languagesEl.textContent = countriesData[code].languages;
-  flagEl.src = "assets/flags/" + countriesData[code].flag;
-  
-  // Drapeau suisse carré
-  if (code === "CH") {
-    flagEl.style.width = "80px";
-    flagEl.style.height = "80px";
-  } else {
-    flagEl.style.width = "120px";
-    flagEl.style.height = "80px";
+  const flagSrc = "assets/flags/" + countriesData[code].flag;
+  flagEl.src = flagSrc;
+  if (flagBottomEl) {
+    flagBottomEl.src = flagSrc;
+  }
+
+  // Size handled by CSS for consistent square flags
+  flagEl.style.width = "";
+  flagEl.style.height = "";
+  flagEl.classList.toggle("square-flag", code === "CH");
+  if (flagBottomEl) {
+    flagBottomEl.style.width = "";
+    flagBottomEl.style.height = "";
+    flagBottomEl.classList.toggle("square-flag", code === "CH");
   }
 }
 
 // ==================== SYSTÈME DE QUIZ ====================
 function launchQuiz() {
+  if (quizLaunched) {
+    return; // Une question est déjà en cours, il faut y répondre d'abord
+  }
+
   console.log("🎯 Quiz lancé!");
   quizLaunched = true;
+  setQuizButtonState(true);
   randCountry = countries[Math.floor(Math.random() * countries.length)];
   console.log("Pays choisi:", randCountry);
   
@@ -166,6 +187,11 @@ function launchQuiz() {
   
   // Vider le feedback de la modale
   modalFeedback.innerHTML = "";
+
+  // Auto-fermer la question après 2.5s tout en laissant la réponse obligatoire
+  modalTimeout = setTimeout(() => {
+    hideModal();
+  }, 2500);
   
   // Masquer les anciens messages
   congrats.classList.remove("active");
@@ -331,6 +357,9 @@ function resetQuiz() {
     clearTimeout(modalTimeout);
     modalTimeout = null;
   }
+
+  // Réactiver le bouton pour permettre une nouvelle question
+  setQuizButtonState(false);
 }
 
 function updateConsecutiveScore() {

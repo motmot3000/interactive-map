@@ -13,13 +13,14 @@
     
 
     <header>
+		<a class="home-btn" href="../../index.html">🏠 Accueil</a>
         <h1>Carte interactive de l'Europe</h1>
         <p class="score-display">
          🔥Nombre de bonnes réponses : <output class="score-value">0</output>
         </p>
     </header>
 <section class="quiz-section">
-        <button class="question-btn" id="btn-quiz">Pose-moi une colle! 🎯</button>
+        <button class="question-btn" id="btn-quiz">Teste-moi! 🎯</button>
 
         <div class="quiz-container" id="le-quiz">
             <div class="quiz-card">
@@ -111,7 +112,8 @@
 			<section class="content-section">
 				<div class="selection-line">
                 <p class="text-selection">pays sélectionné:</p>
-                <p class="selection" id="selection">sélectionne un pays</p>
+                <p class="selection" id="selection">...</p>
+				<img class="country-flag flag-inline" id="flag" src="./assets/flags/eu.png" alt="Drapeau">
 				</div>
 
 				<div class="info-line">
@@ -120,8 +122,7 @@
 					<p>Population :~ <span class="info" id="population">...</span></p>
 					<p>Superficie :~<span class="info" id="area">...</span></p>
 					<p>Langues officielles : <span class="info" id="languages">...</span></p>
-					<p>Drapeau :</p>
-					<img class="country-flag" id="flag" src="./assets/flags/eu.png" alt="Drapeau">
+					<img class="country-flag flag-bottom" id="flag-bottom" src="./assets/flags/eu.png" alt="Drapeau">
 				</div>
 
 	

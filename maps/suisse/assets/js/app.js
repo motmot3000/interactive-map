@@ -1,31 +1,33 @@
-
 // ==================== VARIABLES D'ÉTAT ====================
+let quizLaunched = false;
 let randCanton = null;
 let answer = null;
-let quizLaunched = false;
-let score = 0;
-let totalAttempts = 0;
 let consecutiveScore = 0;
+let modalTimeout = null;
 
 // ==================== SÉLECTEURS DOM ====================
-const nomElement = document.getElementById("nom");
-const congrats = document.getElementById("congrats");
-const loser = document.getElementById("loser");
-const btnQuiz = document.getElementById("btn-quiz");
-const leQuiz = document.getElementById("le-quiz");
-const questionElement = document.getElementById("question");
-const trueAnswerElement = document.getElementById("true-answer");
-const mapSection = document.querySelector(".map-section");
-const infoLabel = document.querySelector(".text-selection");
-const consecutiveScoreElement = document.getElementById("consecutive-score");
-
-// Sélecteurs pour les informations du canton
-const fullNameElement = document.getElementById("full-name");
-const capitalElement = document.getElementById("capital");
-const populationElement = document.getElementById("population");
-const areaElement = document.getElementById("area");
-const languagesElement = document.getElementById("languages");
-const flagElement = document.getElementById("flag");
+let nomElement;
+let congrats;
+let loser;
+let btnQuiz;
+let leQuiz;
+let questionElement;
+let trueAnswerElement;
+let mapSection;
+let infoLabel;
+let consecutiveScoreElement;
+let fullNameElement;
+let capitalElement;
+let populationElement;
+let areaElement;
+let languagesElement;
+let flagElement;
+let flagBottomElement;
+let modalOverlay;
+let modalQuestion;
+let modalFeedback;
+let modalErrorOverlay;
+let modalErrorFeedback;
 
 // ==================== INITIALISATION ====================
 document.addEventListener("DOMContentLoaded", function() {
@@ -33,64 +35,120 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function initializeApp() {
-    // Masquer les messages de résultat au démarrage
+    nomElement = document.getElementById("nom");
+    congrats = document.getElementById("congrats");
+    loser = document.getElementById("loser");
+    btnQuiz = document.getElementById("btn-quiz");
+    leQuiz = document.getElementById("le-quiz");
+    questionElement = document.getElementById("question");
+    trueAnswerElement = document.getElementById("true-answer");
+    mapSection = document.querySelector(".map-section");
+    infoLabel = document.querySelector(".text-selection");
+    consecutiveScoreElement = document.getElementById("consecutive-score");
+
+    fullNameElement = document.getElementById("full-name");
+    capitalElement = document.getElementById("capital");
+    populationElement = document.getElementById("population");
+    areaElement = document.getElementById("area");
+    languagesElement = document.getElementById("languages");
+    flagElement = document.getElementById("flag");
+    flagBottomElement = document.getElementById("flag-bottom");
+
+    modalOverlay = document.getElementById("modalOverlay");
+    modalQuestion = document.getElementById("modalQuestion");
+    modalFeedback = document.getElementById("modalFeedback");
+    modalErrorOverlay = document.getElementById("modalErrorOverlay");
+    modalErrorFeedback = document.getElementById("modalErrorFeedback");
+
     congrats.classList.remove("active");
     loser.classList.remove("active");
     leQuiz.classList.remove("active");
+    if (modalOverlay) {
+        modalOverlay.classList.remove("active");
+    }
+    if (modalErrorOverlay) {
+        modalErrorOverlay.classList.remove("active");
+    }
 
-    // Ajouter les event listeners à tous les cantons
     Object.keys(cantonMap).forEach(cantonId => {
         const cantonElement = document.getElementById(cantonId);
         if (cantonElement) {
+            cantonElement.style.cursor = "pointer";
             cantonElement.addEventListener("click", function() {
                 handleCantonClick(cantonId);
             });
-            cantonElement.style.cursor = "pointer";
         }
     });
 
-    // Bouton de lancement du quiz
-    btnQuiz.addEventListener("click", launchQuiz);
+    btnQuiz?.addEventListener("click", launchQuiz);
+
+    if (modalOverlay) {
+        modalOverlay.addEventListener("click", function(e) {
+            if (e.target === modalOverlay) {
+                hideModal();
+            }
+        });
+    }
+
+    if (modalErrorOverlay) {
+        modalErrorOverlay.addEventListener("click", function(e) {
+            if (e.target === modalErrorOverlay) {
+                hideErrorModal();
+            }
+        });
+    }
+
+    updateConsecutiveScore();
+    setQuizButtonState(false);
+}
+
+// Active/désactive le bouton de quiz pour éviter le spam
+function setQuizButtonState(isDisabled) {
+    if (!btnQuiz) return;
+    btnQuiz.disabled = isDisabled;
+    btnQuiz.classList.toggle("is-disabled", isDisabled);
 }
 
 // ==================== GESTION DES CLICS ====================
 function handleCantonClick(cantonId) {
     const cantonName = cantonMap[cantonId];
-    
-    // Extraire le code du canton (AG, BE, etc.)
     const cantonCode = cantonId.replace("CH-", "");
-    
-    // Si le quiz n'est PAS lancé (2ème clic après une tentative), réinitialiser
+
     if (!quizLaunched) {
         resetVisualState();
     }
-    
-    // Afficher le nom du canton
+
     displayCanton(cantonName);
-    
-    // Afficher les informations du canton
     displayCantonInfo(cantonCode);
-    
     answer = cantonName;
 
-    // Vérifier si la réponse est correcte si le quiz est lancé
     if (quizLaunched) {
-        totalAttempts++;
         checkAnswer(cantonName);
     }
 }
 
 function displayCantonInfo(cantonCode) {
     const data = cantonData[cantonCode];
-    
-    if (data) {
-        fullNameElement.textContent = data.fullName;
-        capitalElement.textContent = data.chefLieu;
-        populationElement.textContent = data.population;
-        areaElement.textContent = data.area;
-        languagesElement.textContent = data.languages;
-        flagElement.src = data.flag;
+    if (!data) return;
+
+    fullNameElement.textContent = data.fullName;
+    capitalElement.textContent = data.chefLieu;
+    populationElement.textContent = data.population;
+    areaElement.textContent = data.area;
+    languagesElement.textContent = data.languages;
+
+    const flagSrc = data.flag;
+    if (flagElement) {
+        flagElement.src = flagSrc;
         flagElement.alt = `Drapeau de ${data.fullName}`;
+        flagElement.style.width = "";
+        flagElement.style.height = "";
+    }
+    if (flagBottomElement) {
+        flagBottomElement.src = flagSrc;
+        flagBottomElement.alt = `Drapeau de ${data.fullName}`;
+        flagBottomElement.style.width = "";
+        flagBottomElement.style.height = "";
     }
 }
 
@@ -104,22 +162,36 @@ function displayCanton(name) {
 
 // ==================== SYSTÈME DE QUIZ ====================
 function launchQuiz() {
+    if (quizLaunched) {
+        return;
+    }
+
     quizLaunched = true;
+    setQuizButtonState(true);
     randCanton = cantons[Math.floor(Math.random() * cantons.length)];
-    
-    // Réinitialiser l'apparence pour la nouvelle question
+
     resetVisualState();
-    
+
     questionElement.textContent = randCanton;
-    
-    // Afficher le conteneur du quiz
-    leQuiz.classList.add("active");
-    
-    // Masquer les anciens messages
+
+    if (modalTimeout) {
+        clearTimeout(modalTimeout);
+    }
+
+    if (modalQuestion && modalOverlay) {
+        modalQuestion.textContent = randCanton;
+        modalOverlay.classList.add("active");
+        modalFeedback.innerHTML = "";
+
+        modalTimeout = setTimeout(() => {
+            hideModal();
+        }, 2500);
+    }
+
     congrats.classList.remove("active");
     loser.classList.remove("active");
+    leQuiz.classList.remove("active");
 
-    // Animation du bouton
     btnQuiz.style.transform = "scale(0.98)";
     setTimeout(() => {
         btnQuiz.style.transform = "scale(1)";
@@ -128,139 +200,109 @@ function launchQuiz() {
 
 function checkAnswer(userAnswer) {
     const isCorrect = userAnswer === randCanton;
+    quizLaunched = false;
 
     if (isCorrect) {
         showSuccess();
-        score++;
         consecutiveScore++;
         updateConsecutiveScore();
+
+        setTimeout(() => {
+            resetQuiz();
+            launchQuiz();
+        }, 600);
     } else {
         showError(userAnswer);
         consecutiveScore = 0;
         updateConsecutiveScore();
-    }
-    
-    // Désactiver le quiz après cette tentative
-    quizLaunched = false;
 
-    // Masquer les messages après 2 secondes
-    setTimeout(() => {
-        congrats.classList.remove("active");
-        loser.classList.remove("active");
-    }, 2000);
+        setTimeout(() => {
+            resetQuiz();
+        }, 1500);
+    }
 }
 
 function showSuccess() {
-    congrats.classList.add("active");
-    loser.classList.remove("active");
-    
-    // Masquer le quiz
-    leQuiz.classList.remove("active");
-    
-    // 🎮 ANIMATION +1 JEU VIDÉO
+    hideModal();
     triggerPlusOneAnimation();
-    
-    // Animation de la map-section en vert
+
     mapSection.classList.remove("error-flash");
     mapSection.classList.add("success-flash");
-    
-    // Changer le message et le style
-    if (infoLabel) {
-        infoLabel.textContent = "✅ Bravo! Tu as trouvé :";
-        infoLabel.classList.remove("error-text");
-        infoLabel.classList.add("success-text");
-    }
-    
-    nomElement.classList.remove("error-badge");
-    nomElement.classList.add("success-badge");
-    
-    // Retirer seulement les animations flash après leur durée
+
     setTimeout(() => {
         mapSection.classList.remove("success-flash");
-    }, 1200);
-    
-    console.log("✅ Bravo! Score: " + score + "/" + totalAttempts);
+    }, 800);
 }
 
 function showError(wrongAnswer) {
-    loser.classList.add("active");
-    congrats.classList.remove("active");
-    
-    // Masquer le quiz
-    leQuiz.classList.remove("active");
-    
-    // Animation de la map-section en rouge
+    hideModal();
+
     mapSection.classList.remove("success-flash");
     mapSection.classList.add("error-flash");
-    
-    // Changer le message et le style
-    if (infoLabel) {
-        infoLabel.textContent = "❌ Non, tu as sélectionné :";
-        infoLabel.classList.remove("success-text");
-        infoLabel.classList.add("error-text");
-    }
-    
-    nomElement.classList.remove("success-badge");
-    nomElement.classList.add("error-badge");
-    
-    // Retirer seulement les animations flash après leur durée
+
+    showErrorModal(wrongAnswer);
+
     setTimeout(() => {
         mapSection.classList.remove("error-flash");
-    }, 1200);
-    
-    trueAnswerElement.textContent = wrongAnswer;
-    console.log("❌ Faux! Vous avez cliqué sur: " + wrongAnswer);
+    }, 800);
+}
+
+// ==================== FONCTIONS MODALE ====================
+function hideModal() {
+    if (modalOverlay) {
+        modalOverlay.classList.remove("active");
+    }
+    if (modalTimeout) {
+        clearTimeout(modalTimeout);
+        modalTimeout = null;
+    }
+}
+
+function showErrorModal(wrongAnswer) {
+    if (!modalErrorOverlay || !modalErrorFeedback) return;
+
+    modalErrorOverlay.classList.add("active");
+    modalErrorFeedback.innerHTML = `
+        <div class="modal-feedback-item modal-error">
+            <span class="icon">❌</span>
+            <p>C'est faux!</p>
+            <p>Tu as cliqué sur <b>${wrongAnswer}</b></p>
+        </div>
+    `;
+}
+
+function hideErrorModal() {
+    if (modalErrorOverlay) {
+        modalErrorOverlay.classList.remove("active");
+    }
+    if (modalTimeout) {
+        clearTimeout(modalTimeout);
+        modalTimeout = null;
+    }
 }
 
 // ==================== UTILITAIRES ====================
 function resetVisualState() {
-    // Réinitialiser les classes et textes de l'info-section
-    infoLabel.textContent = "Canton sélectionné :";
-    infoLabel.classList.remove("success-text", "error-text");
-    
-    // Réinitialiser le badge du canton au texte par défaut
-    nomElement.textContent = "Cliquez sur un canton";
-    nomElement.classList.remove("success-badge", "error-badge");
-    
-    // Retirer les animations en cours
     mapSection.classList.remove("success-flash", "error-flash");
-    
-    // Remettre le texte original
-    if (infoLabel) {
-        infoLabel.textContent = "Canton sélectionné:";
-        infoLabel.classList.remove("success-text", "error-text");
-    }
-}
-
-function getCantonNameById(id) {
-    return cantonMap[id] || "Canton inconnu";
 }
 
 function resetQuiz() {
     quizLaunched = false;
     randCanton = null;
     answer = null;
-    
+
+    hideModal();
+    hideErrorModal();
+
     leQuiz.classList.remove("active");
     congrats.classList.remove("active");
     loser.classList.remove("active");
-    
+    mapSection.classList.remove("success-flash", "error-flash");
+
     nomElement.textContent = "Cliquez sur un canton";
+    setQuizButtonState(false);
 }
 
-// Réinitialiser avec double-clic sur le titre
-document.querySelector("header")?.addEventListener("dblclick", resetQuiz);
-
-// Afficher le score avec la touche 's'
-document.addEventListener("keydown", function(event) {
-    if (event.key === "s" || event.key === "S") {
-        const percentage = totalAttempts > 0 ? Math.round(score/totalAttempts*100) : 0;
-        console.log(`📊 Score actuel: ${score}/${totalAttempts} (${percentage}%)`);
-        console.log(`🔥 Bonnes réponses consécutives: ${consecutiveScore}`);
-    }
-});
-
-// Fonction pour mettre à jour l'affichage du score consécutif
 function updateConsecutiveScore() {
     if (consecutiveScoreElement) {
         consecutiveScoreElement.textContent = consecutiveScore;
@@ -271,33 +313,35 @@ function updateConsecutiveScore() {
 function triggerPlusOneAnimation() {
     const container = document.getElementById('plus-one-container');
     if (!container) return;
-    
-    // Créer l'élément +1
+
     const plusOne = document.createElement('div');
     plusOne.className = 'plus-one-animation';
-    
-    // Variantes de couleurs aléatoires
+
     const variants = ['', 'variant-1', 'variant-2', 'variant-3'];
     const randomVariant = variants[Math.floor(Math.random() * variants.length)];
     if (randomVariant) {
         plusOne.classList.add(randomVariant);
     }
-    
+
     plusOne.textContent = '+1';
-    
-    // Position aléatoire sur la largeur de l'écran (zone centrale)
-    const randomX = 30 + Math.random() * 40; // Entre 30% et 70%
-    const randomY = 40 + Math.random() * 20; // Entre 40% et 60%
-    
+
+    const randomX = 30 + Math.random() * 40;
+    const randomY = 40 + Math.random() * 20;
+
     plusOne.style.left = `${randomX}%`;
     plusOne.style.top = `${randomY}%`;
-    
-    // Ajouter au container
+
     container.appendChild(plusOne);
-    
-    // Supprimer après l'animation (1.5s)
+
     setTimeout(() => {
         plusOne.remove();
     }, 1500);
 }
+
+// ==================== RACCOURCIS CLAVIER ====================
+document.addEventListener("keydown", function(event) {
+    if (event.key === "s" || event.key === "S") {
+        console.log(`🔥 Bonnes réponses consécutives: ${consecutiveScore}`);
+    }
+});
 

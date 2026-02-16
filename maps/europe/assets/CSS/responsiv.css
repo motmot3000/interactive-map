@@ -18,7 +18,7 @@
   }
 
   main {
-    order: 2;
+    order: 3;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,7 +40,7 @@
   }
 
   .quiz-section {
-    order: 4;
+    order: 2;
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
@@ -54,6 +54,16 @@
     margin: 0.5rem auto;
     width: 90%;
     max-width: 600px;
+  }
+
+  /* Flag inline when layout switches to column */
+  .flag-inline {
+    display: inline-flex;
+  }
+
+  .flag-bottom,
+  .flag-label {
+    display: none;
   }
 
   .quiz-container,
@@ -181,6 +191,13 @@
     border-radius: 10px;
   }
 
+  .home-btn {
+    top: 8px;
+    left: 8px;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
   /* Selection line */
   .selection-line {
     gap: 0.5rem;
@@ -198,6 +215,20 @@
     max-width: 100%;
   }
 
+  .country-flag {
+    width: 72px;
+    margin-left: 0.3rem;
+  }
+
+  .flag-inline {
+    display: inline-flex;
+  }
+
+  .flag-bottom,
+  .flag-label {
+    display: none;
+  }
+
   /* Map section et content section */
   .map-section {
     width: 98%;
@@ -211,6 +242,8 @@
     max-width: 100%;
     padding: 0.8rem;
     margin: 0.5rem 0;
+    height: auto;
+    min-height: 0;
   }
   
   .country-flag {

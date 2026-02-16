@@ -59,34 +59,37 @@ body {
    ======================================== */
 .header {
     background:
-        linear-gradient(135deg, rgba(37, 99, 235, 0.95), rgba(59, 130, 246, 0.95)),
-        linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+        linear-gradient(140deg, #1d4ed8 0%, #2563eb 55%, #0ea5e9 100%);
     color: white;
     padding: calc(var(--spacing-xl) + 0.5rem) var(--spacing-md);
     text-align: center;
     box-shadow:
-        0 6px 18px rgba(37, 99, 235, 0.22),
-        inset 0 -2px 12px rgba(255, 255, 255, 0.08);
+        0 10px 24px rgba(0, 0, 0, 0.2),
+        inset 0 -2px 10px rgba(255, 255, 255, 0.08);
     position: relative;
     overflow: hidden;
-    border-bottom: 3px solid rgba(245, 158, 11, 0.8);
+    border-bottom: 3px solid rgba(245, 158, 11, 0.82);
 }
 
 .header::before {
     content: '';
     position: absolute;
-    inset: 0;
+    inset: -6% -4% 0 -4%;
     background:
-        radial-gradient(600px 200px at 20% -10%, rgba(255, 255, 255, 0.18), transparent 60%),
-        radial-gradient(500px 240px at 90% 0%, rgba(255, 255, 255, 0.12), transparent 60%);
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        radial-gradient(520px 220px at 18% 0%, rgba(255, 255, 255, 0.18), transparent 65%),
+        radial-gradient(440px 200px at 82% -6%, rgba(255, 255, 255, 0.12), transparent 62%);
+    background-size: 140px 140px, 140px 140px, 100% 100%, 100% 100%;
     pointer-events: none;
+    opacity: 0.9;
 }
 
 .header::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 60%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 62%);
     mix-blend-mode: screen;
     pointer-events: none;
 }
@@ -97,18 +100,26 @@ body {
 }
 
 .logo {
-    font-size: 2.7rem;
-    font-weight: 800;
+    font-size: 2.8rem;
+    font-weight: 850;
     margin-bottom: var(--spacing-sm);
-    letter-spacing: -1.2px;
-    text-shadow: 0 6px 18px rgba(15, 23, 42, 0.35);
+    letter-spacing: -1.25px;
+    text-shadow: 0 8px 22px rgba(15, 23, 42, 0.38);
+    color: #ffffff;
 }
 
 .tagline {
-    font-size: 1.15rem;
-    opacity: 0.9;
-    font-weight: 400;
-    text-shadow: 0 4px 12px rgba(15, 23, 42, 0.35);
+    display: inline-block;
+    padding: 0.55rem 1rem;
+    font-size: 1.05rem;
+    font-weight: 550;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    text-shadow: 0 4px 12px rgba(15, 23, 42, 0.28);
+    backdrop-filter: blur(4px);
 }
 
 /* ========================================
@@ -313,6 +324,47 @@ body {
     transform: translateY(0);
 }
 
+.btn--disabled {
+    background: #cbd5e1;
+    color: #64748b;
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+}
+
+.btn--disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* ========================================
+   MAP CARD DISABLED - Carte désactivée
+   ======================================== */
+.map-card--disabled {
+    opacity: 0.7;
+    position: relative;
+}
+
+.map-card--disabled:hover {
+    transform: none;
+    box-shadow: 0 4px 15px var(--color-shadow);
+}
+
+.map-card__badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+}
+
 /* ========================================
    FEATURES SECTION - Section caractéristiques
    ======================================== */
@@ -320,7 +372,7 @@ body {
     background: var(--color-light);
     padding: var(--spacing-xl) var(--spacing-md);
     border-radius: var(--radius-lg);
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-sm);
 }
 
 .features-container {
@@ -367,36 +419,33 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.8rem;
+    gap: 1.4rem;
     background:
-        linear-gradient(135deg, rgba(37, 99, 235, 0.95), rgba(59, 130, 246, 0.95)),
-        linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+        linear-gradient(140deg, #1d4ed8 0%, #2563eb 55%, #0ea5e9 100%);
     box-shadow:
-        0 4px 16px rgba(37, 99, 235, 0.25),
-        inset 0 -2px 12px rgba(255, 255, 255, 0.08);
-    border-top: 3px solid rgba(245, 158, 11, 0.8);
-    padding: 1rem 1rem 0.5rem 1rem;
+        0 10px 24px rgba(0, 0, 0, 0.2),
+        inset 0 -2px 10px rgba(255, 255, 255, 0.08);
+    border-top: 3px solid rgba(245, 158, 11, 0.82);
+    padding: 2.4rem 2rem 3.4rem 2rem;
     position: relative;
     overflow: hidden;
     width: 100%;
     margin: 0;
-    margin-top: var(--spacing-xl);
+    margin-top: var(--spacing-xs);
 }
 
 footer::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.1),
-        transparent
-    );
-    animation: shimmer 3s infinite;
+    inset: -6% -4% 0 -4%;
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        radial-gradient(420px 180px at 18% 0%, rgba(255, 255, 255, 0.15), transparent 65%),
+        radial-gradient(360px 160px at 82% -4%, rgba(255, 255, 255, 0.1), transparent 62%);
+    background-size: 140px 140px, 140px 140px, 100% 100%, 100% 100%;
+    opacity: 0.9;
+    pointer-events: none;
 }
 
 .footer-top {

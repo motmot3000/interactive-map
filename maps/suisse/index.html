@@ -10,17 +10,40 @@
 
 <body>
 <header>
-    <div class="header-container">
-    <h1>éjkioasfejéklfadsjkléfsad</h1>
-        <div class="score-display">
-            <span class="score-label">🔥 bonnes réponses d'affilée :</span>
-            <span id="consecutive-score" class="score-value">0</span>
-        </div>
-    </div>
+   <a class="home-btn" href="../../index.html">🏠 Accueil</a>
+   <div class="header-container">
+      <h1>Carte interactive de la Suisse</h1>
+      <div class="score-display">
+         <span class="score-label">🔥 bonnes réponses d'affilée :</span>
+         <span id="consecutive-score" class="score-value">0</span>
+      </div>
+   </div>
 </header>
 
+<section class="quiz-section">
+   <button class="question-btn" id="btn-quiz">Teste-moi! 🎯</button>
+
+   <div class="quiz-container" id="le-quiz">
+      <div class="quiz-card">
+         <p class="quiz-question">Trouve le canton :</p>
+         <p class="quiz-answer" id="question"></p>
+      </div>
+   </div>
+
+   <div class="result-message success-message" id="congrats">
+      <span class="icon">✅</span>
+      <p>Bravo! Tu as raison!</p>
+   </div>
+
+   <div class="result-message error-message" id="loser">
+      <span class="icon">❌</span>
+      <p>Oups! C'est faux!</p>
+      <p>Tu as cliqué sur <b id="true-answer"></b></p>
+   </div>
+</section>
+
 <main>
-    <section class="map-section">
+   <section class="map-section">
          <svg id="switzerland-map" xmlns="http://www.w3.org/2000/svg" viewBox="-30 10 670 400">
              <path
                 id="CH-AG"
@@ -157,48 +180,44 @@
    
     </section>
 
-    <section class="content-section">
-        <div class="selection-line">
-            <p class="text-selection">Canton sélectionné:</p>
-            <p class="selection" id="nom">Cliquez sur un canton</p>
-        </div>
+   <section class="content-section">
+      <div class="selection-line">
+         <p class="text-selection">Canton sélectionné:</p>
+         <p class="selection" id="nom">...</p>
+         <img class="country-flag flag-inline" id="flag" src="./assets/flags/ch.png" alt="Drapeau">
+      </div>
 
-        <div class="info-line">
-            <p>Nom officiel : <span class="info" id="full-name">...</span></p>
-            <p>Chef-lieu : <span class="info" id="capital">...</span></p>
-            <p>Population :~ <span class="info" id="population">...</span></p>
-            <p>Superficie :~<span class="info" id="area">...</span></p>
-            <p>Langues officielles : <span class="info" id="languages">...</span></p>
-            <p>Drapeau :</p>
-            <img class="country-flag" id="flag" src="./assets/flags/ch.png" alt="Drapeau">
-        </div>
-    </section>
+      <div class="info-line">
+         <p>Nom officiel : <span class="info" id="full-name">...</span></p>
+         <p>Chef-lieu : <span class="info" id="capital">...</span></p>
+         <p>Population :~ <span class="info" id="population">...</span></p>
+         <p>Superficie :~<span class="info" id="area">...</span></p>
+         <p>Langues officielles : <span class="info" id="languages">...</span></p>
+        
+         <img class="country-flag flag-bottom" id="flag-bottom" src="./assets/flags/ch.png" alt="Drapeau">
+      </div>
+   </section>
 </main>
 
 <!-- Animation +1 pour jeu vidéo -->
 <div id="plus-one-container"></div>
 
-<section class="quiz-section">
-    <button class="question-btn" id="btn-quiz">Pose-moi une colle! 🎯</button>
+<!-- Modales Quiz -->
+<div class="modal-overlay" id="modalOverlay">
+   <div class="modal-content">
+      <div class="modal-question">
+         <p class="modal-label">Trouve le canton :</p>
+         <p class="modal-answer" id="modalQuestion"></p>
+      </div>
+      <div class="modal-feedback" id="modalFeedback"></div>
+   </div>
+</div>
 
-    <div class="quiz-container" id="le-quiz">
-        <div class="quiz-card">
-            <p class="quiz-question">Trouve le canton :</p>
-            <p class="quiz-answer" id="question"></p>
-        </div>
-    </div>
-
-    <div class="result-message success-message" id="congrats">
-        <span class="icon">✅</span>
-        <p>Bravo! Tu as raison!</p>
-    </div>
-
-    <div class="result-message error-message" id="loser">
-        <span class="icon">❌</span>
-        <p>Oups! C'est faux!</p>
-        <p>Tu as cliqué sur <b id="true-answer"></b></p>
-    </div>
-</section>
+<div class="modal-overlay" id="modalErrorOverlay">
+   <div class="modal-content">
+      <div id="modalErrorFeedback"></div>
+   </div>
+</div>
 
 
 
@@ -208,8 +227,8 @@
 			<p class="footer-content">© Usage pédagogique autorisé.</p>
 		</div>
 		
-		<a href="../../index.html" class="footer-europe-link">
-			<img src="../../assets/pictures/europe.svg" alt="Carte de l'Europe" class="europe">
+		<a href="../europe/index.html" class="footer-europe-link">
+			<img src="../europe/assets/pictures/europe.svg" alt="Carte de l'Europe" class="europe">
 			<span>Découvre la carte de l'Europe!</span>
 		</a>
     </footer>
