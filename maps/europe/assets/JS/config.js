@@ -3,7 +3,6 @@ const countries = [
     "Albanie",
     "Allemagne",
     "Autriche",
-    "Azerbaïdjan",
     "Belgique",
     "Biélorussie",
     "Bosnie-Herzégovine",
@@ -21,9 +20,7 @@ const countries = [
     "Italie",
     "Lettonie",
     "Lituanie",
-    "Macédoine du Nord",
     "Moldavie",
-    "Monténégro",
     "Norvège",
     "Pays-Bas",
     "Pologne",
@@ -36,7 +33,6 @@ const countries = [
     "Suède",
     "Suisse",
     "République Tchèque",
-    "Turquie",
     "Ukraine"
 ];
 
