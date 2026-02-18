@@ -99,6 +99,11 @@ function initializeApp() {
     }
 
     updateConsecutiveScore();
+    
+    // Ajuster le viewBox du SVG selon la taille d'écran
+    adjustSVGViewBox();
+    window.addEventListener("resize", adjustSVGViewBox);
+    
     setQuizButtonState(false);
 }
 
@@ -108,6 +113,7 @@ function setQuizButtonState(isDisabled) {
     btnQuiz.disabled = isDisabled;
     btnQuiz.classList.toggle("is-disabled", isDisabled);
 }
+
 
 // ==================== GESTION DES CLICS ====================
 function handleCantonClick(cantonId) {
@@ -171,6 +177,9 @@ function launchQuiz() {
     randCanton = cantons[Math.floor(Math.random() * cantons.length)];
 
     resetVisualState();
+
+    // Afficher le canton à chercher sur le bouton
+    btnQuiz.textContent = "Cherche: " + randCanton;
 
     questionElement.textContent = randCanton;
 
@@ -300,6 +309,10 @@ function resetQuiz() {
     mapSection.classList.remove("success-flash", "error-flash");
 
     nomElement.textContent = "Cliquez sur un canton";
+    
+    // Restaurer le texte original du bouton
+    btnQuiz.textContent = "Teste-moi! 🎯";
+    
     setQuizButtonState(false);
 }
 

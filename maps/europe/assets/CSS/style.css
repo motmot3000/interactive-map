@@ -355,13 +355,6 @@ p{
 }
 
 
-
-.text-selection{
-  font-weight: 650;
-  color: var(--c-primary);
-  letter-spacing: 0.01em;
-  margin-right: 0.5rem;
-}
 .selection{
   padding: 0.35rem 0.85rem;
   border-radius: 999px;

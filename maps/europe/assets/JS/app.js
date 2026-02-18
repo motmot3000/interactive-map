@@ -63,6 +63,10 @@ function initializeApp() {
   leQuiz.classList.remove("active");
   modalOverlay.classList.remove("active");
 
+  // Ajuster le viewBox du SVG selon la taille d'écran
+  adjustSVGViewBox();
+  window.addEventListener("resize", adjustSVGViewBox);
+
   // Initialiser les event listeners
   showCountryOnClick();
   btnQuiz.addEventListener("click", launchQuiz);
@@ -99,6 +103,16 @@ function setQuizButtonState(isDisabled) {
   if (!btnQuiz) return;
   btnQuiz.disabled = isDisabled;
   btnQuiz.classList.toggle("is-disabled", isDisabled);
+}
+
+// Ajuste le viewBox du SVG selon la taille d'écran
+function adjustSVGViewBox() {
+  const svg = document.querySelector("svg");
+  if (!svg) return;
+  
+  const width = window.innerWidth;
+  
+
 }
 
 // Clique principal sur les pays pour avoir les infos
@@ -174,6 +188,10 @@ function launchQuiz() {
   // Réinitialiser l'apparence pour la nouvelle question
   resetVisualState();
   
+  // Afficher le pays à chercher sur le bouton
+  btnQuiz.textContent = "Cherche: " + randCountry;
+  
+  // Afficher aussi dans la modale
   questionElement.textContent = randCountry;
   
   // Annuler le timeout précédent s'il existe
@@ -357,6 +375,9 @@ function resetQuiz() {
     clearTimeout(modalTimeout);
     modalTimeout = null;
   }
+
+  // Restaurer le texte original du bouton
+  btnQuiz.textContent = "Teste-moi! 🎯";
 
   // Réactiver le bouton pour permettre une nouvelle question
   setQuizButtonState(false);
