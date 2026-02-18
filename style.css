@@ -180,9 +180,10 @@ body {
 
 .maps-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--spacing-lg);
     grid-column: 1 / -1;
+    justify-items: center;
 }
 
 .maps-grid h2 {
@@ -574,6 +575,14 @@ footer::before {
     .header {
         padding: var(--spacing-lg) var(--spacing-sm);
     }
+
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    .main-content {
+        padding: var(--spacing-lg) var(--spacing-sm);
+    }
     
     .logo {
         font-size: 1.5rem;
@@ -591,6 +600,17 @@ footer::before {
         font-size: 1rem;
     }
     
+    .maps-grid {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: var(--spacing-md);
+    }
+
+    .map-card {
+        width: 100%;
+        max-width: 360px;
+    }
+
     .map-card__image {
         height: 150px;
     }

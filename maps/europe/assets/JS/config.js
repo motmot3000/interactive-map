@@ -51,7 +51,7 @@ const countryMap = {
     "AM": "Arménie",
     "AT": "Autriche",
     "AZ": "Azerbaïdjan",
-    "BA": "Bosnie-Herzégovine",
+    "BA": "Bosnie Herzégovine",
     "BE": "Belgique",
     "BG": "Bulgarie",
     "BY": "Biélorussie",
