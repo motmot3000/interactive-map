@@ -16,14 +16,13 @@
   header {
     order: 1;
   }
-
   svg{
   width: 100%;
   height: 100%;
   max-height: 100%;
   color: var(--c-text);
   display: block;
-  margin: 0 auto;
+  margin: 0.25rem auto;
 }
 
 
@@ -89,7 +88,17 @@
 
   footer {
     order: 20;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.34rem;
+    padding: 0.82rem 1.05rem 0.64rem 1.05rem;
+    font-size: 0.8rem;
+    line-height: 1.22;
   }
+
+
 
   header h1 {
     font-size: clamp(1.2rem, 2vw, 1.6rem);
@@ -110,32 +119,12 @@
     padding: 0.15rem 0.5rem;
   }
 
-  footer {
-    gap: 0.6rem;
-    padding: 0.8rem 0.5rem 0.4rem 0.5rem;
-  }
-
   .footer-top {
     flex-direction: column;
-    gap: 0.5rem;
     text-align: center;
   }
 
-  .footer-top p {
-    margin: 0.2rem 0;
-    font-size: 0.85rem;
-  }
 
-  .footer-swiss-link {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.8rem;
-    gap: 0.5rem;
-  }
-
-  .swiss-flag-icon {
-    width: 28px;
-    height: 28px;
-  }
 }
 
 /* Desktop - Largeurs fixes pour grands écrans */
@@ -180,12 +169,12 @@
 @media (max-width: 640px) {
   /* Header compact */
   header {
-    padding: 0.8rem 0.5rem;
+    padding: 1.05rem 0.7rem;
   }
 
   header h1 {
-    font-size: clamp(1.1rem, 4vw, 1.3rem);
-    margin: 0 0 0.4rem 0;
+    font-size: clamp(1.5rem, 6vw, 1.9rem);
+    margin: 0.22rem 0 0.55rem 0;
   }
 
 
@@ -208,10 +197,18 @@
   }
 
   .home-btn {
-    top: 8px;
-    left: 8px;
-    padding: 0.35rem 0.6rem;
-    font-size: 0.85rem;
+    top: 4px;
+    left: 4px;
+    width: 42px;
+    height: 42px;
+    padding: 0.25rem 0.4rem;
+    font-size: 0.8rem;
+    border-radius: 50%;
+  }
+
+  .home-btn::before {
+    width: 14px;
+    height: 14px;
   }
 
   /* Selection line */
@@ -277,7 +274,7 @@
   }
   
   .info-line p {
-    font-size: 0.9rem;
+    font-size: 0.84rem;
   }
 
   .map {
@@ -305,9 +302,14 @@
 
   /* Footer compact */
   footer {
-    padding: 0.7rem 0.5rem 0.3rem 0.5rem;
-    gap: 0.5rem;
-    font-size: 0.8rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.74rem 0.96rem 0.54rem 0.96rem;
+    gap: 0.3rem;
+    font-size: 0.76rem;
+    line-height: 1.2;
+    text-align: center;
   }
 
   .footer-top {
@@ -317,14 +319,24 @@
   }
 
   .footer-top p {
-    margin: 0.15rem 0;
-    font-size: 0.8rem;
+    margin: 0.08rem 0;
+    font-size: 0.74rem;
+  }
+
+  /* Footer link always underlined on mobile (no hover) */
+  .footer-link {
+    color: #fff;
+  }
+
+  .footer-link::after {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
   }
 
   .footer-swiss-link {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.7rem;
-    gap: 0.4rem;
+    font-size: 0.82rem;
+    padding: 0.34rem 0.58rem;
+    gap: 0.3rem;
   }
 
   .swiss-flag-icon {
@@ -333,18 +345,33 @@
   }
 
   .footer-link {
-    font-size: 0.8rem;
+    font-size: 0.84rem;
   }
 }
 
 /* Très petits écrans */
 @media (max-width: 480px) {
   header {
-    padding: 0.6rem 0.4rem;
+    padding: 0.9rem 0.6rem;
   }
 
   header h1 {
-    font-size: 1.1rem;
+    font-size: 1.55rem;
+    margin: 0.25rem 0 0.6rem 0;
+  }
+
+  .home-btn {
+    top: 3px;
+    left: 3px;
+    width: 38px;
+    height: 38px;
+    padding: 0.2rem 0.35rem;
+    font-size: 0.78rem;
+  }
+
+  .home-btn::before {
+    width: 13px;
+    height: 13px;
   }
 
  
@@ -383,7 +410,7 @@
 
   .footer-top p {
     margin: 0.1rem 0;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
 
   .footer-swiss-link {
@@ -421,14 +448,17 @@
   }
 
   footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: nowrap;
-      font-size: 0.75rem;
-    gap: 0.5rem;
-}
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    font-size: 0.74rem;
+    gap: 0.26rem;
+    padding: 0.64rem 0.86rem 0.46rem 0.86rem;
+    line-height: 1.16;
+    text-align: center;
+  }
 
 }
 

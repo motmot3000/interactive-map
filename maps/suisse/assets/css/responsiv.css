@@ -80,16 +80,18 @@
   footer {
     order: 20;
     flex-direction: column;
-    gap: 0.8rem;
-    padding: 1rem 0.5rem 0.5rem;
+    gap: 0.34rem;
+    padding: 0.82rem 1.05rem 0.64rem 1.05rem;
     align-items: center;
-  }
+    font-size: 0.8rem;
+    margin: 0.08rem 0;
+    font-size: 0.74rem;
 
   .footer-top {
     flex-direction: column;
-    gap: 0.5rem;
-    text-align: center;
-  }
+    font-size: 0.82rem;
+    padding: 0.34rem 0.58rem;
+    gap: 0.3rem;
 
   .footer-top p {
     margin: 0.2rem 0;
@@ -118,7 +120,7 @@
   }
 
   .header-container h1 {
-    font-size: 1.3rem;
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
   }
 
   .score-display {
@@ -138,12 +140,12 @@
 
   /* Header compact */
   header {
-    padding: 0.8rem 0.5rem;
+    padding: 1.05rem 0.7rem;
   }
 
   .header-container h1 {
-    font-size: clamp(1.1rem, 4vw, 1.3rem);
-    margin: 0 0 0.4rem 0;
+    font-size: clamp(1.5rem, 6vw, 1.9rem);
+    margin: 0.22rem 0 0.55rem 0;
   }
 
   /* Score compact */
@@ -161,10 +163,18 @@
   }
 
   .home-btn {
-    top: 8px;
-    left: 8px;
-    padding: 0.35rem 0.6rem;
-    font-size: 0.85rem;
+    top: 4px;
+    left: 4px;
+    width: 42px;
+    height: 42px;
+    padding: 0.25rem 0.4rem;
+    font-size: 0.8rem;
+    border-radius: 50%;
+  }
+
+  .home-btn::before {
+    width: 14px;
+    height: 14px;
   }
 
   /* Order: quiz before map, then info */
@@ -254,9 +264,10 @@
 
   /* Footer compact */
   footer {
-    padding: 0.7rem 0.5rem 0.3rem 0.5rem;
-    gap: 0.5rem;
-    font-size: 0.8rem;
+    padding: 0.74rem 0.96rem 0.54rem 0.96rem;
+    gap: 0.3rem;
+    font-size: 0.76rem;
+    line-height: 1.2;
   }
 
   .footer-top {
@@ -266,14 +277,14 @@
   }
 
   .footer-top p {
-    margin: 0.15rem 0;
-    font-size: 0.8rem;
+    margin: 0.08rem 0;
+    font-size: 0.74rem;
   }
 
   .footer-europe-link {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.7rem;
-    gap: 0.4rem;
+    font-size: 0.82rem;
+    padding: 0.34rem 0.58rem;
+    gap: 0.3rem;
   }
 }
 
@@ -292,20 +303,27 @@
 
   /* Header très compact */
   header {
-    padding: 0.6rem 0.5rem;
+    padding: 0.9rem 0.6rem;
   }
 
   .header-container h1 {
-    font-size: 1.1rem;
-    margin: 0 0 0.4rem 0;
+    font-size: 1.55rem;
+    margin: 0.25rem 0 0.6rem 0;
     letter-spacing: -0.01em;
   }
 
   .home-btn {
-    top: 8px;
-    left: 8px;
-    padding: 0.35rem 0.6rem;
-    font-size: 0.85rem;
+    top: 3px;
+    left: 3px;
+    width: 38px;
+    height: 38px;
+    padding: 0.2rem 0.35rem;
+    font-size: 0.78rem;
+  }
+
+  .home-btn::before {
+    width: 13px;
+    height: 13px;
   }
 
   .header-container .tagline {
@@ -451,8 +469,10 @@
   }
 
   footer {
-    padding: 0.8rem 0.4rem 0.3rem;
-    gap: 0.5rem;
+    padding: 0.64rem 0.86rem 0.46rem 0.86rem;
+    gap: 0.26rem;
+    font-size: 0.74rem;
+    line-height: 1.16;
   }
 
   .footer-top {
@@ -465,9 +485,9 @@
   }
 
   .footer-europe-link {
-    font-size: 0.65rem;
-    padding: 0.3rem 0.6rem;
-    gap: 0.3rem;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.6rem;
+    gap: 0.35rem;
   }
 
   .europe {

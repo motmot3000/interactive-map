@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>Carte interactive de l'Europe</title>
+    <title>Europe</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/CSS/style.css">
@@ -13,39 +13,45 @@
     
 
     <header>
-		<a class="home-btn" href="../../index.html">🏠 Accueil</a>
-        <h1>Carte interactive de l'Europe</h1>
-        <p class="score-display">
-         🔥Nombre de bonnes réponses : <output class="score-value">0</output>
-        </p>
+		<a class="home-btn" href="../../index.html">Accueil</a>
+        <h1> Carte interactive de l'Europe</h1>
+   
     </header>
+
+
 <section class="quiz-section">
-        <button class="question-btn" id="btn-quiz">Teste-moi! 🎯</button>
+	<button class="question-btn" id="btn-quiz">Teste-moi! </button>
 
-        <div class="quiz-container" id="le-quiz">
-            <div class="quiz-card">
-                <p class="quiz-question">Trouve le pays :</p>
-                <p class="quiz-answer" id="question"></p>
-            </div>
-        </div>
+	<div class="quiz-container" id="le-quiz">
+		<div class="quiz-card">
+			<p class="quiz-question">Trouve le pays :</p>
+			<p class="quiz-answer" id="question"></p>
+		</div>
+	</div>
 
-        <div class="result-message success-message" id="congrats">
-            <span class="icon">✅</span>
-            <p>Bravo! Tu as raison!</p>
-        </div>
+	<div class="result-message success-message" id="congrats">
+		<span class="icon">✅</span>
+		<p>Bravo! Tu as raison!</p>
+	</div>
 
-        <div class="result-message error-message" id="loser">
-            <span class="icon">❌</span>
-            <p>Oups! C'est faux!</p>
-            <p>Tu as cliqué sur <b id="true-answer"></b></p>
-        </div>
-    </section>
+	<div class="result-message error-message" id="loser">
+		<span class="icon">❌</span>
+		<p>Oups! C'est faux!</p>
+		<p>Tu as cliqué sur <b id="true-answer"></b></p>
+	</div>
+</section>
+
+
+
         <main>
           
 
     
 		
 				<section class="map-section">
+					<div class="score-display map-score">
+						<p>🔥 score : <output class="score-value">0</output></p>
+					</div>
                   
                         <svg viewBox="52 260 430 450">
     <g>
@@ -114,11 +120,11 @@
 				</div>
 
 				<div class="info-line">
-					<p>Nom officiel : <span class="info" id="full-name">...</span></p>
-					<p>Capitale : <span class="info"  id="capital">...</span></p>
-					<p>Population :~ <span class="info" id="population">...</span></p>
-					<p>Superficie :~<span class="info" id="area">...</span></p>
-					<p>Langues officielles : <span class="info" id="languages">...</span></p>
+					<p>Nom officiel:<br> <span class="info" id="full-name">...</span></p>
+					<p>Capitale:<br> <span class="info"  id="capital">...</span></p>
+					<p>Population:~<br> <span class="info" id="population">...</span></p>
+					<p>Superficie:~<br> <span class="info" id="area">...</span></p>
+					<p>Langues:<br> <span class="info" id="languages">...</span></p>
 					<img class="country-flag flag-bottom" id="flag-bottom" src="./assets/flags/eu.png" alt="Drapeau">
 				</div>
 
@@ -153,15 +159,12 @@
 	
 
 
-    <footer>
-		<a href="../suisse/index.html" class="footer-swiss-link">
-			<img src="../suisse/assets/images/switzerland.svg" alt="Carte de la Suisse" class="swiss-flag-icon">
-			<span>Découvre la carte de la Suisse!</span>
-		</a>
-		<div class="footer-top">
+    <footer >
+	
+		
 			<p class="footer-signature">Créé avec ❤️ par <a class="footer-link" href="https://www.lecagibi.ch">Le Cagibi</a></p>
 			<p class="footer-content">© Usage pédagogique autorisé.</p>
-		</div>
+	
 		
 		
     </footer>
