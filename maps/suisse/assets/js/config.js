@@ -4,7 +4,7 @@ const cantons = [
     "Appenzell Rhodes-Intérieures",
     "Argovie",
     "Bâle-Campagne",
-    "Bâle-Ville",
+    //"Bâle-Ville",
     "Berne",
     "Fribourg",
     "Genève",

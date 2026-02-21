@@ -72,7 +72,7 @@ header {
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.2),
     inset 0 -2px 10px rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+  border-bottom: 2px solid rgba(255, 197, 7, 0.685);
   position: relative;
   overflow: hidden;
 }
@@ -115,6 +115,14 @@ header > * {
   border-color: rgba(255, 255, 255, 0.65);
 }
 
+.home-btn::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 3 3 11h3v9h5v-5h2v5h5v-9h3z'/%3E%3C/svg%3E") center/contain no-repeat;
+  margin: 0;
+}
+
 header::before {
   content: '';
   position: absolute;
@@ -144,32 +152,6 @@ header::after {
   100% { left: 200%; }
 }
 
-@media (max-width: 640px) {
-  .home-btn {
-    width: 46px;
-    height: 46px;
-    padding: 0;
-    border-radius: 50%;
-    top: 8px;
-    left: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0;
-    text-indent: -9999px;
-    overflow: hidden;
-    line-height: 1;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
-  }
-
-  .home-btn::before {
-    content: '';
-    width: 16px;
-    height: 16px;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 3 3 11h3v9h5v-5h2v5h5v-9h3z'/%3E%3C/svg%3E") center/contain no-repeat;
-    margin: 0;
-  }
-}
 
 .header-container {
   position: relative;
@@ -196,13 +178,20 @@ h4 {
   margin-top: 0.8rem;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+  padding: 0.4rem 0.8rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
 }
 
 .score-display.map-score {
@@ -218,8 +207,22 @@ h4 {
   pointer-events: none;
 }
 
+.score-display p {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font: inherit;
+}
+
+.score-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .score-value {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 800;
   background: rgba(255, 255, 255, 0.9);
   color: var(--c-primary);
@@ -467,15 +470,15 @@ main{
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 0.5rem 1rem 1rem;
 }
-
-.map-section {
+.map-section{
+  position: relative;
   width: 100%;
   max-width: 500px;
-  min-height: 350px;
+  max-height: 350px;
   flex: 1 1 480px;
-  position: relative;
+  background: var(--c-surface);
+  box-shadow: var(--shadow-md);
   border: 2px solid var(--c-border);
   border-radius: var(--radius-md);
   padding: 1rem;
@@ -488,34 +491,33 @@ main{
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
 
 .content-section{
   position: relative;
+  width: 100%;
   max-width: 450px;
-  min-height: 350px;
+  max-height: 350px;
   flex: 1 1 480px;
-
   background: var(--c-surface);
   box-shadow: var(--shadow-md);
   border: 2px solid var(--c-border);
   border-radius: var(--radius-md);
   padding: 1rem;
-  padding-right: 9.5rem; /* reserve space for larger flag in top-right */
+  padding-right: 9.5rem;
   margin: 0.5rem;
   transition: box-shadow var(--transition), transform var(--transition);
   background:
     radial-gradient(1200px 600px at 20% 10%, rgba(37, 99, 235, 0.10), transparent 60%),
     radial-gradient(900px 500px at 90% 30%, rgba(245, 158, 11, 0.12), transparent 55%),
     var(--c-bg);
+  overflow: hidden;
 }
 
 .quiz-section{
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0.5rem auto 0.75rem;
   gap: 20px;   
 }
 
@@ -528,21 +530,11 @@ svg{
   margin: 0 auto;
 }
 
-.selection-line{
-  display: flex;
-  gap: 0.5rem;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  width: 100%;
-}
 
-.text-selection{
-  font-weight: 650;
-  color: var(--c-primary);
-  letter-spacing: 0.01em;
-}
 
 .selection{
+  display: flex;
+  width: fit-content;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
   font-weight: 750;
@@ -556,6 +548,10 @@ svg{
   max-width: 100%;
   word-wrap: break-word;
   overflow-wrap: break-word;
+}
+
+.info-line{
+  margin-top: 30px;
 }
 
 .info-line p{
@@ -727,55 +723,64 @@ svg{
   align-items: center;
   gap: 0.8rem;
   width: 100%;
-  padding: 1rem 0 2rem;
-  margin: 0;
-   margin-bottom: 5px;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .btn-start,
 .question-btn {
-  border: 0;
-  border-radius: 999px;
-  padding: 0.65rem 1rem;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  background-color: #fff;
-  color: #fff;
-  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-2));
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
+  font-family: var(--font-display);
+  font-weight: 800;
+  border: 2px solid rgba(37, 99, 235, 0.6);
+  border-radius: 18px;
+  padding: 0.72rem 1.35rem;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.18) 70%);
+  color: var(--c-text);
   cursor: pointer;
-  transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
-  display: block;
-  margin: auto;
-  min-width: 300px;
+  transition: transform var(--transition), filter var(--transition), box-shadow var(--transition), background var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  max-width: 180px;
+  margin: 0 auto;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+  animation: idleNudge 2.6s ease-in-out infinite;
 }
 
 .btn-start:hover,
 .question-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 22px rgba(37, 99, 235, 0.35);
-  filter: brightness(1.05);
+  filter: brightness(1.08);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.22) 70%);
+  box-shadow: 0 9px 20px rgba(0, 0, 0, 0.18);
 }
 
 .btn-start:active,
-.question-btn:active { 
-  transform: translateY(-1px); 
+.question-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16) inset, 0 6px 12px rgba(0, 0, 0, 0.08);
 }
 
 .btn-start:focus-visible,
 .question-btn:focus-visible {
-  outline: 3px solid rgba(245, 158, 11, 0.55);
+  outline: 2px solid var(--c-primary-2);
   outline-offset: 3px;
 }
 
 .question-btn.is-disabled,
 .question-btn:disabled {
-  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(148, 163, 184, 0.5);
+  color: var(--c-muted);
   box-shadow: none;
   cursor: not-allowed;
-  filter: grayscale(0.15);
+  filter: grayscale(0.1);
   transform: none;
 }
 
@@ -783,7 +788,14 @@ svg{
 .question-btn:disabled:hover {
   transform: none;
   box-shadow: none;
-  filter: grayscale(0.15);
+  filter: grayscale(0.1);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+@keyframes idleNudge {
+  0%, 70%, 100% { transform: translateY(0); }
+  80% { transform: translateY(-2px) rotate(-0.5deg); }
+  90% { transform: translateY(-1px) rotate(0.5deg); }
 }
 
 /* ==================== 8) CARTE QUIZ & MESSAGES ==================== */
@@ -889,7 +901,7 @@ footer {
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.2),
     inset 0 -2px 10px rgba(255, 255, 255, 0.08);
-  border-top: 1px solid rgb(0, 0, 0);
+  border-top: 2px solid rgba(255, 197, 7, 0.685);
   padding: 0.85rem 1.2rem;
   position: relative;
   overflow: hidden;
@@ -940,70 +952,33 @@ footer::after {
 }
 
 .footer-link {
-  color: #fff;
-  font-weight: 600;
-  text-decoration: none;
-  position: relative;
-  transition: color 0.3s ease;
+    color: #fff;
+    font-weight: 1000;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease;
 }
 
 .footer-link::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--c-accent), #fbbf24);
-  transition: width 0.3s ease;
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg,#fbbf24, #fbbf24);
+    transition: width 0.3s ease;
 }
 
 .footer-link:hover {
-  color: var(--c-accent);
+    color:#fbbf24;
 }
 
 .footer-link:hover::after {
-  width: 100%;
+    width: 100%;
 }
 
-/* Lien vers la carte de Suisse */
-.footer-europe-link {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  color: #fff;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: var(--radius-md);
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-  font-weight: 600;
-  font-size: 0.9rem;
-  position: relative;
-  z-index: 1;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-}
 
-.footer-europe-link:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: var(--c-accent);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(245, 158, 11, 0.3);
-}
-
-.europe {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-  transition: transform 0.3s ease;
-}
-
-.footer-europe-link:hover .europe {
-  transform: scale(1.08) rotate(5deg);
-}
 
 /* ==================== STYLES MODALE QUIZ ==================== */
 .modal-overlay {
@@ -1134,24 +1109,7 @@ footer::after {
   font-size: 1.3rem;
 }
 
-/* Mobile sizing override */
-@media (max-width: 640px) {
-  .map-section,
-  .content-section {
-    min-height: 350px !important;
-    padding: 0.75rem !important;
-    max-width: 100%;
-    flex: 1 1 100%;
-  }
 
-  .content-section {
-    padding-right: 1rem !important;
-  }
-
-  svg {
-    max-height: 260px;
-  }
-}
 
 .modal-error {
   color: var(--c-error);

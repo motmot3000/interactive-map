@@ -14,6 +14,8 @@ let nameEl, capitalEl, populationEl, areaEl, languagesEl, flagEl, flagBottomEl, 
 let congrats, loser, btnQuiz, leQuiz, questionElement, trueAnswerElement;
 let mapElement, contentSection, infoLineEl;
 let modalOverlay, modalFeedback, modalQuestion, modalErrorOverlay, modalErrorFeedback;
+let recentCountries = [];
+let defaultQuizLabel = "QUIZ";
 
 // ==================== INITIALISATION ====================
 document.addEventListener("DOMContentLoaded", function() {
@@ -40,6 +42,9 @@ function initializeApp() {
   congrats = document.getElementById("congrats");
   loser = document.getElementById("loser");
   btnQuiz = document.getElementById("btn-quiz");
+  if (btnQuiz) {
+    defaultQuizLabel = btnQuiz.textContent.trim() || defaultQuizLabel;
+  }
   leQuiz = document.getElementById("le-quiz");
   questionElement = document.getElementById("question");
   trueAnswerElement = document.getElementById("true-answer");
@@ -182,7 +187,7 @@ function launchQuiz() {
   console.log("🎯 Quiz lancé!");
   quizLaunched = true;
   setQuizButtonState(true);
-  randCountry = countries[Math.floor(Math.random() * countries.length)];
+  randCountry = pickRandomCountry();
   console.log("Pays choisi:", randCountry);
   
   // Réinitialiser l'apparence pour la nouvelle question
@@ -221,6 +226,17 @@ function launchQuiz() {
   setTimeout(() => {
     btnQuiz.style.transform = "scale(1)";
   }, 100);
+}
+
+function pickRandomCountry() {
+  const pool = countries.filter(c => !recentCountries.includes(c));
+  const candidates = pool.length ? pool : countries;
+  const choice = candidates[Math.floor(Math.random() * candidates.length)];
+  recentCountries.push(choice);
+  if (recentCountries.length > 10) {
+    recentCountries.shift();
+  }
+  return choice;
 }
 
 function checkAnswer(userAnswer) {
@@ -377,7 +393,7 @@ function resetQuiz() {
   }
 
   // Restaurer le texte original du bouton
-  btnQuiz.textContent = "Teste-moi! 🎯";
+  btnQuiz.textContent = defaultQuizLabel;
 
   // Réactiver le bouton pour permettre une nouvelle question
   setQuizButtonState(false);

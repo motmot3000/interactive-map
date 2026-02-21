@@ -76,7 +76,7 @@ header {
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.2),
     inset 0 -2px 10px rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+  border-bottom: 2px solid rgba(255, 197, 7, 0.685);
   position: relative;
   overflow: hidden;
 }
@@ -548,7 +548,7 @@ footer {
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.2),
     inset 0 -2px 10px rgba(255, 255, 255, 0.08);
-  border-top: 1px solid rgb(0, 0, 0);
+  border-top: 2px solid rgba(255, 197, 7, 0.685);
   padding: 0.85rem 1.2rem;
   margin: 0;
   margin-top: auto;
@@ -597,30 +597,30 @@ footer::after {
 
 
 .footer-link {
-  color: #fff;
-  font-weight: 1000;
-  text-decoration: none;
-  position: relative;
-  transition: color 0.3s ease;
+    color: #fff;
+    font-weight: 1000;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease;
 }
 
 .footer-link::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #00a8f7, #00a8f7);
-  transition: width 0.3s ease;
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg,#fbbf24, #fbbf24);
+    transition: width 0.3s ease;
 }
 
 .footer-link:hover {
-  color: #00a8f7;
+    color:#fbbf24;
 }
 
 .footer-link:hover::after {
-  width: 100%;
+    width: 100%;
 }
 
 

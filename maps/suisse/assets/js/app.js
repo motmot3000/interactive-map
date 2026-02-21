@@ -4,6 +4,7 @@ let randCanton = null;
 let answer = null;
 let consecutiveScore = 0;
 let modalTimeout = null;
+let recentCantons = []; // Historique des 5 derniers cantons pour éviter les répétitions
 
 // ==================== SÉLECTEURS DOM ====================
 let nomElement;
@@ -174,12 +175,29 @@ function launchQuiz() {
 
     quizLaunched = true;
     setQuizButtonState(true);
-    randCanton = cantons[Math.floor(Math.random() * cantons.length)];
+    
+    // Filtrer les cantons pour exclure les 5 derniers
+    let availableCantons = cantons.filter(canton => !recentCantons.includes(canton));
+    
+    // Si moins de cantons disponibles que nécessaire, réinitialiser l'historique
+    if (availableCantons.length === 0) {
+        recentCantons = [];
+        availableCantons = cantons;
+    }
+    
+    // Sélectionner un canton aléatoire parmi les disponibles
+    randCanton = availableCantons[Math.floor(Math.random() * availableCantons.length)];
+    
+    // Ajouter le canton à l'historique et maintenir la taille à 5 max
+    recentCantons.push(randCanton);
+    if (recentCantons.length > 5) {
+        recentCantons.shift(); // Retirer le plus ancien
+    }
 
     resetVisualState();
 
     // Afficher le canton à chercher sur le bouton
-    btnQuiz.textContent = "Cherche: " + randCanton;
+    btnQuiz.innerHTML = "Cherche: <br>" + randCanton;
 
     questionElement.textContent = randCanton;
 
@@ -311,7 +329,7 @@ function resetQuiz() {
     nomElement.textContent = "Cliquez sur un canton";
     
     // Restaurer le texte original du bouton
-    btnQuiz.textContent = "Teste-moi! 🎯";
+    btnQuiz.textContent = "QUIZ";
     
     setQuizButtonState(false);
 }
