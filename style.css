@@ -49,7 +49,7 @@ body {
     background-color: #f7f2e8;
     background-image:
         linear-gradient(rgba(247, 242, 232, 0.85), rgba(247, 242, 232, 0.85)),
-        url("assets/bg-body.jpg");
+        url("assets/bg-body.webp");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -75,7 +75,7 @@ h1, h2, h3, h4 {
    HEADER - En-tête
    ======================================== */
 .header {
-    background: url("assets/banner-world.png");
+    background: url("assets/banner-world.webp");
     background-size: 120% auto;
     background-position: center 35%;
     background-repeat: no-repeat;
