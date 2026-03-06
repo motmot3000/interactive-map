@@ -547,7 +547,7 @@ footer {
   align-items: center;
   justify-content: center;
   font-family: var(--font-body);
-  background: url("../../../../assets/banner-world.png") center 40% / 120% auto no-repeat;
+  background: url("../../../../assets/banner-world.webp") center 40% / 120% auto no-repeat;
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.2),
     inset 0 -2px 10px rgba(255, 255, 255, 0.08);
