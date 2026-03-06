@@ -446,3 +446,9 @@ document.addEventListener("keydown", function(event) {
     console.log(`🔥 Bonnes réponses consécutives: ${consecutiveScore}`);
   }
 });
+
+  // Met à jour automatiquement l'année du footer
+    let yearSpan = document.getElementById('year');
+    if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+    }

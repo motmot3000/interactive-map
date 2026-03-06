@@ -95,3 +95,10 @@ function addClassWithAnimation(element, className) {
     element.classList.add(className);
     element.style.animation = 'fadeIn 0.3s ease';
 }
+
+
+ // Met à jour automatiquement l'année du footer
+    let yearSpan = document.getElementById('year');
+    if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+    }
