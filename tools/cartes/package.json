@@ -1,0 +1,14 @@
+{
+  "name": "cartes-interactives-fonds",
+  "private": true,
+  "type": "module",
+  "description": "Génère les fonds de carte SVG des Cartes interactives à partir de données ouvertes.",
+  "scripts": {
+    "sources": "node sources.mjs",
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "mapshaper": "0.8.9",
+    "swiss-maps": "4.7.0"
+  }
+}
