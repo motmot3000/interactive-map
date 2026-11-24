@@ -1,0 +1,12 @@
+{
+  "name": "cartes-interactives-tests",
+  "private": true,
+  "type": "module",
+  "description": "Tests de bout en bout des Cartes interactives (Chrome installé sur la machine, sans téléchargement de navigateur).",
+  "scripts": {
+    "test": "node run.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.56.0"
+  }
+}
