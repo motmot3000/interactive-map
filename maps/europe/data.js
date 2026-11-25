@@ -16,7 +16,7 @@ window.ATLAS_MAP = {
   small: ['AD', 'LI', 'LU', 'MC', 'MT', 'SM', 'VA'],
   smallLabel: 'Inclure les micro-États',
   flags: 'drapeaux/',
-  quizLead: 'Retrouve chaque pays sur la carte. Trois essais par question ; après le troisième, la carte montre la bonne réponse.',
+  quizLead: 'Retrouve chaque pays sur la carte. Trois essais par question\u00a0; après le troisième, la carte montre la bonne réponse.',
   questions: [
     { id: 'pays', label: 'Pays', lead: 'Trouve', prompt: 'name' },
     { id: 'capitale', label: 'Capitales', lead: 'Pays de la capitale', prompt: 'capital' },
@@ -30,7 +30,7 @@ window.ATLAS_MAP = {
     { key: 'languages', label: 'Langues officielles', wide: true },
     { key: 'eu', label: 'Union européenne', format: 'eu', wide: true },
   ],
-  sources: 'Sources : Banque mondiale (population 2024), Eurostat et offices statistiques nationaux (superficie), Journal officiel (noms). Fond de carte : Natural Earth, vue officielle de la France.',
+  sources: 'Sources&nbsp;: Banque mondiale (population 2024), Eurostat et offices statistiques nationaux (superficie), Journal officiel (noms). Fond de carte&nbsp;: Natural Earth, vue officielle de la France.',
   regions: {
     "AL": { name: "Albanie", official: "République d'Albanie", capital: "Tirana", population: 2377128, populationYear: 2024, area: 28791, languages: "Albanais", currency: "Lek", flag: "al.svg" },
     "DE": { name: "Allemagne", official: "République fédérale d'Allemagne", capital: "Berlin", population: 83516593, populationYear: 2024, area: 357569, languages: "Allemand", currency: "Euro", eu: 1958, flag: "de.svg", note: "Membre fondateur (RFA) ; l'ex-RDA y est entrée avec la réunification de 1990." },

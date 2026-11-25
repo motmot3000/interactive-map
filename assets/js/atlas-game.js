@@ -489,7 +489,7 @@
         <ul class="legend" aria-label="Légende de la correction">
           <li>${swatch('hit')}Trouvé du premier coup</li>
           <li>${swatch('retry')}Trouvé au 2e ou 3e essai</li>
-          <li>${swatch('miss')}Manqué : la carte montre la bonne réponse</li>
+          <li>${swatch('miss')}Manqué&nbsp;: la carte montre la bonne réponse</li>
         </ul>
       </section>`;
     $$('[data-type]', els.sheetBody).forEach((b) => b.addEventListener('click', () => {
@@ -568,7 +568,7 @@
   const hits = () => Array.from(quiz.results.values()).filter((v) => v === 'hit').length;
 
   // La question tient sur une ligne : « Trouve : Allemagne », « Département n° 64 ».
-  const askOf = (q) => (/°$/.test(q.lead) ? q.lead : `${q.lead} :`);
+  const askOf = (q) => (/°$/.test(q.lead) ? q.lead : `${q.lead}\u00a0:`);
 
   function promptHtml(code) {
     const q = question();
@@ -774,7 +774,7 @@
     const pct = r.total ? Math.round(r.hits / r.total * 100) : 0;
     const stars = starsOf(r.hits, r.total);
     const title = r.stopped ? 'Quiz arrêté'
-      : ['Continue l’exploration', 'Expédition réussie', 'Bien joué !', 'Sans faute, bravo !'][stars];
+      : ['Continue l’exploration', 'Expédition réussie', 'Bien joué\u00a0!', 'Sans faute, bravo\u00a0!'][stars];
     els.sheetHead.innerHTML = '';
     els.sheetFoot.hidden = true;
     els.sheetBody.innerHTML = `
@@ -795,7 +795,7 @@
           <ul class="legend legend--counts">
             <li>${swatch('hit')}<span>Trouvé du premier coup</span><strong>${counts.hit}</strong></li>
             <li>${swatch('retry')}<span>Trouvé au 2e ou 3e essai</span><strong>${counts.retry}</strong></li>
-            <li>${swatch('miss')}<span>Manqué : la réponse est hachurée</span><strong>${counts.miss}</strong></li>
+            <li>${swatch('miss')}<span>Manqué&nbsp;: la réponse est hachurée</span><strong>${counts.miss}</strong></li>
           </ul>
         </section>
         ${errors.length ? `

@@ -15,7 +15,7 @@ window.ATLAS_MAP = {
   home: null,
   small: [],
   flags: '',
-  quizLead: 'Retrouve chaque département sur la carte. Trois essais par question ; après le troisième, la carte montre la bonne réponse.',
+  quizLead: 'Retrouve chaque département sur la carte. Trois essais par question\u00a0; après le troisième, la carte montre la bonne réponse.',
   questions: [
     { id: 'nom', label: 'Noms', lead: 'Trouve', prompt: 'name' },
     { id: 'numero', label: 'Numéros', lead: 'Trouve le département n°', prompt: 'code' },
@@ -28,7 +28,7 @@ window.ATLAS_MAP = {
     { key: 'area', label: 'Superficie', format: 'area' },
     { key: 'communes', label: 'Communes', format: 'int' },
   ],
-  sources: 'Sources : Insee, Code officiel géographique et populations de référence 2023 (en vigueur au 1er janvier 2026), via geo.api.gouv.fr. Fond de carte : IGN Admin Express (Licence Ouverte), Natural Earth.',
+  sources: 'Sources&nbsp;: Insee, Code officiel géographique et populations de référence 2023 (en vigueur au 1er janvier 2026), via geo.api.gouv.fr. Fond de carte&nbsp;: IGN Admin Express (Licence Ouverte), Natural Earth.',
   regions: {
     '10': { name: "Aube", capital: "Troyes", region: "Grand Est", population: 310447, populationYear: 2023, area: 6023, communes: 431 },
     '11': { name: "Aude", capital: "Carcassonne", region: "Occitanie", population: 379648, populationYear: 2023, area: 6345, communes: 433 },

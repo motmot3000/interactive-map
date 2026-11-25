@@ -91,7 +91,7 @@
     var code = queue[index];
     targetEl.textContent = data.regions[code].name;
     countEl.textContent = index + ' / ' + ROUNDS;
-    foot.textContent = index === 0 ? 'Clique sur la carte.' : 'Suivant : clique sur la carte.';
+    foot.textContent = index === 0 ? 'Clique sur la carte.' : 'Suivant\u00a0: clique sur la carte.';
   }
 
   function start() {
@@ -105,12 +105,12 @@
   function finish() {
     countEl.textContent = ROUNDS + ' / ' + ROUNDS;
     targetEl.textContent = found + ' sur ' + ROUNDS;
-    root.querySelector('.teaser__ask').textContent = found === ROUNDS ? 'Bravo !' : 'Trouvés :';
+    root.querySelector('.teaser__ask').textContent = found === ROUNDS ? 'Bravo\u00a0!' : 'Trouvés\u00a0:';
     foot.innerHTML = '<span>Encore ' + (Object.keys(data.regions).length - ROUNDS) + ' pays à découvrir.</span>'
       + '<span class="teaser__more"><button type="button" class="btn" data-teaser-again>Rejouer</button> '
       + '<a class="btn btn--primary" href="maps/europe/index.html#quiz">Carte d’Europe</a></span>';
     foot.querySelector('[data-teaser-again]').addEventListener('click', function () {
-      root.querySelector('.teaser__ask').textContent = 'Trouve :';
+      root.querySelector('.teaser__ask').textContent = 'Trouve\u00a0:';
       start();
     });
   }
@@ -126,7 +126,7 @@
       if (tries === 0) found += 1;
       path.classList.add(tries === 0 ? 'is-hit' : 'is-show');
       showPin(code, data.regions[code].name, false);
-      foot.textContent = tries === 0 ? 'Bien vu !' : 'Trouvé !';
+      foot.textContent = tries === 0 ? 'Bien vu\u00a0!' : 'Trouvé\u00a0!';
       index += 1;
       setTimeout(function () {
         if (index >= ROUNDS) finish(); else ask();
@@ -140,14 +140,14 @@
       locked = true;
       var right = el(goal);
       if (right) right.classList.add('is-show');
-      showPin(goal, 'Ici : ' + data.regions[goal].name, false);
-      foot.textContent = 'Raté : la bonne réponse est indiquée sur la carte.';
+      showPin(goal, 'Ici\u00a0: ' + data.regions[goal].name, false);
+      foot.textContent = 'Raté\u00a0: la bonne réponse est indiquée sur la carte.';
       index += 1;
       setTimeout(function () {
         if (index >= ROUNDS) finish(); else ask();
       }, 1800);
     } else {
-      showPin(code, 'Ça, c’est : ' + data.regions[code].name, true);
+      showPin(code, 'Ça, c’est\u00a0: ' + data.regions[code].name, true);
       foot.textContent = 'Non. Encore un essai.';
     }
   });

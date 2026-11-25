@@ -13,7 +13,7 @@ window.ATLAS_MAP = {
   home: null,
   small: [],
   flags: 'drapeaux/',
-  quizLead: 'Retrouve chaque canton sur la carte. Trois essais par question ; après le troisième, la carte montre la bonne réponse.',
+  quizLead: 'Retrouve chaque canton sur la carte. Trois essais par question\u00a0; après le troisième, la carte montre la bonne réponse.',
   questions: [
     { id: 'canton', label: 'Cantons', lead: 'Trouve', prompt: 'name' },
     { id: 'chef-lieu', label: 'Chefs-lieux', lead: 'Canton du chef-lieu', prompt: 'capital' },
@@ -26,7 +26,7 @@ window.ATLAS_MAP = {
     { key: 'area', label: 'Superficie', format: 'area' },
     { key: 'languages', label: 'Langues officielles', wide: true },
   ],
-  sources: 'Sources : Office fédéral de la statistique (population au 31.12.2025, superficie). Fond de carte : OFS et swisstopo (limites généralisées 2026), Natural Earth.',
+  sources: 'Sources&nbsp;: Office fédéral de la statistique (population au 31.12.2025, superficie). Fond de carte&nbsp;: OFS et swisstopo (limites généralisées 2026), Natural Earth.',
   regions: {
     "AR": { name: "Appenzell Rhodes-Extérieures", official: "Canton d'Appenzell Rhodes-Extérieures", capital: "Herisau", population: 57221, populationYear: 2025, area: 243, languages: "Allemand", joined: 1513, flag: "ar.webp", square: true, note: "1513 : entrée d'Appenzell, divisé en 1597 en Rhodes-Extérieures et Rhodes-Intérieures. La Constitution cantonale ne fixe pas de chef-lieu : Herisau est le siège du gouvernement et du parlement, Trogen celui du Tribunal supérieur." },
     "AI": { name: "Appenzell Rhodes-Intérieures", official: "Canton d'Appenzell Rhodes-Intérieures", capital: "Appenzell", population: 16890, populationYear: 2025, area: 172, languages: "Allemand", joined: 1513, flag: "ai.webp", square: true, note: "1513 : entrée d'Appenzell, divisé en 1597 en Rhodes-Extérieures et Rhodes-Intérieures." },
