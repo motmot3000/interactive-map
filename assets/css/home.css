@@ -124,202 +124,49 @@ html {
   color: #fff;
 }
 
-/* ---------------------------------------------------------------- Bienvenue + planche jouable */
+/* ---------------------------------------------------------------- Bienvenue : le message d'accueil et sa description,
+   centrés sur le papier, juste avant les cartes */
 .welcome {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
-  align-items: center;
-  gap: clamp(32px, 5vw, 72px);
-  width: var(--column);
+  width: min(var(--column), 46rem);
   margin: 0 auto;
+  padding-top: clamp(48px, 6vw, 80px);
+  text-align: center;
 }
 
-.welcome h2 {
+.welcome__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
   color: var(--navy);
-  font-size: clamp(2.3rem, 1.5rem + 2.2vw, 3.4rem);
+  font-size: clamp(2.4rem, 1.6rem + 2.4vw, 3.6rem);
   line-height: 1.05;
 }
 
+.welcome__title::after {
+  content: "";
+  width: 132px;
+  height: 12px;
+  background: var(--ornament) center / 132px 12px no-repeat;
+}
+
 .welcome__lead {
-  max-width: 30rem;
-  margin-top: 18px;
+  max-width: 36rem;
+  margin: 22px auto 0;
   color: var(--ink);
-  font-size: 1.25rem;
+  font-size: clamp(1.1875rem, 1.05rem + 0.5vw, 1.375rem);
   font-weight: 600;
   line-height: 1.5;
+  text-wrap: balance;
 }
 
 .welcome__more {
-  max-width: 33rem;
-  margin-top: 10px;
+  max-width: 40rem;
+  margin: 12px auto 0;
   color: var(--ink-2);
   font-size: 1.0625rem;
   line-height: 1.65;
-}
-
-.welcome__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 28px;
-}
-
-.welcome__note {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 16px;
-  color: var(--ink-3);
-  font-size: var(--step--1);
-  font-weight: 600;
-}
-
-/* La planche jouable chevauche le bord déchiré du bandeau */
-.teaser {
-  position: relative;
-  z-index: 2;
-  margin: -24px 0 0;
-  border-radius: var(--r-lg);
-  background: var(--paper);
-  box-shadow: var(--shadow-lift);
-  overflow: hidden;
-}
-
-.teaser__bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px 12px 18px;
-  border-bottom: 1px solid var(--line);
-}
-
-.teaser__prompt {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  color: var(--navy);
-  font-family: var(--font-display);
-  font-size: 1.625rem;
-  line-height: 1.15;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.teaser__ask {
-  color: var(--ink-3);
-  font-family: var(--font);
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-
-.teaser__count {
-  padding: 6px 11px;
-  border-radius: var(--r-pill);
-  background: var(--navy);
-  color: #fff;
-  font-size: 0.8125rem;
-  font-weight: 700;
-}
-
-.teaser__map {
-  position: relative;
-  background: var(--sea);
-}
-
-.teaser__map svg {
-  width: 100%;
-  height: auto;
-}
-
-.teaser__map .s {
-  fill: var(--sea);
-}
-
-.teaser__map .g {
-  fill: none;
-  stroke: var(--graticule);
-  stroke-width: 0.7;
-}
-
-.teaser__map .c {
-  fill: var(--ctx);
-  stroke: var(--ctx-line);
-  stroke-width: 0.6;
-}
-
-.teaser__map .r {
-  fill: var(--mute);
-  stroke: var(--mute-line);
-  stroke-width: 0.6;
-  stroke-linejoin: round;
-  cursor: pointer;
-  transition: fill var(--t-fast) var(--ease);
-}
-
-.teaser__map .r:hover {
-  fill: var(--gold-soft);
-}
-
-.teaser__map .r.is-hit {
-  fill: var(--hit);
-}
-
-.teaser__map .r.is-wrong {
-  fill: var(--miss);
-}
-
-.teaser__map .r.is-show {
-  fill: var(--retry);
-}
-
-.teaser__map .r:focus-visible {
-  outline: none;
-  stroke: var(--navy);
-  stroke-width: 2;
-}
-
-.teaser__pin {
-  position: absolute;
-  left: 0;
-  top: 0;
-  padding: 6px 12px;
-  border-radius: var(--r-pill);
-  background: var(--navy);
-  color: #fff;
-  font-size: var(--step--1);
-  font-weight: 700;
-  white-space: nowrap;
-  pointer-events: none;
-  transform: translate(-50%, calc(-100% - 10px));
-  box-shadow: var(--shadow);
-}
-
-.teaser__pin--miss {
-  background: var(--miss-ink);
-}
-
-.teaser__foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px 12px;
-  min-height: 56px;
-  padding: 10px 14px 10px 18px;
-  border-top: 1px solid var(--line);
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-
-.teaser__more {
-  display: inline-flex;
-  gap: 8px;
-}
-
-.teaser__foot .btn {
-  min-height: 40px;
-  padding: 0 16px;
+  text-wrap: pretty;
 }
 
 /* ---------------------------------------------------------------- Sections */
@@ -330,6 +177,11 @@ html {
   width: var(--column);
   margin: 0 auto;
   padding-top: clamp(72px, 8vw, 112px);
+}
+
+/* Les cartes suivent le message d'accueil de près : c'est la suite de la même phrase */
+.welcome + .maps {
+  padding-top: clamp(48px, 5vw, 72px);
 }
 
 .section-title {
@@ -405,21 +257,6 @@ html {
 
 .plate__flag--square {
   width: 34px;
-}
-
-.plate__ribbon {
-  position: absolute;
-  top: 14px;
-  right: -36px;
-  padding: 4px 40px;
-  background: var(--gold);
-  color: var(--ink);
-  font-size: 0.6875rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  box-shadow: 0 2px 6px rgba(26, 34, 51, 0.22);
-  transform: rotate(38deg);
 }
 
 .plate__badge {
@@ -692,9 +529,6 @@ html {
     animation: rise 800ms var(--ease) both;
   }
   .hero__title > :nth-child(2) { animation-delay: 90ms; }
-  .teaser {
-    animation: rise 900ms 160ms var(--ease) both;
-  }
 }
 
 @keyframes rise {
@@ -705,21 +539,6 @@ html {
 @media (max-width: 1080px) {
   .plates {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-/* Tablette en portrait et téléphone : la planche passe sous le texte, centrée */
-@media (max-width: 860px) {
-  .welcome {
-    grid-template-columns: 1fr;
-    padding-top: 28px;
-  }
-
-  .teaser {
-    justify-self: center;
-    width: 100%;
-    max-width: 640px;
-    margin-top: 0;
   }
 }
 
@@ -810,30 +629,15 @@ html {
   }
 
   .welcome {
-    row-gap: 0;
+    padding-top: 40px;
   }
 
-  .welcome__text {
-    display: contents;
+  .welcome__more {
+    font-size: 1rem;
   }
-
-  .welcome h2 { order: 1; }
-  .welcome__lead { order: 2; margin-top: 10px; font-size: 1.125rem; }
-  .teaser { order: 3; margin-top: 22px; }
-  .welcome__more { order: 4; margin-top: 22px; font-size: 1rem; }
-  .welcome__actions { order: 5; margin-top: 20px; }
-  .welcome__note { order: 6; margin-top: 14px; }
 
   .plate__map {
     aspect-ratio: 2 / 1;
-  }
-
-  .welcome__actions {
-    flex-direction: column;
-  }
-
-  .welcome__actions .btn {
-    width: 100%;
   }
 
   .plates {
@@ -848,9 +652,5 @@ html {
 
   .notebook__list {
     grid-template-columns: 1fr;
-  }
-
-  .teaser__prompt {
-    font-size: 1.375rem;
   }
 }

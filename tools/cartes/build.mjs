@@ -352,24 +352,21 @@ function renderMap(id, parsed, { seaClass = 'map-sea', underlayClass = 'land-und
 }
 
 // Vignette autonome (page d'accueil) : styles en ligne, sans interaction.
-function renderPlate(id, parsed, { landSea = false, interactive = false, underlay = 'u', neighbors = null } = {}) {
+function renderPlate(id, parsed, { landSea = false, underlay = 'u', neighbors = null } = {}) {
   const { width, height, layers } = parsed;
   const tint = neighbors ? tintRegions((layers.regions || []).map((p) => p.id), neighbors) : null;
   const out = [];
   out.push(`<svg xmlns="http://www.w3.org/2000/svg" class="plate-svg" data-plate="${id}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Carte : ${id}">`);
-  if (!interactive) {
-    out.push('<style>.s{fill:#a9d4ea}.s--land{fill:#efe5cd}.g{fill:none;stroke:#fff;stroke-opacity:.55;stroke-width:.7}.c{fill:#efe5cd;stroke:#d8c39b;stroke-width:.6}.u{fill:#f8f0dc}.uc{fill:#efe5cd}.r{fill:#f8f0dc;stroke:#fff;stroke-width:.8;stroke-linejoin:round}'
-      + TINTS.map((c, i) => `.t${i}{fill:${c}}`).join('') + '.l{fill:#a9d4ea;stroke:#7fb3d0;stroke-width:.4}</style>');
-  }
+  out.push('<style>.s{fill:#a9d4ea}.s--land{fill:#efe5cd}.g{fill:none;stroke:#fff;stroke-opacity:.55;stroke-width:.7}.c{fill:#efe5cd;stroke:#d8c39b;stroke-width:.6}.u{fill:#f8f0dc}.uc{fill:#efe5cd}.r{fill:#f8f0dc;stroke:#fff;stroke-width:.8;stroke-linejoin:round}'
+    + TINTS.map((c, i) => `.t${i}{fill:${c}}`).join('') + '.l{fill:#a9d4ea;stroke:#7fb3d0;stroke-width:.4}</style>');
   out.push(`<rect class="s${landSea ? ' s--land' : ''}" width="${width}" height="${height}"/>`);
   if (layers.graticule?.length) out.push(`<path class="g" d="${layers.graticule.map((p) => p.d).join('')}"/>`);
   for (const p of layers.context || []) out.push(`<path class="c" d="${p.d}"/>`);
   for (const p of layers.underlay || []) out.push(`<path class="${underlay}" d="${p.d}"/>`);
   for (const p of layers.waterUnder || []) out.push(`<path class="l" d="${p.d}"/>`);
   for (const p of layers.regions || []) {
-    const t = tint && !interactive ? ` t${tint[p.id]}` : '';
-    const dt = tint && interactive ? ` data-tint="${tint[p.id]}"` : '';
-    out.push(`<path class="r${t}"${interactive ? ` data-code="${p.id}"` : ''}${dt} d="${p.d}"/>`);
+    const t = tint ? ` t${tint[p.id]}` : '';
+    out.push(`<path class="r${t}" d="${p.d}"/>`);
   }
   for (const p of layers.lakes || []) out.push(`<path class="l" d="${p.d}"/>`);
   out.push('</svg>');
@@ -469,7 +466,6 @@ async function buildEurope() {
   await inject('europe', renderMap('europe', parsed, { neighbors, names, playable: EUROPE }));
   const plate = await composeSvg({ frame: home, layers: { graticule: grid, context, regions }, width: 600, simplify: 18, svgData: '', precision: 0.5, clip: true });
   await writePlate('europe', renderPlate('europe', plate, { neighbors }));
-  return renderPlate('europe', plate, { interactive: true, neighbors });
 }
 
 // ---------------------------------------------------------------- France
@@ -694,13 +690,7 @@ async function buildMonde() {
 
 const only = process.argv.slice(2);
 const builds = { europe: buildEurope, france: buildFrance, suisse: buildSuisse, monde: buildMonde };
-let teaser = null;
 for (const [id, fn] of Object.entries(builds)) {
   if (only.length && !only.includes(id)) continue;
-  const result = await fn();
-  if (id === 'europe') teaser = result;
-}
-if (teaser && !process.env.PREVIEW) {
-  await replaceBetween(path.join(root, 'index.html'), '<!-- vignette:debut -->', '<!-- vignette:fin -->', teaser);
-  console.log('vignette interactive injectée dans index.html');
+  await fn();
 }

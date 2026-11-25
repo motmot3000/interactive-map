@@ -382,17 +382,6 @@ a {
   transform: translateY(-1px);
 }
 
-.btn--gold {
-  --btn-bg: var(--gold);
-  --btn-fg: var(--ink);
-  --btn-line: var(--gold-deep);
-}
-
-.btn--gold:hover {
-  --btn-bg: #f0c56a;
-  --btn-line: var(--gold-deep);
-}
-
 .btn--quiet {
   --btn-line: transparent;
   --btn-bg: transparent;
