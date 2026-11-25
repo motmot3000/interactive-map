@@ -53,7 +53,7 @@ async function test(name, fn, viewport = { width: 1440, height: 900 }) {
   }
 }
 
-const settle = (page) => page.waitForFunction(() => !window.Atlas.app.map.motion, null, { timeout: 8000 });
+const settle = (page) => page.waitForFunction(() => !window.Atlas.app.map.motion && !window.Atlas.app.map.dirty, null, { timeout: 8000 });
 async function open(page, map) {
   await page.goto(`${base}/maps/${map}/index.html`);
   await page.waitForFunction(() => window.Atlas && window.Atlas.app);
@@ -76,7 +76,7 @@ await test('Accueil : chargement et planche jouable', async (page) => {
   await page.goto(`${base}/index.html`);
   await page.waitForSelector('[data-teaser-target]');
   const h1 = await page.textContent('h1');
-  assert(h1.includes('Situer chaque pays'), `titre inattendu : ${h1}`);
+  assert(h1.includes('Cartes interactives'), `titre inattendu : ${h1}`);
   const name = (await page.textContent('[data-teaser-target]')).trim();
   const code = await page.evaluate((n) => Object.keys(window.ATLAS_MAP.regions).find((c) => window.ATLAS_MAP.regions[c].name === n), name);
   assert(code, `pays introuvable pour « ${name} »`);
@@ -119,6 +119,43 @@ for (const [map, expected] of [['europe', 47], ['suisse', 26], ['france', 96]]) 
     assert(!report.flags.length, `drapeaux absents : ${report.flags}`);
     assert(!report.noName.length, `fiches incomplètes : ${report.noName}`);
   });
+}
+
+// ---------------------------------------------------------------- Plein cadre
+// Sur chaque écran courant, le fond dessiné couvre toute la scène (aucun bord de planche) et le pays de départ
+// tient entier dans la zone libre, en exploration comme en quiz.
+const frameReport = (page) => page.evaluate(() => {
+  const m = window.Atlas.app.map;
+  const c = m._content();
+  const h = m._homeBox();
+  const box = { x1: h.x * m.k + m.x, y1: h.y * m.k + m.y, x2: (h.x + h.w) * m.k + m.x, y2: (h.y + h.h) * m.k + m.y };
+  return {
+    covers: m.x <= 0.5 && m.y <= 0.5 && m.x + m.W * m.k >= m.vw - 0.5 && m.y + m.H * m.k >= m.vh - m.hiddenBottom - 0.5,
+    inside: box.x1 >= c.L - 2 && box.y1 >= c.T - 2 && box.x2 <= c.R + 2 && box.y2 <= c.B + 2,
+    forced: m.k / (Math.min(c.w / h.w, c.h / h.h) * 0.94),
+  };
+});
+for (const [w, h] of [[1440, 900], [1920, 1080], [1366, 768], [1024, 768], [768, 1024], [390, 844]]) {
+  await test(`Plein cadre ${w}x${h} : fond sans bord, pays entier (3 cartes, exploration et quiz)`, async (page) => {
+    const problems = [];
+    for (const map of ['europe', 'suisse', 'france']) {
+      await open(page, map);
+      let r = await frameReport(page);
+      if (!r.covers || !r.inside || r.forced > 1.08) problems.push(`${map} exploration ${JSON.stringify(r)}`);
+      await press(page, 'button[data-mode="quiz"]');
+      await press(page, '[data-start]');
+      await settle(page);
+      r = await frameReport(page);
+      if (!r.covers || !r.inside || r.forced > 1.08) problems.push(`${map} quiz ${JSON.stringify(r)}`);
+      for (let i = 0; i < 4; i++) await press(page, '[data-action="zoom-out"]');
+      await settle(page);
+      r = await frameReport(page);
+      if (!r.covers) problems.push(`${map} dézoom maximal : bord visible`);
+    }
+    assert(!problems.length, problems.join(' | '));
+    const scale = await page.textContent('.scalebar');
+    assert(/\d km$/.test(scale.trim()), `échelle : « ${scale} »`);
+  }, { width: w, height: h });
 }
 
 // ---------------------------------------------------------------- Explorer
@@ -190,9 +227,17 @@ await test('Quiz : partie, erreurs corrigées sur la carte, révision des erreur
     await clickRegion(page, s.target);
     await page.waitForFunction((n) => window.Atlas.app.quiz.index > n || window.Atlas.app.quiz.status !== 'play', s.index);
   }
-  await page.waitForSelector('.result');
+  await page.waitForSelector('.sheet .result');
   const score = await page.textContent('.result__score strong');
   assert(score === '9', `score affiché : ${score}`);
+  const docked = await page.evaluate(() => ({
+    sheet: !document.querySelector('.sheet').classList.contains('is-hidden'),
+    overlay: !!document.querySelector('.result-layer, [aria-modal="true"]'),
+    miss: document.querySelectorAll('.region.is-miss').length,
+    count: document.querySelector('.legend--counts li:last-child strong').textContent,
+  }));
+  assert(docked.sheet && !docked.overlay, `bilan : ${JSON.stringify(docked)}`);
+  assert(docked.miss === 1 && docked.count === '1', `correction sur la carte : ${JSON.stringify(docked)}`);
   assert(await page.isVisible('[data-errors]'), 'pas de bouton de révision');
   await press(page, '[data-errors]');
   await settle(page);
@@ -240,6 +285,33 @@ await test('Téléphone : la fiche s’ouvre dans le panneau du bas', async (pag
   const box = await page.locator('.sheet').boundingBox();
   assert(box.y > 300 && box.width > 360, `panneau : ${JSON.stringify(box)}`);
   assert((await page.textContent('.fiche h2')) === 'Gironde', 'mauvaise fiche');
+}, { width: 390, height: 844 });
+
+await test('Téléphone : le retour de quiz montre le nom entier et le score', async (page) => {
+  await open(page, 'france');
+  await page.evaluate(() => localStorage.clear());
+  await press(page, 'button[data-mode="quiz"]');
+  await press(page, '[data-start]');
+  await settle(page);
+  await page.evaluate(() => { window.Atlas.app.quiz.queue[0] = '04'; });
+  await clickRegion(page, '04');
+  await page.waitForSelector('.hud.is-hit');
+  const hit = await page.evaluate(() => {
+    clearTimeout(window.Atlas.app.quiz.pending);
+    const t = document.querySelector('.hud__target');
+    const score = document.querySelector('.hud__stat--score');
+    return { cut: t.scrollWidth > t.clientWidth + 1, text: t.textContent, score: getComputedStyle(score).display };
+  });
+  assert(!hit.cut && hit.text === 'Alpes-de-Haute-Provence', `nom coupé : ${JSON.stringify(hit)}`);
+  assert(hit.score !== 'none', 'le score reste caché');
+  const inHud = await page.evaluate(() => {
+    const h = document.querySelector('.hud').getBoundingClientRect();
+    return Array.from(document.querySelectorAll('.hud > *')).filter((el) => el.offsetWidth).every((el) => {
+      const r = el.getBoundingClientRect();
+      return r.right <= h.right + 1 && r.left >= h.left - 1 && (!el.matches('button') || r.width >= 44);
+    });
+  });
+  assert(inHud, 'un élément du bandeau déborde ou un bouton fait moins de 44 px');
 }, { width: 390, height: 844 });
 
 await browser.close();
