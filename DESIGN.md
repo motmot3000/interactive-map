@@ -122,12 +122,6 @@ components:
   button-primary-hover:
     backgroundColor: "{colors.navy-deep}"
     textColor: "#ffffff"
-  button-gold:
-    backgroundColor: "{colors.gold}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.control}"
-    padding: "0 20px"
-    height: "46px"
   button-secondary:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.navy}"
@@ -213,8 +207,8 @@ La palette de la v1 (bleu marine, doré, crème) étendue à un atlas d'école :
   badge des départements. Version profonde (`navy-deep`) au survol et pour les traits de sélection.
 
 ### Secondary
-- **Laiton doré** (`gold`) : liserés des bandeaux et des calques, essais restants, étoiles, ruban « Nouveau », bouton
-  « Nouveau : la France ». En texte, toujours la version encre (`gold-ink`) pour le contraste ; fond doux `gold-soft`
+- **Laiton doré** (`gold`) : liserés des bandeaux et des calques, filets d'ornement, cadres des planches, essais
+  restants, étoiles. En texte, toujours la version encre (`gold-ink`) pour le contraste ; fond doux `gold-soft`
   pour les survols et le record.
 
 ### Tertiary
@@ -279,11 +273,11 @@ pour qu'aucune ponctuation ne commence une ligne.
 
 Les bandes de carte ancienne sont **courtes** (Thomas, 2026-11-25 : « courte en header et footer »). L'en-tête est une
 bande de 128 px (104 px sur téléphone, bord déchiré compris) sur une seule rangée : rose des vents, nom gravé et devise
-à gauche, trois liens de section à droite (masqués sous 760 px). Dessous, sur le papier : « Bienvenue à bord ! », une
-phrase d'accroche, le détail et les deux boutons à gauche ; la planche jouable à droite, qui mord de 24 px sur le bord
-déchiré (les deux colonnes tiennent jusqu'à 860 px, puis la planche passe dessous, centrée). Sur téléphone, l'ordre
-devient titre, accroche, planche jouable, détail, boutons : on joue dès le premier écran. Puis les cartes disponibles
-en planches d'atlas, quatre colonnes (deux sous 1080 px, une sous 680 px, vignette en 2:1) ; les trois timbres
+à gauche, trois liens de section à droite (masqués sous 760 px). Dessous, sur le papier, l'accueil tient en un bloc
+centré de 46 rem au plus (Thomas, 2026-11-25 : « juste message d'accueil et description puis cartes ») : « Bienvenue à
+bord ! » sur son filet doré, une phrase d'accroche, puis la description ; ni carte jouable, ni bouton, ni mention de
+nouveauté. Les cartes suivent de près (48 à 72 px) et se voient dès le premier écran. Elles sont présentées en planches
+d'atlas, quatre colonnes (deux sous 1080 px, une sous 680 px, vignette en 2:1) ; les trois timbres
 « Explore, Découvre, Relève le défi » reliés par une route en pointillé doré (sous 860 px, une étape par ligne, timbre
 à gauche) ; « Pensé pour la classe » sur une page de carnet lignée tous les 28 px (marge rouge) : titre et introduction
 en tête, quatre usages en deux colonnes, chaque ligne de base posée sur le trait. Une seule colonne de contenu
@@ -309,7 +303,7 @@ portent un liseré doré. Les cartes du catalogue se soulèvent de 4 px au survo
 - **Calque** (`box-shadow: 0 2px 4px rgba(26, 34, 51, 0.06), 0 10px 26px -8px rgba(26, 34, 51, 0.24)`) : cartes du
   catalogue, commandes de zoom, épingles.
 - **Calque levé** (`box-shadow: 0 4px 8px rgba(26, 34, 51, 0.08), 0 22px 44px -14px rgba(26, 34, 51, 0.34)`) : carnet,
-  bandeau de quiz, planche jouable, page « Pensé pour la classe », carte survolée.
+  bandeau de quiz, page « Pensé pour la classe », carte survolée.
 - **Liseré doré** (`box-shadow: 0 0 0 2px #e7b552`) combiné à l'une des ombres : boutons ronds de la bande, commandes,
   bandeau de quiz, mini-carte.
 
@@ -321,7 +315,7 @@ presque opaque posé dessus.
 ## Shapes
 
 Coins généreux et amicaux : 8 px (petites cases), 12 px (cases de faits, éléments de liste, boutons, compteur), 14 px
-(grands boutons, champs), 16 px (calques, cartes, planche jouable), 24 px (carnet du téléphone), pilule pour les puces, l'onglet
+(grands boutons, champs), 16 px (calques, cartes), 24 px (carnet du téléphone), pilule pour les puces, l'onglet
 Explorer/Quiz et les épingles. Les timbres ont des dents découpées ; la bande d'en-tête et le pied de page ont le bord
 déchiré du parchemin de la v1 ; les drapeaux sont collés comme des autocollants, bord blanc et légère rotation.
 
@@ -330,7 +324,6 @@ déchiré du parchemin de la v1 ; les drapeaux sont collés comme des autocollan
 ### Buttons
 - **Shape:** coins de 12 px, 46 px de haut (52 px et coins de 14 px en grand).
 - **Primary:** encre bleu marine, texte blanc, léger reflet en haut ; se soulève d'un pixel au survol.
-- **Gold:** laiton doré, texte encre : pour une nouveauté (« Nouveau : la France »).
 - **Secondary:** papier, texte marine, filet sable ; au survol fond doré pâle et filet doré.
 - **Focus:** anneau papier puis doré (2 px + 3 px).
 

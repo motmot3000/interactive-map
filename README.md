@@ -39,7 +39,7 @@ sont intégrées aux pages.
 ## Organisation
 
 ```
-index.html                 accueil (planche jouable, cartes, fonctionnement)
+index.html                 accueil (message de bienvenue, cartes, fonctionnement)
 maps/<carte>/index.html    page de la carte : SVG intégré entre <!-- carte:debut --> et <!-- carte:fin -->
 maps/<carte>/data.js       données de la carte (fiches, questions, sources) : window.ATLAS_MAP
 maps/<carte>/drapeaux/     drapeaux (Europe : flag-icons, licence MIT ; Suisse : armoiries cantonales)
@@ -87,7 +87,7 @@ npm install
 npm test
 ```
 
-Ils vérifient l'accueil et sa planche jouable, la cohérence des trois cartes (régions, fiches, drapeaux), le plein
+Ils vérifient l'accueil (message de bienvenue et liens des cartes), la cohérence des trois cartes (régions, fiches, drapeaux), le plein
 cadre sur six tailles d'écran (fond sans bord, pays entier, échelle), l'exploration (fiche, voisins, recherche), la
 navigation (boutons, molette, recadrage, mini-carte), une partie de quiz complète avec correction et bilan dans le
 panneau, la révision des erreurs, l'enregistrement du record, le clavier et l'affichage téléphone.

@@ -63,6 +63,8 @@ publicité, conçu par un enseignant pour la classe et le TBI.
 - Retouche demandée par Thomas le 2026-11-25 : garder cet esprit « explorateur, grandes découvertes » mais « nickel,
   pro, magnifique » : bandeau et pied de page aux bonnes proportions (ils étaient « géants »), tailles et positions
   revues partout, l'écriture cursive remplacée (« pas top »), liberté laissée sur la police ; le serpent vert est retiré.
+  Puis : bandeaux de carte ancienne « courts » en tête et en pied, et un accueil réduit à un message de bienvenue et sa
+  description, suivis des cartes (sans carte jouable ni mention « Nouveau »).
 
 ## Evidence on Hand
 
