@@ -46,7 +46,7 @@ maps/<carte>/drapeaux/     drapeaux (Europe : flag-icons, licence MIT ; Suisse :
 assets/css/                base.css (jetons, composants), map.css (écran de carte), home.css (accueil)
 assets/js/atlas-map.js     moteur de carte : caméra, gestes, écritures, repères, mini-carte
 assets/js/atlas-game.js    modes Explorer et Quiz, communs à toutes les cartes
-assets/fonts/              Fraunces, Manrope et Parisienne (SIL OFL, voir OFL.txt)
+assets/fonts/              IM Fell DW Pica, IM Fell English SC et Manrope (SIL OFL, voir OFL.txt)
 assets/img/                carte ancienne et carte pixelisée de la v1, gravures du domaine public, vignettes des cartes
                            (chaque image porte son origine dans un fichier .json voisin)
 tools/cartes/              génération des fonds de carte à partir de données ouvertes
@@ -107,8 +107,9 @@ Chaque fichier `data.js` rappelle ses sources en tête et dans la fiche affiché
 
 - Images de la v1 (carte ancienne sur parchemin, carte du monde pixelisée) : Thomas Wünsche.
 - Gravures du domaine public, via Wikimedia Commons : rose des vents d'Emanuel Bowen (1748), monstre marin de Sebastian
-  Münster (*Cosmographia*), serpent de mer d'Olaus Magnus (*Carta marina*, 1539).
-- Polices : Fraunces, Manrope et Parisienne, sous SIL Open Font License.
+  Münster (*Cosmographia*), le navire *Victoria* de Magellan sur la carte *Maris Pacifici* d'Abraham Ortelius (1589).
+- Polices : IM Fell DW Pica et IM Fell English SC (caractères de Peter de Walpergen et John Fell, XVIIe siècle,
+  numérisés par Igino Marini) et Manrope, sous SIL Open Font License.
 - Drapeaux des pays : [flag-icons](https://github.com/lipis/flag-icons) (MIT).
 
 Conçu et propulsé par [Le Cagibi](https://www.lecagibi.ch). Usage pédagogique autorisé.

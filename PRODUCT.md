@@ -58,8 +58,11 @@ publicité, conçu par un enseignant pour la classe et le TBI.
   « beaucoup moins IA » que la version 1.
 - Monde visuel confirmé par Thomas le 2026-11-24 au soir : garder **son design d'origine** et en faire une version
   améliorée, « ludifiée pour les enfants, pour apprendre », pas « corporate ». Ses images restent la signature : la carte
-  ancienne sur parchemin en tête et en pied de page, la carte du monde pixelisée en fond de page, les titres en écriture,
-  l'encre bleu marine et le doré. D'autres images d'exploration peuvent s'y ajouter (gravures du domaine public).
+  ancienne sur parchemin en tête et en pied de page, la carte du monde pixelisée en fond de page, l'encre bleu marine et
+  le doré. D'autres images d'exploration peuvent s'y ajouter (gravures du domaine public).
+- Retouche demandée par Thomas le 2026-11-25 : garder cet esprit « explorateur, grandes découvertes » mais « nickel,
+  pro, magnifique » : bandeau et pied de page aux bonnes proportions (ils étaient « géants »), tailles et positions
+  revues partout, l'écriture cursive remplacée (« pas top »), liberté laissée sur la police ; le serpent vert est retiré.
 
 ## Evidence on Hand
 
