@@ -638,7 +638,7 @@ async function buildSuisse() {
   const countries = JSON.parse(await projectPoints([
     ['FRANCE', 6.3, 47.05, 'country', 1],
     ['ALLEMAGNE', 8.45, 47.86, 'country', 1],
-    ['ITALIE', 8.75, 45.93, 'country', 1],
+    ['ITALIE', 9.9, 46.0, 'country', 1],
     ['AUTRICHE', 10.25, 47.3, 'country', 1],
     ['LIECHTENSTEIN', 9.55, 47.155, 'country', 2],
     ['Mer Méditerranée', 6.2, 42.4, 'sea', 1],

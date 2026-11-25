@@ -94,12 +94,23 @@
 
     var notes = this.root.querySelector('script.map-annotations');
     this.annotations = notes ? JSON.parse(notes.textContent) : [];
+    // À rang égal, l'eau passe avant les pays voisins : un nom de pays ne cache jamais un lac ou une mer.
+    this.annotations.sort(function (a, b) { return a.rank - b.rank || (a.kind === 'country') - (b.kind === 'country'); });
 
+    this._occ = null;
     this._buildOverlay();
     this._buildMinimap();
     this._bind();
     this._measure();
     this.home(false);
+
+    // Un panneau qui a fini de glisser ou d'apparaître change la place laissée aux écritures.
+    var occSel = this.opts.occluders;
+    if (occSel) {
+      document.addEventListener('transitionend', function (e) {
+        if (e.target === self.minimap || (e.target.matches && e.target.matches(occSel))) self.refreshOccluders();
+      });
+    }
 
     if (global.ResizeObserver) {
       new ResizeObserver(function () { self._onResize(); }).observe(this.root);
@@ -261,6 +272,7 @@
   };
 
   MapView.prototype._onResize = function () {
+    this._occ = null;
     var c = this._content();
     var mx = (c.cx - this.x) / this.k;
     var my = (c.cy - this.y) / this.k;
@@ -280,6 +292,7 @@
     var mx = (before.cx - base.x) / base.k;
     var my = (before.cy - base.y) / base.k;
     var rel = base.k / this.k0;
+    this._occ = null;
     this.insets = Object.assign({ top: 0, right: 0, bottom: 0, left: 0 }, insets);
     // Bas d'écran couvert par un panneau opaque (téléphone) : le fond n'a pas besoin d'y être dessiné.
     this.hiddenBottom = Math.max(0, this.insets.hidden || 0);
@@ -852,7 +865,15 @@
     var vw = this.vw;
     var vh = this.vh;
     var zoom = k / this.k0;
-    var placed = [];
+    // Les panneaux posés sur la carte et les épingles réservent leur place : aucune écriture ne passe dessous.
+    var placed = this._occluders().slice();
+    var pinned = {};
+    var selfPins = this;
+    this.pins.forEach(function (p) {
+      pinned[p.code] = true;
+      var b = selfPins._pinBox(p);
+      placed.push([b.x - 2, b.y - 2, b.w + 4, b.h + 12]);
+    });
     var mode = this.labelMode;
     var hits = function (rx, ry, rw, rh) {
       for (var i = 0; i < placed.length; i++) {
@@ -896,7 +917,8 @@
       var bh = r.box.height * k;
       var answered = r.states.has('hit') || r.states.has('retry') || r.states.has('miss');
       var forced = r.states.has('selected') || r.states.has('target');
-      var allowed = mode === 'names' || forced || (mode === 'answered' && answered);
+      // Une région qui porte une épingle est déjà nommée par elle : pas de second nom dans la forme.
+      var allowed = !pinned[r.code] && (mode === 'names' || forced || (mode === 'answered' && answered));
       var text = null;
       var w = 0;
       var short = false;
@@ -937,9 +959,11 @@
       var sx = clamp(a.x * k + x, x + a.w / 2 + 6, plateR - a.w / 2 - 6);
       var sy = clamp(a.y * k + y, y + a.h / 2 + 4, plateB - a.h / 2 - 4);
       var on = zoom >= minZoom && sx - a.w / 2 > 2 && sx + a.w / 2 < vw - 2 && sy > 8 && sy < vh - 8;
-      if (on && hits(sx - a.w / 2, sy - a.h / 2, a.w, a.h)) on = false;
+      // Les jambages de l'italique gravé (mers, lacs) débordent de leur ligne : marge au-dessus et au-dessous.
+      var py = a.kind === 'country' ? 0 : 3;
+      if (on && hits(sx - a.w / 2 - 1, sy - a.h / 2 - py, a.w + 2, a.h + 2 * py)) on = false;
       if (on) {
-        placed.push([sx - a.w / 2, sy - a.h / 2, a.w, a.h]);
+        placed.push([sx - a.w / 2 - 1, sy - a.h / 2 - py, a.w + 2, a.h + 2 * py]);
         a.el.style.transform = 'translate(' + (sx - a.w / 2) + 'px,' + (sy - a.h / 2) + 'px)';
       }
       show(a.el, on);
@@ -954,29 +978,62 @@
     el.className = 'map-pin' + (variant ? ' map-pin--' + variant : '') + (pulse ? ' is-pulse' : '');
     el.innerHTML = html;
     this.labelsLayer.appendChild(el);
-    var pin = { code: code, el: el };
+    // Taille lue une fois : les écritures l'évitent à chaque image sans relancer la mise en page.
+    var pin = { code: code, el: el, w: el.offsetWidth, h: el.offsetHeight };
     this.pins.push(pin);
     this._placePins();
+    this._schedule();
     return pin;
   };
 
   MapView.prototype.clearPins = function () {
     this.pins.forEach(function (p) { p.el.remove(); });
     this.pins = [];
+    this._schedule();
+  };
+
+  MapView.prototype._pinBox = function (p) {
+    var r = this.regions.get(p.code);
+    var s = this._screenOf(r);
+    var top = r.box.y * this.k + this.y;
+    // Près du haut de la région, mais jamais loin de son point d'étiquette (îles lointaines : Svalbard, Corse…).
+    var anchorY = Math.max(s.y - 64, Math.min(s.y - 6, top + Math.min(r.box.height * this.k * 0.35, 40)));
+    return { x: Math.round(s.x - p.w / 2), y: Math.round(anchorY - p.h - 8), w: p.w, h: p.h };
   };
 
   MapView.prototype._placePins = function () {
     var self = this;
     this.pins.forEach(function (p) {
-      var r = self.regions.get(p.code);
-      var s = self._screenOf(r);
-      var w = p.el.offsetWidth;
-      var h = p.el.offsetHeight;
-      var top = r.box.y * self.k + self.y;
-      // Près du haut de la région, mais jamais loin de son point d'étiquette (îles lointaines : Svalbard, Corse…).
-      var anchorY = Math.max(s.y - 64, Math.min(s.y - 6, top + Math.min(r.box.height * self.k * 0.35, 40)));
-      p.el.style.transform = 'translate(' + Math.round(s.x - w / 2) + 'px,' + Math.round(anchorY - h - 8) + 'px)';
+      var b = self._pinBox(p);
+      p.el.style.transform = 'translate(' + b.x + 'px,' + b.y + 'px)';
     });
+  };
+
+  /* ------------------------------------------------------------------ Panneaux posés sur la carte */
+  // À appeler quand un panneau change de taille ou de contenu (bandeau du quiz, carnet).
+  MapView.prototype.refreshOccluders = function () {
+    this._occ = null;
+    this._schedule();
+  };
+
+  // Boîtes des panneaux visibles, dans le repère de la carte ; relues seulement après un changement.
+  MapView.prototype._occluders = function () {
+    if (this._occ) return this._occ;
+    var els = this.opts.occluders ? Array.prototype.slice.call(document.querySelectorAll(this.opts.occluders)) : [];
+    if (this.minimap && this._miniOn) els.push(this.minimap);
+    if (this.scaleBar) els.push(this.scaleBar);
+    var root = this.root.getBoundingClientRect();
+    var out = [];
+    els.forEach(function (el) {
+      if (el.classList.contains('is-hidden')) return;
+      var cs = getComputedStyle(el);
+      if (cs.display === 'none' || cs.visibility === 'hidden' || cs.opacity === '0') return;
+      var b = el.getBoundingClientRect();
+      if (!b.width || !b.height) return;
+      out.push([b.left - root.left - 4, b.top - root.top - 4, b.width + 8, b.height + 8]);
+    });
+    this._occ = out;
+    return out;
   };
 
   MapView.prototype.screenPointOf = function (code) {
@@ -1039,6 +1096,7 @@
     if (this._miniOn !== on) {
       this.minimap.classList.toggle('is-on', on);
       this._miniOn = on;
+      this._occ = null;
     }
   };
 

@@ -95,6 +95,7 @@
     names,
     shortLabels,
     capsLabels: !!(cfg.labels && cfg.labels.caps),
+    occluders: '.sheet, .hud, .map-compass, .map-controls',
     maxZoom: cfg.maxZoom || 12,
     home: cfg.home || null,
     small: cfg.small || [],
@@ -271,7 +272,7 @@
       });
       html += '</ul>';
     }
-    html += `<p class="sources" style="padding: 0 16px 18px">${cfg.sources}</p>`;
+    html += `<p class="sources" style="padding: 0 16px 28px">${cfg.sources}</p>`;
     els.sheetBody.innerHTML = html;
     els.sheetBody.scrollTop = 0;
     $$('.index__item', els.sheetBody).forEach((btn) => {
@@ -599,6 +600,7 @@
       <button type="button" class="icon-btn" data-stop title="Arrêter le quiz" aria-label="Arrêter le quiz">${icon('close')}</button>`;
     $('[data-skip]', els.hud).addEventListener('click', () => { if (!quiz.locked) reveal(true); });
     $('[data-stop]', els.hud).addEventListener('click', () => finish(true));
+    map.refreshOccluders();
   }
 
   function announceQuestion() {
