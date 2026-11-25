@@ -80,8 +80,26 @@ await test('Accueil : chargement et planche jouable', async (page) => {
   const name = (await page.textContent('[data-teaser-target]')).trim();
   const code = await page.evaluate((n) => Object.keys(window.ATLAS_MAP.regions).find((c) => window.ATLAS_MAP.regions[c].name === n), name);
   assert(code, `pays introuvable pour « ${name} »`);
-  const box = await page.locator(`.teaser [data-code="${code}"]`).boundingBox();
-  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  // Un point vraiment dans le pays : le centre du rectangle tombe hors de la Norvège, de la Grèce ou du Danemark.
+  const pt = await page.evaluate((c) => {
+    const path = document.querySelector(`.teaser [data-code="${c}"]`);
+    const bb = path.getBBox();
+    const m = path.getScreenCTM();
+    const inside = [];
+    for (let i = 1; i < 24; i++) {
+      for (let j = 1; j < 24; j++) {
+        const p = new DOMPoint(bb.x + (bb.width * i) / 24, bb.y + (bb.height * j) / 24);
+        if (!path.isPointInFill(p)) continue;
+        const s = p.matrixTransform(m);
+        const hit = document.elementFromPoint(s.x, s.y);
+        if (hit && hit.closest('[data-code]') === path) inside.push({ x: s.x, y: s.y, d: Math.hypot(i - 12, j - 12) });
+      }
+    }
+    inside.sort((a, b) => a.d - b.d);
+    return inside[0] || null;
+  }, code);
+  assert(pt, `aucun point cliquable dans « ${name} »`);
+  await page.mouse.click(pt.x, pt.y);
   await page.waitForFunction(() => document.querySelector('[data-teaser-count]').textContent.trim().startsWith('1'), null, { timeout: 4000 });
   const images = await page.evaluate(async () => {
     const out = [];
