@@ -1,5 +1,5 @@
 /*
- * Cartes interactives 2.0 — modes Explorer et Quiz, communs à toutes les cartes.
+ * Cartes interactives — modes Explorer et Quiz, communs à toutes les cartes.
  * Lit la configuration de la carte dans window.ATLAS_MAP (fichier data.js de chaque carte).
  */
 (function (global) {
@@ -13,7 +13,14 @@
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const fold = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[’']/g, ' ').replace(/[-]/g, ' ');
   const reduced = () => global.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const narrow = () => global.matchMedia('(max-width: 900px)').matches;
+  // Panneau en bas de l'écran : téléphones et tablettes en portrait (même requête que map.css).
+  const narrow = () => global.matchMedia('(max-width: 900px) and (orientation: portrait), (max-width: 600px)').matches;
+  // Étoiles : 3 sans faute, 2 dès 80 % du premier coup, 1 dès 50 %.
+  const starsOf = (hits, total) => {
+    const pct = total ? hits / total : 0;
+    return pct >= 1 ? 3 : pct >= 0.8 ? 2 : pct >= 0.5 ? 1 : 0;
+  };
+  const starRow = (n) => `<span class="stars" role="img" aria-label="${n} étoile${n > 1 ? 's' : ''} sur 3">${[0, 1, 2].map((i) => Atlas.icon('star', i < n ? 'is-on' : '')).join('')}</span>`;
   const swatch = (kind) => `<svg class="swatch swatch--${kind}" viewBox="0 0 22 16" aria-hidden="true" focusable="false"><rect width="22" height="16" rx="3"/></svg>`;
 
   /* ------------------------------------------------------------------ Préférences */
@@ -159,16 +166,31 @@
   // mode : true (en douceur), false (sans animation) ou 'measure' (sans bouger la caméra).
   function updateInsets(animate) {
     const hudOn = !els.hud.classList.contains('is-hidden');
-    const insets = { top: 0, right: 0, bottom: 0, left: 0 };
-    if (sheetVisible()) {
-      if (narrow()) insets.bottom = els.sheet.offsetHeight + 12;
-      else insets.right = els.sheet.offsetWidth + 24;
+    const docked = sheetVisible();
+    const bottom = narrow() && docked;
+    // hidden : la partie de l'écran que le panneau du bas masque entièrement (sous ses coins arrondis près).
+    const insets = { top: 0, right: 0, bottom: 0, left: 0, hidden: 0 };
+    if (bottom) {
+      insets.bottom = els.sheet.offsetHeight + 12;
+      insets.hidden = els.sheet.offsetHeight - 20;
+    } else if (docked) {
+      insets.right = els.sheet.offsetWidth + 24;
     }
     if (hudOn) insets.top = els.hud.offsetHeight + 20;
+    // L'échelle (en bas) et, au-dessus du carnet du téléphone, les commandes de zoom : ce qu'on cadre ne passe pas dessous.
+    insets.bottom += 40;
+    if (bottom) insets.right += 56;
+    // Commandes de zoom décalées par transform : aucun décalage de mise en page, animation fluide.
     const controls = $('.map-controls');
     if (controls) {
-      controls.style.right = !narrow() && sheetVisible() ? `${els.sheet.offsetWidth + 32}px` : '';
-      controls.style.bottom = narrow() && sheetVisible() ? `${els.sheet.offsetHeight + 16}px` : '';
+      const dx = docked && !bottom ? els.sheet.offsetWidth + 16 : 0;
+      const dy = bottom ? els.sheet.offsetHeight - 4 : 0;
+      if (animate === false) controls.style.transition = 'none';
+      controls.style.transform = dx || dy ? `translate(${-dx}px, ${-dy}px)` : '';
+      if (animate === false) {
+        void controls.offsetWidth;
+        controls.style.transition = '';
+      }
     }
     map.setInsets(insets, animate === 'measure' ? 'measure' : animate ? 'animate' : 'jump');
   }
@@ -461,7 +483,7 @@
           <span class="switch__track" aria-hidden="true"></span>
         </label>` : ''}
         <div class="record">${record
-          ? `<span>${icon('award')} Record</span><strong>${record.hits}/${record.total} · ${fmt.time(record.time)}</strong>`
+          ? `<span class="record__label">${icon('award')} Ton record</span>${starRow(starsOf(record.hits, record.total))}<strong>${record.hits}/${record.total} · ${fmt.time(record.time)}</strong>`
           : '<span>Pas encore de record pour ce réglage.</span>'}</div>
         <button type="button" class="btn btn--primary btn--lg btn--block" data-start>${icon('quiz')}<span>Commencer</span></button>
         <ul class="legend" aria-label="Légende de la correction">
@@ -526,7 +548,6 @@
     map.clearPins();
     map.clearStates(['hit', 'retry', 'miss', 'wrong', 'target', 'selected', 'neighbor']);
     map.setLabelMode('answered');
-    closeResult();
     els.sheet.classList.add('is-hidden');
     els.hud.classList.remove('is-hidden');
     renderHud();
@@ -546,29 +567,32 @@
   const target = () => quiz.queue[quiz.index];
   const hits = () => Array.from(quiz.results.values()).filter((v) => v === 'hit').length;
 
+  // La question tient sur une ligne : « Trouve : Allemagne », « Département n° 64 ».
+  const askOf = (q) => (/°$/.test(q.lead) ? q.lead : `${q.lead} :`);
+
   function promptHtml(code) {
     const q = question();
     const r = R[code];
     if (q.prompt === 'flag') {
-      return `<span class="hud__lead">${esc(q.lead)}</span><img class="hud__flag" src="${esc(flagOf(code))}" alt="Drapeau à retrouver">`;
+      return `<span class="hud__lead">${esc(askOf(q))}</span> <img class="hud__flag" src="${esc(flagOf(code))}" alt="Drapeau à retrouver">`;
     }
     const value = q.prompt === 'name' ? r.name : q.prompt === 'code' ? code : r[q.prompt];
-    return `<span class="hud__lead">${esc(q.lead)}</span><strong class="hud__target${q.prompt === 'code' ? ' hud__target--code' : ''}">${esc(value)}</strong>`;
+    return `<span class="hud__lead">${esc(askOf(q))}</span> <strong class="hud__target${q.prompt === 'code' ? ' hud__target--code' : ''}">${esc(value)}</strong>`;
   }
 
-  function renderHud(feedback) {
+  function renderHud(feedback, tone) {
     const code = target();
     const total = quiz.queue.length;
     const tries = [0, 1, 2].map((i) => `<span class="${i < quiz.tries ? 'is-used' : ''}"></span>`).join('');
-    let prompt = promptHtml(code);
-    if (feedback) prompt = feedback;
+    const prompt = feedback || promptHtml(code);
+    const streak = quiz.streak >= 2 ? `<span class="hud__streak">${quiz.streak} d'affilée</span>` : '';
     els.hud.className = 'hud';
     els.hud.innerHTML = `
-      <div class="hud__progress" aria-label="Question ${quiz.index + 1} sur ${total}">${quiz.index + 1}<small>/${total}</small></div>
-      <div class="hud__prompt" aria-live="off">${prompt}</div>
+      <div class="hud__progress" aria-label="Question ${quiz.index + 1} sur ${total}"><span>${quiz.index + 1}<small>/${total}</small></span></div>
+      <p class="hud__prompt${tone ? ` is-${tone}` : ''}">${prompt}</p>
       <div class="hud__side">
         <div class="tries" aria-label="${3 - quiz.tries} essai${3 - quiz.tries > 1 ? 's' : ''} restant${3 - quiz.tries > 1 ? 's' : ''}">${tries}</div>
-        <div class="hud__stat hud__stat--score"><strong data-score>${hits()}</strong><span>trouvés</span></div>
+        <div class="hud__stat hud__stat--score"><strong data-score>${hits()}</strong><span>trouvé${hits() > 1 ? 's' : ''}</span>${streak}</div>
         <div class="hud__stat hud__stat--time"><strong data-time>${fmt.time(quiz.elapsed)}</strong><span>temps</span></div>
       </div>
       <button type="button" class="icon-btn" data-skip title="Je ne sais pas" aria-label="Je ne sais pas : montrer la réponse">${icon('question')}</button>
@@ -582,7 +606,7 @@
     const code = target();
     const r = R[code];
     const what = q.prompt === 'flag' ? 'le drapeau affiché' : q.prompt === 'name' ? r.name : q.prompt === 'code' ? code : r[q.prompt];
-    announce(`Question ${quiz.index + 1} sur ${quiz.queue.length}. ${q.lead} ${what}.`);
+    announce(`Question ${quiz.index + 1} sur ${quiz.queue.length}. ${askOf(q)} ${what}.`);
   }
 
   function answer(code, info) {
@@ -597,9 +621,9 @@
       quiz.streak = result === 'hit' ? quiz.streak + 1 : 0;
       quiz.best = Math.max(quiz.best, quiz.streak);
       sound.play(result);
-      if (result === 'hit') flyPoint(info);
-      renderHud(`<span class="hud__lead">${quiz.streak >= 3 ? `${quiz.streak} d'affilée` : 'Bien vu'}</span><strong class="hud__target hud__feedback hud__feedback--hit">${icon('check')}${esc(R[goal].name)}</strong>`);
+      renderHud(`${icon('check')}<strong class="hud__target">${esc(R[goal].name)}</strong>`, 'hit');
       els.hud.classList.add('is-hit');
+      if (result === 'hit') flyPoint(info);
       announce(`Correct : ${R[goal].name}.`);
       quiz.pending = global.setTimeout(nextQuestion, reduced() ? 900 : 750);
       return;
@@ -637,9 +661,9 @@
     map.setState(goal, 'miss', true);
     map.setState(goal, 'target', true);
     map.pin(goal, `${icon('locate')}<span>${esc(R[goal].name)}</span>`, null, true);
-    map.flyTo(lastWrong ? [goal, lastWrong] : goal, { ifNeeded: true, maxZoom: 5, padding: 0.45 });
+    map.flyTo(lastWrong ? [goal, lastWrong] : goal, { ifNeeded: true, minSize: 44, maxZoom: 5, padding: 0.45 });
     if (skipped) sound.play('miss');
-    renderHud(`<span class="hud__lead">${skipped ? 'La réponse' : 'Raté, c’était ici'}</span><strong class="hud__target hud__feedback hud__feedback--miss">${esc(R[goal].name)}</strong>`);
+    renderHud(`${icon('locate')}<strong class="hud__target">${esc(R[goal].name)}</strong> <span class="hud__lead">${skipped ? 'est ici' : 'était ici'}</span>`, 'miss');
     els.hud.classList.add('is-miss');
     const next = document.createElement('button');
     next.type = 'button';
@@ -675,6 +699,7 @@
     if (!scoreEl) return;
     const stage = els.stage.getBoundingClientRect();
     const to = scoreEl.getBoundingClientRect();
+    if (!to.width) return;
     const dot = document.createElement('div');
     dot.className = 'fly-point';
     dot.textContent = '+1';
@@ -702,7 +727,8 @@
     quiz.status = 'setup';
     quiz.locked = false;
     els.hud.classList.add('is-hidden');
-    closeResult();
+    map.clearPins();
+    map.clearStates(['hit', 'retry', 'miss', 'wrong', 'target']);
     if (!silent) renderSetup();
   }
 
@@ -719,7 +745,7 @@
       setSheet(true);
       return;
     }
-    quiz.status = 'done';
+    quiz.status = 'review';
     quiz.locked = true;
     els.hud.classList.add('is-hidden');
     sound.play('done');
@@ -736,97 +762,85 @@
       }
     }
     showResult({ total, hits: h, stopped, isRecord, hadRecord: !!record });
-    updateInsets(true);
   }
 
-  /* ------------------------------------------------------------------ Bilan */
-  function closeResult() {
-    const layer = $('.result-layer');
-    if (layer) layer.remove();
-  }
-
+  /* ------------------------------------------------------------------ Bilan : la légende de la carte corrigée */
+  // Le bilan prend la place de la fiche ; la carte reste nette et montre chaque correction.
   function showResult(r) {
-    closeResult();
     const q = question();
+    const counts = { hit: 0, retry: 0, miss: 0 };
+    quiz.results.forEach((v) => { counts[v] += 1; });
     const errors = Array.from(quiz.results.entries()).filter(([, v]) => v !== 'hit').map(([c]) => c);
-    const retry = errors.filter((c) => quiz.results.get(c) === 'retry').length;
-    const misses = errors.length - retry;
     const pct = r.total ? Math.round(r.hits / r.total * 100) : 0;
-    const layer = document.createElement('div');
-    layer.className = 'result-layer';
-    layer.innerHTML = `
-      <section class="result" role="dialog" aria-modal="true" aria-labelledby="result-title">
-        <h2 id="result-title" tabindex="-1">${r.stopped ? 'Quiz arrêté' : pct === 100 ? 'Sans faute' : 'Quiz terminé'}</h2>
+    const stars = starsOf(r.hits, r.total);
+    const title = r.stopped ? 'Quiz arrêté'
+      : ['Continue l’exploration', 'Expédition réussie', 'Bien joué !', 'Sans faute, bravo !'][stars];
+    els.sheetHead.innerHTML = '';
+    els.sheetFoot.hidden = true;
+    els.sheetBody.innerHTML = `
+      <section class="result" aria-labelledby="result-title">
+        <img class="result__seal" src="../../assets/img/boussole.webp" alt="" width="64" height="64">
+        <div class="result__stars${stars ? '' : ' is-empty'}">${starRow(stars)}</div>
+        <h2 id="result-title" tabindex="-1">${title}</h2>
         <p class="result__context">${esc(cfg.title)} · ${esc(q.label)}${quiz.review ? ' · révision des erreurs' : ''}</p>
         <p class="result__score"><strong>${r.hits}</strong><span>/ ${r.total}</span>
           ${r.isRecord ? `<span class="result__record">${icon('award')}${r.hadRecord ? 'Nouveau record' : 'Premier record'}</span>` : ''}</p>
         <dl class="result__stats">
-          <div><dt>Du 1er coup</dt><dd>${pct} %</dd></div>
-          <div><dt>Temps</dt><dd>${fmt.time(quiz.elapsed)}</dd></div>
-          <div><dt>Meilleure série</dt><dd>${quiz.best}</dd></div>
+          <div><dt>du 1er coup</dt><dd>${pct} %</dd></div>
+          <div><dt>au chrono</dt><dd>${fmt.time(quiz.elapsed)}</dd></div>
+          <div><dt>d’affilée</dt><dd>${quiz.best}</dd></div>
         </dl>
+        <section class="result__key" aria-labelledby="key-title">
+          <h3 id="key-title">Sur la carte</h3>
+          <ul class="legend legend--counts">
+            <li>${swatch('hit')}<span>Trouvé du premier coup</span><strong>${counts.hit}</strong></li>
+            <li>${swatch('retry')}<span>Trouvé au 2e ou 3e essai</span><strong>${counts.retry}</strong></li>
+            <li>${swatch('miss')}<span>Manqué : la réponse est hachurée</span><strong>${counts.miss}</strong></li>
+          </ul>
+        </section>
         ${errors.length ? `
-        <section class="result__review">
-          <h3>À revoir : ${[misses ? `${misses} manqué${misses > 1 ? 's' : ''}` : '', retry ? `${retry} trouvé${retry > 1 ? 's' : ''} après une erreur` : ''].filter(Boolean).join(', ')}</h3>
+        <section class="result__review" aria-labelledby="review-title">
+          <h3 id="review-title">À revoir sur la carte</h3>
           <div class="chips">${errors.map((c) => `<button type="button" class="chip" data-show="${esc(c)}">${swatch(quiz.results.get(c))}${esc(R[c].name)}</button>`).join('')}</div>
-        </section>` : `<p class="result__perfect">Tous trouvés du premier coup. Essaie une autre série ou un autre type de question.</p>`}
+        </section>` : '<p class="result__perfect">Tous trouvés du premier coup. Essaie une autre série ou un autre type de question.</p>'}
         <div class="result__actions">
-          ${errors.length ? `<button type="button" class="btn btn--primary btn--lg" data-errors>${icon('replay')}<span>${errors.length > 1 ? `Revoir mes ${errors.length} erreurs` : 'Revoir mon erreur'}</span></button>` : ''}
+          ${errors.length ? `<button type="button" class="btn btn--primary btn--lg btn--block" data-errors>${icon('replay')}<span>${errors.length > 1 ? `Revoir mes ${errors.length} erreurs` : 'Revoir mon erreur'}</span></button>` : ''}
           <div class="row">
             <button type="button" class="btn${errors.length ? '' : ' btn--primary'}" data-again>${icon('replay')}<span>Nouvelle partie</span></button>
-            <button type="button" class="btn" data-map>${icon('map')}<span>Carte corrigée</span></button>
+            <button type="button" class="btn" data-setup>${icon('list')}<span>Réglages</span></button>
           </div>
-          <button type="button" class="btn btn--quiet" data-setup>Changer de réglage</button>
         </div>
       </section>`;
-    els.stage.appendChild(layer);
-    const card = $('.result', layer);
-    $('#result-title', layer).focus({ preventScroll: true });
-    const errorsBtn = $('[data-errors]', layer);
+    els.sheetBody.scrollTop = 0;
+    map.setLabelMode('answered');
+    setSheet(true);
+    if (errors.length) map.flyTo(errors, { padding: 0.5, maxZoom: 3 });
+    else map.home(true);
+    $('#result-title', els.sheetBody).focus({ preventScroll: true });
+    const errorsBtn = $('[data-errors]', els.sheetBody);
     if (errorsBtn) errorsBtn.addEventListener('click', () => startQuiz(errors));
-    $('[data-again]', layer).addEventListener('click', () => startQuiz());
-    $('[data-setup]', layer).addEventListener('click', () => { closeResult(); map.clearStates(['hit', 'retry', 'miss']); renderSetup(); setSheet(true); });
-    $('[data-map]', layer).addEventListener('click', () => showCorrected());
-    $$('[data-show]', layer).forEach((b) => b.addEventListener('click', () => showCorrected(b.dataset.show)));
-    layer.addEventListener('click', (e) => { if (e.target === layer) showCorrected(); });
-    layer.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') { e.preventDefault(); showCorrected(); }
-      if (e.key === 'Tab') {
-        const focusables = $$('button', card);
-        const first = focusables[0];
-        const last = focusables[focusables.length - 1];
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-      }
+    $('[data-again]', els.sheetBody).addEventListener('click', () => startQuiz());
+    $('[data-setup]', els.sheetBody).addEventListener('click', () => {
+      map.clearPins();
+      map.clearStates(['hit', 'retry', 'miss']);
+      renderSetup();
+      updateInsets(true);
     });
+    $$('[data-show]', els.sheetBody).forEach((b) => {
+      const code = b.dataset.show;
+      b.addEventListener('click', () => showAnswer(code, true));
+      b.addEventListener('mouseenter', () => map.setState(code, 'hover', true));
+      b.addEventListener('mouseleave', () => map.setState(code, 'hover', false));
+    });
+    announce(`${title} : ${r.hits} sur ${r.total}, ${stars} étoile${stars > 1 ? 's' : ''} sur 3${errors.length ? `. ${errors.length} à revoir, montrés sur la carte` : ''}.`);
   }
 
-  // Carte corrigée : la partie reste affichée, noms visibles sur les régions jouées.
-  function showCorrected(code) {
-    closeResult();
-    quiz.status = 'review';
-    map.setLabelMode('answered');
-    els.hud.className = 'hud';
-    const h = hits();
-    els.hud.innerHTML = `
-      <div class="hud__prompt"><span class="hud__lead">Carte corrigée</span><strong class="hud__target">${h} / ${quiz.results.size}</strong></div>
-      <div class="hud__side" style="border:0">
-        <button type="button" class="btn" data-result>Bilan</button>
-        <button type="button" class="btn btn--primary" data-again>${icon('replay')}<span>Rejouer</span></button>
-      </div>
-      <button type="button" class="icon-btn" data-stop title="Fermer" aria-label="Fermer la correction">${icon('close')}</button>`;
-    $('[data-result]', els.hud).addEventListener('click', () => {
-      quiz.status = 'done';
-      els.hud.classList.add('is-hidden');
-      showResult({ total: quiz.results.size, hits: h, stopped: false, isRecord: false });
-    });
-    $('[data-again]', els.hud).addEventListener('click', () => startQuiz());
-    $('[data-stop]', els.hud).addEventListener('click', () => { map.clearStates(['hit', 'retry', 'miss']); stopQuiz(); setSheet(true); });
-    updateInsets(true);
-    if (code) {
-      map.flyTo(code, { maxZoom: 5, padding: 0.6 });
-      map.flash(code);
-    }
+  // Carte corrigée : nommer une région jouée, et y aller depuis le bilan.
+  function showAnswer(code, fly) {
+    map.clearPins();
+    map.pin(code, `${icon('locate')}<span>${esc(R[code].name)}</span>`);
+    if (fly) map.flyTo(code, { maxZoom: 5, padding: 0.6 });
+    map.flash(code);
   }
 
   /* ------------------------------------------------------------------ Carte : événements */
@@ -845,7 +859,7 @@
     } else if (quiz.status === 'play') {
       answer(code, info);
     } else if (quiz.status === 'review') {
-      map.flash(code);
+      showAnswer(code, false);
     }
   });
 
@@ -857,11 +871,9 @@
 
   const zoomIn = $('[data-action="zoom-in"]');
   const zoomOut = $('[data-action="zoom-out"]');
-  const zoomLevel = $('.zoom-level');
   map.on('camera', (cam) => {
     if (zoomIn) zoomIn.disabled = cam.atMax;
     if (zoomOut) zoomOut.disabled = cam.atMin;
-    if (zoomLevel) zoomLevel.textContent = `×${cam.zoom < 9.95 ? cam.zoom.toFixed(1).replace('.', ',') : Math.round(cam.zoom)}`;
   });
 
   /* ------------------------------------------------------------------ Barre et commandes */

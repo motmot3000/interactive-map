@@ -1,11 +1,9 @@
-Copyright 2020-2024 The Atkinson Hyperlegible Next Project Authors (https://github.com/googlefonts/atkinson-hyperlegible-next) AtkinsonHyperlegibleNext-Italic[wght].ttf: Copyright 2020-2024 The Atkinson Hyperlegible Next Project Authors (https://github.com/googlefonts/atkinson-hyperlegible-next)
+Polices auto-hébergées, toutes sous SIL Open Font License 1.1 (texte complet ci-dessous) :
+- Fraunces : Copyright 2020 The Fraunces Project Authors (github.com/undercasetype/Fraunces)
+- Manrope : Copyright 2019 The Manrope Project Authors (https://github.com/sharanda/manrope)
+- Parisienne : Copyright (c) 2012 by Brian J. Bonislawsky DBA Astigmatic (AOETI) (astigma@astigmatic.com), with Reserved Font Name "Parisienne"
+Fichiers woff2 issus des paquets Fontsource (fontsource.org), sous-ensembles latin et latin étendu.
 
-This Font Software is licensed under the SIL Open Font License, Version 1.1.
-This license is copied below, and is also available with a FAQ at:
-http://scripts.sil.org/OFL
-
-
------------------------------------------------------------
 SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
 -----------------------------------------------------------
 

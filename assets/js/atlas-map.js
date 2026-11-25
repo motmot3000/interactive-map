@@ -21,6 +21,9 @@
     this.content = this.svg.querySelector('.map-content');
     this.W = Number(this.svg.getAttribute('data-width'));
     this.H = Number(this.svg.getAttribute('data-height'));
+    var homeAttr = (this.svg.getAttribute('data-home') || '').split(' ').map(Number);
+    this.homeUnits = homeAttr.length === 4 && homeAttr.every(isFinite) ? homeAttr : null;
+    this.kmPerUnit = Number(this.svg.getAttribute('data-km')) || 0;
     this.opts = Object.assign({
       maxZoom: 12,
       names: {},
@@ -30,6 +33,7 @@
       small: [],
     }, options || {});
     this.insets = { top: 0, right: 0, bottom: 0, left: 0 };
+    this.hiddenBottom = 0;
     this.k = 1;
     this.x = 0;
     this.y = 0;
@@ -145,6 +149,14 @@
     this.tooltip.className = 'map-tooltip';
     this.tooltip.setAttribute('aria-hidden', 'true');
     this.root.appendChild(this.tooltip);
+
+    if (this.kmPerUnit) {
+      this.scaleBar = document.createElement('div');
+      this.scaleBar.className = 'scalebar';
+      this.scaleBar.setAttribute('aria-hidden', 'true');
+      this.scaleBar.innerHTML = '<span class="scalebar__label mono"></span><span class="scalebar__bar"><i></i></span>';
+      this.root.appendChild(this.scaleBar);
+    }
     this._measureLabels();
   };
 
@@ -177,7 +189,13 @@
     box.className = 'minimap';
     box.setAttribute('aria-hidden', 'true');
     var svg = document.createElementNS(SVG_NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 ' + this.W + ' ' + this.H);
+    var hb = this._homeBox();
+    var mx0 = hb.x - hb.w * 0.12;
+    var my0 = hb.y - hb.h * 0.12;
+    var mw = hb.w * 1.24;
+    var mh = hb.h * 1.24;
+    svg.setAttribute('viewBox', mx0 + ' ' + my0 + ' ' + mw + ' ' + mh);
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
     var use = document.createElementNS(SVG_NS, 'use');
     use.setAttribute('href', '#' + this.content.id);
     svg.appendChild(use);
@@ -192,8 +210,8 @@
 
     var moveTo = function (e, animate) {
       var r = svg.getBoundingClientRect();
-      var mx = (e.clientX - r.left) / r.width * self.W;
-      var my = (e.clientY - r.top) / r.height * self.H;
+      var mx = mx0 + (e.clientX - r.left) / r.width * mw;
+      var my = my0 + (e.clientY - r.top) / r.height * mh;
       self.centerOn(mx, my, self.k, animate);
     };
     var dragging = false;
@@ -217,8 +235,12 @@
     this.svg.setAttribute('viewBox', '0 0 ' + this.vw + ' ' + this.vh);
     var c = this._content();
     var home = this._homeBox();
-    this.k0 = Math.min(c.w / home.w, c.h / home.h) * 0.94;
-    this.minK = Math.min(this.k0 * 0.8, Math.min(c.w / this.W, c.h / this.H));
+    // Vue de départ : le pays entier dans la zone libre. Le fond dessiné, bien plus grand, couvre toujours
+    // tout l'écran : on ne voit jamais le bord de la carte, ni au départ ni en dézoomant.
+    var fit = Math.min(c.w / home.w, c.h / home.h) * 0.94;
+    var cover = Math.max(this.vw / this.W, (this.vh - this.hiddenBottom) / this.H);
+    this.k0 = Math.max(fit, cover);
+    this.minK = Math.max(cover, this.k0 * 0.45);
     this.maxK = this.k0 * this.opts.maxZoom;
   };
 
@@ -233,8 +255,9 @@
 
   MapView.prototype._homeBox = function () {
     var h = this.opts.home;
-    if (!h) return { x: 0, y: 0, w: this.W, h: this.H };
-    return { x: h[0] * this.W, y: h[1] * this.H, w: (h[2] - h[0]) * this.W, h: (h[3] - h[1]) * this.H };
+    if (h) return { x: h[0] * this.W, y: h[1] * this.H, w: (h[2] - h[0]) * this.W, h: (h[3] - h[1]) * this.H };
+    if (this.homeUnits) return { x: this.homeUnits[0], y: this.homeUnits[1], w: this.homeUnits[2], h: this.homeUnits[3] };
+    return { x: 0, y: 0, w: this.W, h: this.H };
   };
 
   MapView.prototype._onResize = function () {
@@ -258,6 +281,8 @@
     var my = (before.cy - base.y) / base.k;
     var rel = base.k / this.k0;
     this.insets = Object.assign({ top: 0, right: 0, bottom: 0, left: 0 }, insets);
+    // Bas d'écran couvert par un panneau opaque (téléphone) : le fond n'a pas besoin d'y être dessiné.
+    this.hiddenBottom = Math.max(0, this.insets.hidden || 0);
     this._measure();
     if (mode === 'measure') {
       this._schedule();
@@ -269,17 +294,14 @@
   };
 
   MapView.prototype._clamp = function (k, x, y) {
-    var c = this._content();
     var mw = this.W * k;
     var mh = this.H * k;
-    var sx = c.w * 0.3;
-    var sy = c.h * 0.3;
-    var minX = c.R - sx - mw;
-    var maxX = c.L + sx;
-    var minY = c.B - sy - mh;
-    var maxY = c.T + sy;
-    if (minX > maxX) { minX = maxX = c.cx - mw / 2; }
-    if (minY > maxY) { minY = maxY = c.cy - mh / 2; }
+    var minX = this.vw - mw;
+    var maxX = 0;
+    var minY = this.vh - this.hiddenBottom - mh;
+    var maxY = 0;
+    if (minX > maxX) { minX = maxX = minX / 2; }
+    if (minY > maxY) { minY = maxY = minY / 2; }
     return { k: k, x: clamp(x, minX, maxX), y: clamp(y, minY, maxY) };
   };
 
@@ -322,6 +344,7 @@
     this._placeLabels();
     this._placePins();
     this._updateMinimap();
+    this._updateScale();
     this._emit('camera', { zoom: this.k / this.k0, atMin: this.k <= this.minK * 1.001, atMax: this.k >= this.maxK * 0.999 });
   };
 
@@ -461,7 +484,7 @@
   // Cadre une ou plusieurs régions. options : { minZoom, maxZoom, padding, ifNeeded, duration }
   MapView.prototype.flyTo = function (codes, options) {
     codes = [].concat(codes);
-    var o = Object.assign({ padding: 0.35, ifNeeded: false, minZoom: 1, maxZoom: 6, duration: null }, options);
+    var o = Object.assign({ padding: 0.35, ifNeeded: false, minSize: 26, minZoom: 1, maxZoom: 6, duration: null }, options);
     var b = this._boxOf(codes);
     if (!b) return;
     var c = this._content();
@@ -471,7 +494,7 @@
       var sx2 = (b.x + b.w) * this.k + this.x;
       var sy2 = (b.y + b.h) * this.k + this.y;
       var inside = sx1 >= c.L + 12 && sy1 >= c.T + 12 && sx2 <= c.R - 12 && sy2 <= c.B - 12;
-      var bigEnough = Math.max(sx2 - sx1, sy2 - sy1) >= 26;
+      var bigEnough = Math.max(sx2 - sx1, sy2 - sy1) >= o.minSize;
       if (inside && bigEnough) return;
     }
     var pad = 1 + o.padding * 2;
@@ -897,7 +920,7 @@
           r.label.textContent = text;
           r.labelText = text;
         }
-        var dark = r.states.has('selected') || r.states.has('hit');
+        var dark = r.states.has('hit');
         var onDark = dark && !r._tiny && (short ? r.shortW <= bw * 0.95 : r.nameW <= bw * 0.92);
         if (r._short !== short) { r.label.classList.toggle('map-label--short', short); r._short = short; }
         if (r._dark !== onDark) { r.label.classList.toggle('is-on-dark', onDark); r._dark = onDark; }
@@ -950,7 +973,8 @@
       var w = p.el.offsetWidth;
       var h = p.el.offsetHeight;
       var top = r.box.y * self.k + self.y;
-      var anchorY = Math.min(s.y - 6, top + Math.min(r.box.height * self.k * 0.35, 40));
+      // Près du haut de la région, mais jamais loin de son point d'étiquette (îles lointaines : Svalbard, Corse…).
+      var anchorY = Math.max(s.y - 64, Math.min(s.y - 6, top + Math.min(r.box.height * self.k * 0.35, 40)));
       p.el.style.transform = 'translate(' + Math.round(s.x - w / 2) + 'px,' + Math.round(anchorY - h - 8) + 'px)';
     });
   };
@@ -973,6 +997,34 @@
   };
 
   /* ------------------------------------------------------------------ Mini-carte */
+  // Échelle graphique : une longueur ronde en km, entre 70 et 140 px environ.
+  var SCALE_STEPS = [0.5, 1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 5000];
+  MapView.prototype._updateScale = function () {
+    if (!this.scaleBar) return;
+    var pxPerKm = this.k / this.kmPerUnit;
+    var target = 120 / pxPerKm;
+    var pick = SCALE_STEPS[0];
+    for (var i = 0; i < SCALE_STEPS.length; i++) if (SCALE_STEPS[i] <= target) pick = SCALE_STEPS[i];
+    var len = Math.round(pick * pxPerKm);
+    if (this._scaleLen !== len) {
+      this._scaleLen = len;
+      this.scaleBar.lastChild.style.width = len + 'px';
+      this.scaleBar.firstChild.textContent = pick.toLocaleString('fr-FR') + ' km';
+    }
+    var lift = this.insets.bottom ? this.insets.bottom + 4 : 0;
+    if (this._scaleLift !== lift) {
+      // Première pose sans glissement ; ensuite l'échelle suit le panneau en douceur.
+      var first = this._scaleLift === undefined;
+      if (first) this.scaleBar.style.transition = 'none';
+      this._scaleLift = lift;
+      this.scaleBar.style.transform = lift ? 'translateY(' + -lift + 'px)' : '';
+      if (first) {
+        void this.scaleBar.offsetWidth;
+        this.scaleBar.style.transition = '';
+      }
+    }
+  };
+
   MapView.prototype._updateMinimap = function () {
     var c = this._content();
     var vx = (c.L - this.x) / this.k;
