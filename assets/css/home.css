@@ -1,4 +1,4 @@
-/* Cartes interactives — accueil : le carnet d'explorateur de Thomas, en version améliorée. */
+/* Cartes interactives — accueil : le carnet d'explorateur des grandes découvertes. */
 
 /* Le papier du carnet : la carte du monde pixelisée de la v1, fixe derrière la page (y compris sur iPad). */
 body.home {
@@ -18,125 +18,142 @@ html {
   scroll-behavior: smooth;
 }
 
-/* ---------------------------------------------------------------- En-tête : la carte ancienne, bord déchiré en bas */
-/* Hauteur fixe : l'arrivée de la police d'écriture ne décale pas la page */
+/* ---------------------------------------------------------------- En-tête : une bande courte de carte ancienne */
+/* Une seule rangée : rose des vents, nom gravé et devise à gauche, sections à droite ; le bord déchiré ferme la bande.
+   Hauteur fixe : l'arrivée des polices ne décale pas la page. */
 .hero {
-  display: flex;
-  flex-direction: column;
-  height: clamp(300px, min(32vw, 46vh), 450px);
+  height: 128px;
+  padding-top: 18px;
   overflow: hidden;
-  padding: 16px clamp(16px, 4vw, 48px) 92px;
-  -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - 48px) no-repeat, var(--bord-dechire-bas) bottom center / 1600px 62px repeat-x;
-  mask: linear-gradient(#000 0 0) top / 100% calc(100% - 48px) no-repeat, var(--bord-dechire-bas) bottom center / 1600px 62px repeat-x;
+  /* Le bord déchiré s'étire au-delà de 1100 px au lieu de se répéter : aucun motif ne revient sur un grand écran */
+  -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - 30px) no-repeat, var(--bord-dechire-bas) bottom center / max(1100px, 100%) 36px no-repeat;
+  mask: linear-gradient(#000 0 0) top / 100% calc(100% - 30px) no-repeat, var(--bord-dechire-bas) bottom center / max(1100px, 100%) 36px no-repeat;
 }
 
-.hero__nav {
+/* Voile un peu plus appuyé que la bande des cartes : la gravure reste miel et la devise garde 4,5:1 sur la partie
+   la plus claire de la gravure, que montre le téléphone (mesuré sur le fond réel) */
+.hero.banner {
+  background-image:
+    radial-gradient(135% 120% at 50% 40%, rgba(15, 23, 42, 0.42) 0%, rgba(15, 23, 42, 0.58) 55%, rgba(15, 23, 42, 0.72) 85%),
+    url("../img/carte-ancienne.webp");
+}
+
+@media (max-width: 760px) {
+  .hero.banner {
+    background-image:
+      radial-gradient(135% 120% at 50% 40%, rgba(15, 23, 42, 0.5) 0%, rgba(15, 23, 42, 0.62) 55%, rgba(15, 23, 42, 0.74) 85%),
+      url("../img/carte-ancienne-720.webp");
+  }
+}
+
+/* Rangée alignée sur la colonne du contenu : la rose des vents tombe à l'aplomb du texte */
+.hero__bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  width: 100%;
-  max-width: 1360px;
+  gap: 24px;
+  width: var(--column);
   margin: 0 auto;
 }
 
-.brand {
-  display: inline-flex;
+.hero__brand {
+  display: flex;
   align-items: center;
-  gap: 12px;
-  color: #fff;
-  font-family: var(--font-display);
-  font-variation-settings: "SOFT" 100;
-  font-size: var(--step-1);
-  font-weight: 700;
-  text-decoration: none;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  gap: 14px;
+  min-width: 0;
 }
 
-.brand img {
-  width: 44px;
-  height: 44px;
+.hero__emblem {
+  flex: none;
   border-radius: 50%;
-  box-shadow: 0 0 0 2px var(--gold), 0 4px 12px rgba(0, 0, 0, 0.45);
-  transition: transform var(--t-slow) var(--ease-bounce);
 }
 
-.brand:hover img {
-  transform: rotate(-24deg);
+.hero__emblem img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--gold), 0 3px 10px rgba(0, 0, 0, 0.4);
+  transition: transform var(--t-slow) var(--ease);
+}
+
+.hero__emblem:hover img {
+  transform: rotate(-30deg);
+}
+
+.hero__title {
+  min-width: 0;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+}
+
+.hero__title h1 {
+  color: #fff;
+  font-size: clamp(1.6rem, 1.2rem + 1vw, 2.1rem);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.hero__tagline {
+  margin-top: 5px;
+  color: #fbe9c0;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-style: italic;
+  line-height: 1.2;
 }
 
 .hero__links {
   display: flex;
-  gap: 4px;
+  flex: none;
+  gap: 2px;
+  margin-right: -14px;
 }
 
 .hero__links a {
-  padding: 10px 14px;
+  padding: 9px 14px;
   border-radius: var(--r-pill);
-  color: #fff;
-  font-weight: 700;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 0.9375rem;
+  font-weight: 600;
   text-decoration: none;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
   transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 }
 
 .hero__links a:hover {
-  background: rgba(255, 253, 248, 0.16);
-  color: var(--gold-soft);
-}
-
-.hero__title {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-top: 8px;
-  text-align: center;
-  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.55);
-}
-
-.hero__title h1 {
-  font-size: clamp(3.2rem, 1.9rem + 5.4vw, 6.4rem);
-  line-height: 1.05;
-  letter-spacing: 0.01em;
-}
-
-.hero__tagline {
-  margin-top: 4px;
-  color: #f8dc9b;
-  font-size: clamp(1.45rem, 1rem + 1.8vw, 2.5rem);
-  line-height: 1.2;
+  background: rgba(255, 253, 248, 0.14);
+  color: #fff;
 }
 
 /* ---------------------------------------------------------------- Bienvenue + planche jouable */
 .welcome {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-  align-items: start;
-  gap: clamp(28px, 5vw, 72px);
-  max-width: 1280px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+  width: var(--column);
   margin: 0 auto;
-  padding: 8px clamp(16px, 4vw, 48px) 0;
-}
-
-.welcome__text {
-  padding-top: clamp(16px, 2.4vw, 32px);
 }
 
 .welcome h2 {
   color: var(--navy);
-  font-size: clamp(2.4rem, 1.5rem + 2.6vw, 3.6rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: clamp(2.3rem, 1.5rem + 2.2vw, 3.4rem);
+  line-height: 1.05;
 }
 
 .welcome__lead {
-  max-width: 34rem;
-  margin-top: 14px;
+  max-width: 30rem;
+  margin-top: 18px;
   color: var(--ink);
-  font-size: var(--step-1);
-  font-weight: 500;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.welcome__more {
+  max-width: 33rem;
+  margin-top: 10px;
+  color: var(--ink-2);
+  font-size: 1.0625rem;
   line-height: 1.65;
 }
 
@@ -144,25 +161,27 @@ html {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 22px;
+  margin-top: 28px;
 }
 
 .welcome__note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-top: 16px;
   color: var(--ink-3);
   font-size: var(--step--1);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /* La planche jouable chevauche le bord déchiré du bandeau */
 .teaser {
   position: relative;
   z-index: 2;
-  margin: -112px 0 0;
-  border: 3px solid var(--paper);
-  border-radius: var(--r-xl);
+  margin: -24px 0 0;
+  border-radius: var(--r-lg);
   background: var(--paper);
-  box-shadow: 0 0 0 1.5px var(--gold-deep), var(--shadow-lift);
+  box-shadow: var(--shadow-lift);
   overflow: hidden;
 }
 
@@ -170,9 +189,8 @@ html {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px 14px 20px;
-  border-bottom: 2px solid var(--gold);
-  background: var(--paper);
+  padding: 12px 14px 12px 18px;
+  border-bottom: 1px solid var(--line);
 }
 
 .teaser__prompt {
@@ -181,28 +199,26 @@ html {
   overflow: hidden;
   color: var(--navy);
   font-family: var(--font-display);
-  font-variation-settings: "SOFT" 100;
-  font-size: var(--step-3);
-  font-weight: 750;
-  line-height: 1.1;
+  font-size: 1.625rem;
+  line-height: 1.15;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .teaser__ask {
-  color: var(--ink-2);
+  color: var(--ink-3);
   font-family: var(--font);
-  font-size: var(--step-1);
-  font-weight: 700;
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
 
 .teaser__count {
-  padding: 7px 12px;
+  padding: 6px 11px;
   border-radius: var(--r-pill);
   background: var(--navy);
   color: #fff;
-  font-size: var(--step--1);
-  font-weight: 800;
+  font-size: 0.8125rem;
+  font-weight: 700;
 }
 
 .teaser__map {
@@ -266,12 +282,12 @@ html {
   position: absolute;
   left: 0;
   top: 0;
-  padding: 7px 14px;
+  padding: 6px 12px;
   border-radius: var(--r-pill);
   background: var(--navy);
   color: #fff;
   font-size: var(--step--1);
-  font-weight: 800;
+  font-weight: 700;
   white-space: nowrap;
   pointer-events: none;
   transform: translate(-50%, calc(-100% - 10px));
@@ -288,11 +304,12 @@ html {
   align-items: center;
   justify-content: space-between;
   gap: 10px 12px;
-  min-height: 60px;
-  padding: 10px 16px 10px 20px;
+  min-height: 56px;
+  padding: 10px 14px 10px 18px;
   border-top: 1px solid var(--line);
   color: var(--ink-2);
-  font-weight: 700;
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
 
 .teaser__more {
@@ -301,7 +318,8 @@ html {
 }
 
 .teaser__foot .btn {
-  min-height: 42px;
+  min-height: 40px;
+  padding: 0 16px;
 }
 
 /* ---------------------------------------------------------------- Sections */
@@ -309,34 +327,25 @@ html {
 .how,
 .classroom {
   scroll-margin-top: 24px;
-  max-width: 1360px;
+  width: var(--column);
   margin: 0 auto;
-  padding: clamp(64px, 8vw, 104px) clamp(16px, 4vw, 48px) 0;
+  padding-top: clamp(72px, 8vw, 112px);
 }
 
 .section-title {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
   margin-bottom: clamp(32px, 4vw, 48px);
-  padding-bottom: 18px;
-  color: var(--ink);
-  font-size: var(--step-4);
-  font-weight: 800;
+  color: var(--navy);
+  font-size: clamp(2rem, 1.5rem + 1.4vw, 2.6rem);
   text-align: center;
 }
 
-.section-title::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: 72px;
-  height: 4px;
-  margin-left: -36px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--navy), var(--gold));
-}
-
-/* Cartes disponibles */
+/* Cartes disponibles : des planches d'atlas. La carte est encadrée d'un filet d'encre et d'un filet doré dans une marge
+   de papier, ce qu'elle contient s'écrit en petites capitales comme une légende, et le bouton reste discret : l'action
+   principale de la page est plus haut. */
 .plates {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -356,71 +365,74 @@ html {
 }
 
 .plate:not(.plate--soon):hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-lift);
 }
 
 .plate__art {
   position: relative;
   display: block;
-  aspect-ratio: 4 / 3;
-  background: var(--sea);
-  overflow: hidden;
+  padding: 14px 14px 0;
 }
 
+/* Double filet de planche : encre au bord de la carte, papier, puis or */
 .plate__map {
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 16 / 11;
   object-fit: cover;
-  transition: transform var(--t-slow) var(--ease);
+  background: var(--sea);
+  outline: 1px solid rgba(26, 34, 51, 0.62);
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px var(--gold-deep);
+  transition: filter var(--t-med) var(--ease);
 }
 
 .plate:not(.plate--soon):hover .plate__map {
-  transform: scale(1.04);
+  filter: saturate(1.12) brightness(1.03);
 }
 
-/* Drapeau collé comme un autocollant */
+/* Drapeau collé comme un autocollant, à cheval sur le coin du cadre */
 .plate__flag {
   position: absolute;
-  left: 14px;
-  top: 14px;
-  width: 54px;
+  left: 6px;
+  top: 6px;
+  width: 44px;
   height: auto;
-  border-radius: 5px;
-  box-shadow: 0 0 0 3px #fff, 0 6px 12px rgba(26, 34, 51, 0.28);
-  transform: rotate(-4deg);
+  border-radius: 4px;
+  box-shadow: 0 0 0 2.5px #fff, 0 4px 10px rgba(26, 34, 51, 0.28);
+  transform: rotate(-3deg);
 }
 
 .plate__flag--square {
-  width: 40px;
+  width: 34px;
 }
 
 .plate__ribbon {
   position: absolute;
-  top: 18px;
-  right: -40px;
-  padding: 5px 44px;
+  top: 14px;
+  right: -36px;
+  padding: 4px 40px;
   background: var(--gold);
   color: var(--ink);
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  box-shadow: 0 3px 8px rgba(26, 34, 51, 0.25);
+  box-shadow: 0 2px 6px rgba(26, 34, 51, 0.22);
   transform: rotate(38deg);
 }
 
 .plate__badge {
   position: absolute;
-  right: 12px;
-  top: 12px;
-  padding: 6px 12px;
+  right: 22px;
+  top: 22px;
+  padding: 5px 11px;
   border-radius: var(--r-pill);
   background: var(--navy);
   color: #fff;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -428,43 +440,50 @@ html {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: 12px;
-  padding: 20px 20px 22px;
+  gap: 8px;
+  padding: 18px 18px 18px;
 }
 
 .plate__body h3 {
-  color: var(--ink);
-  font-size: var(--step-2);
-  font-weight: 750;
+  color: var(--navy);
+  font-size: 1.5rem;
+  line-height: 1.1;
 }
 
 .plate__text {
   color: var(--ink-2);
   font-size: 0.9375rem;
+  line-height: 1.55;
 }
 
+/* Légende de la planche : petites capitales gravées, chiffres en Manrope. Chaque mot porte son point devant lui ;
+   le point du premier mot de chaque ligne tombe dans une marge masquée : aucune ligne ne commence ni ne finit par un
+   séparateur. */
 .plate__features {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  margin-left: -16px;
+  clip-path: inset(0 0 0 16px);
+  color: var(--gold-ink);
+  font-family: var(--font-caps);
+  font-size: 1.0625rem;
+  letter-spacing: 0.03em;
+  line-height: 1.45;
 }
 
-.plate__features li {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px 4px 7px;
-  border-radius: var(--r-pill);
-  background: var(--navy-soft);
-  color: var(--navy);
-  font-size: 0.8125rem;
+.plate__features li::before {
+  content: "·";
+  display: inline-block;
+  width: 16px;
+  color: var(--gold-deep);
+  text-align: center;
+}
+
+.plate__features .num {
+  font-family: var(--font);
+  font-size: 0.8em;
   font-weight: 800;
-}
-
-.plate__features .icon {
-  width: 15px;
-  height: 15px;
-  stroke-width: 2.6;
+  letter-spacing: 0;
 }
 
 .plate__record {
@@ -473,42 +492,49 @@ html {
   gap: 8px;
   color: var(--gold-ink);
   font-size: var(--step--1);
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .plate__record .stars {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .plate .btn {
   margin-top: auto;
 }
 
+.plate__open [data-icon] {
+  display: inline-flex;
+}
+
+.plate__open .icon {
+  width: 18px;
+  height: 18px;
+  transition: transform var(--t-med) var(--ease);
+}
+
+.plate__open:hover .icon {
+  transform: translateX(3px);
+}
+
 .plate--soon {
   background: var(--paper-2);
-  box-shadow: 0 0 0 1.5px var(--line);
+  box-shadow: 0 0 0 1px var(--line);
 }
 
 .plate--soon .plate__map {
   filter: grayscale(0.85) sepia(0.25);
   opacity: 0.6;
+  box-shadow: 0 0 0 4px var(--paper-2), 0 0 0 5px var(--line-strong);
 }
 
 .plate--soon .plate__body h3,
-.plate--soon .plate__text {
-  color: var(--ink-3);
-}
-
-.plate--soon .plate__features li {
-  background: var(--paper-3);
+.plate--soon .plate__text,
+.plate--soon .plate__features {
   color: var(--ink-3);
 }
 
 /* ---------------------------------------------------------------- Comment ça marche : trois timbres sur une route d'explorateur */
-.how {
-  max-width: 1240px;
-}
-
 .route {
   position: relative;
   display: grid;
@@ -519,11 +545,11 @@ html {
 .route::before {
   content: "";
   position: absolute;
-  top: 104px;
-  left: 17%;
-  right: 17%;
-  border-top: 3px dashed var(--gold-deep);
-  opacity: 0.8;
+  top: 98px;
+  left: 18%;
+  right: 18%;
+  border-top: 2px dashed var(--gold-deep);
+  opacity: 0.7;
 }
 
 .route__step {
@@ -532,39 +558,39 @@ html {
 }
 
 .route__step h3 {
-  margin-top: 22px;
+  margin-top: 20px;
   color: var(--navy);
-  font-size: var(--step-3);
-  font-weight: 800;
+  font-size: 1.75rem;
 }
 
 .route__step p {
   max-width: 32ch;
-  margin: 10px auto 0;
+  margin: 8px auto 0;
   color: var(--ink-2);
+  font-size: 1rem;
   line-height: 1.6;
 }
 
 /* Timbre : dents découpées, ombre portée sur le conteneur (le masque l'effacerait sinon) */
 .stamp {
-  width: min(240px, 72vw);
+  width: min(196px, 60vw);
   margin: 0 auto;
-  filter: drop-shadow(0 8px 10px rgba(26, 34, 51, 0.22));
-  transition: transform var(--t-slow) var(--ease-bounce);
+  filter: drop-shadow(0 6px 9px rgba(26, 34, 51, 0.2));
+  transition: transform var(--t-slow) var(--ease);
 }
 
-.stamp--a { transform: rotate(-5deg); }
+.stamp--a { transform: rotate(-4deg); }
 .stamp--b { transform: rotate(3deg); }
 .stamp--c { transform: rotate(-2deg); }
 
 .route__step:hover .stamp {
-  transform: rotate(0deg) scale(1.05);
+  transform: rotate(0deg) scale(1.04);
 }
 
 .stamp__paper {
-  --r: 7px;
+  --r: 6px;
   display: block;
-  padding: calc(var(--r) * 2.6);
+  padding: calc(var(--r) * 2.5);
   background: #fffcf3;
   -webkit-mask:
     radial-gradient(var(--r), #0000 98%, #000) round calc(-1.5 * var(--r)) calc(-1.5 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)),
@@ -590,87 +616,64 @@ html {
 
 /* ---------------------------------------------------------------- En classe : une page du carnet d'explorateur */
 .classroom {
-  max-width: 1180px;
+  width: min(100% - 2 * var(--gutter), 1024px);
 }
 
+/* Page lignée tous les 28 px, marge rouge : le papier d'un carnet d'écolier.
+   Chaque hauteur est un multiple de la ligne, et la ligne de base du texte se pose sur le trait. */
 .notebook {
+  --rule: 28px;
+  --margin-x: clamp(40px, 4.6vw, 60px);
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  gap: 0 clamp(28px, 5vw, 64px);
-  padding: 64px clamp(24px, 4vw, 56px) 0 clamp(64px, 7vw, 96px);
+  padding: var(--rule) clamp(24px, 4vw, 56px) var(--rule) calc(var(--margin-x) + clamp(24px, 3vw, 40px));
   border-radius: 6px 6px var(--r-lg) var(--r-lg);
-  /* Page lignée, marge rouge : le papier d'un carnet d'écolier */
   background:
-    linear-gradient(90deg, transparent clamp(40px, 4.6vw, 64px), rgba(214, 69, 58, 0.4) clamp(40px, 4.6vw, 64px) calc(clamp(40px, 4.6vw, 64px) + 2px), transparent calc(clamp(40px, 4.6vw, 64px) + 2px)),
-    repeating-linear-gradient(to bottom, transparent 0 31px, rgba(29, 85, 132, 0.16) 31px 32px) 0 -7px,
+    linear-gradient(90deg, transparent var(--margin-x), rgba(214, 69, 58, 0.4) var(--margin-x) calc(var(--margin-x) + 2px), transparent calc(var(--margin-x) + 2px)),
+    repeating-linear-gradient(to bottom, transparent 0 calc(var(--rule) - 1px), rgba(29, 85, 132, 0.16) calc(var(--rule) - 1px) var(--rule)) 0 -6px,
     var(--paper);
   box-shadow: var(--shadow-lift);
-  transform: rotate(-0.5deg);
+  transform: rotate(-0.4deg);
 }
 
-/* Ruban adhésif doré qui tient la page */
-.notebook::before {
-  content: "";
-  position: absolute;
-  top: -14px;
-  left: 50%;
-  width: 150px;
-  height: 30px;
-  margin-left: -75px;
-  background: rgba(231, 181, 82, 0.78);
-  box-shadow: 0 2px 4px rgba(26, 34, 51, 0.12);
-  transform: rotate(2deg);
-}
-
-/* Tout le texte de la page tient sur des lignes de 32 px : la ligne de base se pose sur le trait */
+/* Le titre occupe deux lignes du carnet ; le décalage pose sa ligne de base sur le trait, quelle que soit la taille */
 .notebook__intro h2 {
+  position: relative;
+  top: calc(20px - 0.28em);
   color: var(--navy);
-  font-size: clamp(2rem, 1.5rem + 1.4vw, 2.6rem);
-  font-weight: 800;
-  line-height: 64px;
+  font-size: clamp(2rem, 1.6rem + 1vw, 2.5rem);
+  line-height: calc(var(--rule) * 2);
 }
 
 .notebook__intro p {
-  max-width: 30ch;
-  margin-top: 0;
+  max-width: 72ch;
   color: var(--ink-2);
-  font-size: var(--step-1);
-  line-height: 32px;
+  font-size: 1.0625rem;
+  line-height: var(--rule);
 }
 
+/* Quatre usages en deux colonnes, une ligne blanche sous l'introduction : un titre sur une ligne, l'explication sur les suivantes */
 .notebook__list {
-  margin: 0;
-}
-
-.notebook__list div {
   display: grid;
-  grid-template-columns: 12.5rem minmax(0, 1fr);
-  column-gap: 18px;
-  align-items: start;
-}
-
-.notebook__list div + div {
-  margin-top: 32px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--rule) clamp(32px, 5vw, 72px);
+  margin: var(--rule) 0 0;
 }
 
 .notebook__list dt {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
+  height: var(--rule);
   color: var(--navy);
   font-family: var(--font-display);
-  font-variation-settings: "SOFT" 100;
-  font-size: var(--step-2);
-  font-weight: 750;
-  line-height: 32px;
+  font-size: 1.375rem;
+  line-height: var(--rule);
 }
 
 .notebook__list dt .icon {
-  align-self: center;
-  width: 30px;
-  height: 30px;
-  padding: 6px;
+  width: 26px;
+  height: 26px;
+  padding: 5px;
   border-radius: 50%;
   background: var(--gold-soft);
   color: var(--gold-ink);
@@ -679,18 +682,8 @@ html {
 .notebook__list dd {
   margin: 0;
   color: var(--ink-2);
-  line-height: 32px;
-}
-
-/* Le monstre marin de Münster nage en bas de la page */
-.notebook__monster {
-  grid-column: 1 / -1;
-  width: calc(100% + clamp(24px, 4vw, 56px) + clamp(64px, 7vw, 96px));
-  max-width: none;
-  height: auto;
-  margin: 32px calc(-1 * clamp(24px, 4vw, 56px)) 0 calc(-1 * clamp(64px, 7vw, 96px));
-  border-radius: 0 0 var(--r-lg) var(--r-lg);
-  border-top: 2px solid var(--gold);
+  font-size: 1rem;
+  line-height: var(--rule);
 }
 
 /* ---------------------------------------------------------------- Mouvement d'entrée : une seule fois, déjà visible par défaut */
@@ -698,67 +691,149 @@ html {
   .hero__title > * {
     animation: rise 800ms var(--ease) both;
   }
-  .hero__title > :nth-child(2) { animation-delay: 120ms; }
+  .hero__title > :nth-child(2) { animation-delay: 90ms; }
   .teaser {
     animation: rise 900ms 160ms var(--ease) both;
   }
 }
 
 @keyframes rise {
-  from { opacity: 0.001; transform: translateY(14px); }
+  from { opacity: 0.001; transform: translateY(12px); }
 }
 
 /* ---------------------------------------------------------------- Écrans moyens et téléphones */
 @media (max-width: 1080px) {
-  .welcome {
-    grid-template-columns: 1fr;
-  }
-
-  .welcome__text {
-    padding-top: 12px;
-  }
-
-  .teaser {
-    margin-top: 0;
-    max-width: 680px;
-  }
-
   .plates {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
-  .notebook {
+/* Tablette en portrait et téléphone : la planche passe sous le texte, centrée */
+@media (max-width: 860px) {
+  .welcome {
     grid-template-columns: 1fr;
+    padding-top: 28px;
+  }
+
+  .teaser {
+    justify-self: center;
+    width: 100%;
+    max-width: 640px;
+    margin-top: 0;
   }
 }
 
-@media (max-width: 760px) {
+/* Une colonne : chaque étape devient une ligne, le timbre à gauche du texte */
+@media (max-width: 860px) {
   .route {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 32px;
   }
 
   .route::before {
     display: none;
   }
-}
 
-@media (max-width: 680px) {
-  .hero {
-    height: 300px;
-    padding-bottom: 84px;
+  .route__step {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0 clamp(18px, 3vw, 28px);
+    align-items: center;
+    text-align: left;
   }
 
-  .hero__title h1 {
-    font-size: clamp(2.7rem, 1.6rem + 5vw, 3.4rem);
+  .route__step .stamp {
+    grid-row: 1 / span 2;
+    width: clamp(108px, 18vw, 140px);
+  }
+
+  .route__step h3 {
+    align-self: end;
+    margin-top: 0;
+    font-size: 1.5rem;
+  }
+
+  .route__step p {
+    align-self: start;
+    max-width: none;
+    margin: 6px 0 0;
+    font-size: 0.9375rem;
+  }
+}
+
+/* Tablette : liens plus serrés pour tenir sur la rangée */
+@media (max-width: 1000px) {
+  .hero__links a {
+    padding: 8px 10px;
+    font-size: 0.875rem;
   }
 
   .hero__links {
-    display: none;
+    margin-right: -10px;
   }
 
-  .welcome h2 {
-    font-size: var(--step-4);
+  .hero__tagline {
+    font-size: 0.9375rem;
+  }
+}
+
+/* Petite tablette et téléphone : la bande ne garde que la rose des vents, le nom et la devise */
+@media (max-width: 760px) {
+  .hero__links {
+    display: none;
+  }
+}
+
+/* Téléphone : bande encore plus courte ; on joue dès le premier écran */
+@media (max-width: 680px) {
+  .hero {
+    height: 104px;
+    padding-top: 16px;
+  }
+
+  .hero__brand {
+    gap: 12px;
+  }
+
+  .hero__emblem img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .hero__title h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero__tagline {
+    margin-top: 4px;
+    font-size: 0.875rem;
+  }
+
+  .welcome {
+    row-gap: 0;
+  }
+
+  .welcome__text {
+    display: contents;
+  }
+
+  .welcome h2 { order: 1; }
+  .welcome__lead { order: 2; margin-top: 10px; font-size: 1.125rem; }
+  .teaser { order: 3; margin-top: 22px; }
+  .welcome__more { order: 4; margin-top: 22px; font-size: 1rem; }
+  .welcome__actions { order: 5; margin-top: 20px; }
+  .welcome__note { order: 6; margin-top: 14px; }
+
+  .plate__map {
+    aspect-ratio: 2 / 1;
+  }
+
+  .welcome__actions {
+    flex-direction: column;
+  }
+
+  .welcome__actions .btn {
+    width: 100%;
   }
 
   .plates {
@@ -766,24 +841,16 @@ html {
   }
 
   .notebook {
-    padding: 64px 20px 0 52px;
+    --margin-x: 34px;
+    padding: var(--rule) 20px var(--rule) 52px;
     transform: none;
   }
 
-  .notebook__list div {
+  .notebook__list {
     grid-template-columns: 1fr;
   }
 
-  .notebook__list {
-    margin-top: 32px;
-  }
-
-  .notebook__monster {
-    width: calc(100% + 72px);
-    margin: 24px -20px 0 -52px;
-  }
-
   .teaser__prompt {
-    font-size: var(--step-2);
+    font-size: 1.375rem;
   }
 }

@@ -1,36 +1,29 @@
-/* Cartes interactives — socle commun : le carnet d'explorateur de Thomas (v1), en version améliorée. */
+/* Cartes interactives — socle commun : le carnet d'explorateur des grandes découvertes. */
 
+/* IM Fell : les caractères gravés du XVIIe siècle, contemporains des cartes de Blaeu et Hondius. */
 @font-face {
-  font-family: "Fraunces";
+  font-family: "IM Fell DW Pica";
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400;
   font-display: swap;
-  src: url("../fonts/fraunces-latin-normal.woff2") format("woff2");
+  src: url("../fonts/im-fell-dw-pica-latin-normal.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: "Fraunces";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url("../fonts/fraunces-latin-ext-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-@font-face {
-  font-family: "Fraunces";
+  font-family: "IM Fell DW Pica";
   font-style: italic;
-  font-weight: 100 900;
+  font-weight: 400;
   font-display: swap;
-  src: url("../fonts/fraunces-latin-italic.woff2") format("woff2");
+  src: url("../fonts/im-fell-dw-pica-latin-italic.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: "Fraunces";
-  font-style: italic;
-  font-weight: 100 900;
+  font-family: "IM Fell English SC";
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url("../fonts/fraunces-latin-ext-italic.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  src: url("../fonts/im-fell-english-sc-latin-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: "Manrope";
@@ -48,22 +41,6 @@
   src: url("../fonts/manrope-latin-ext.woff2") format("woff2");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
-@font-face {
-  font-family: "Parisienne";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/parisienne-latin.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: "Parisienne";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/parisienne-latin-ext.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
 /* Replis aux mesures des vraies polices : le texte ne bouge pas quand elles arrivent. */
 @font-face {
   font-family: "Manrope Fallback";
@@ -74,11 +51,11 @@
   line-gap-override: 0%;
 }
 @font-face {
-  font-family: "Fraunces Fallback";
+  font-family: "Fell Fallback";
   src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Liberation Serif"), local("Times");
-  size-adjust: 99.2%;
-  ascent-override: 98.8%;
-  descent-override: 26.2%;
+  size-adjust: 100%;
+  ascent-override: 90%;
+  descent-override: 25%;
   line-gap-override: 0%;
 }
 
@@ -129,8 +106,8 @@
   --miss-soft: #fadbd5;
 
   --font: "Manrope", "Manrope Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Fraunces", "Fraunces Fallback", Georgia, serif;
-  --font-script: "Parisienne", "Brush Script MT", "Segoe Script", cursive;
+  --font-display: "IM Fell DW Pica", "Fell Fallback", Georgia, serif;
+  --font-caps: "IM Fell English SC", "IM Fell DW Pica", "Fell Fallback", Georgia, serif;
 
   --step--1: 0.875rem;
   --step-0: 1rem;
@@ -142,7 +119,7 @@
 
   --r-sm: 8px;
   --r-md: 12px;
-  --r-lg: 18px;
+  --r-lg: 16px;
   --r-xl: 24px;
   --r-pill: 999px;
 
@@ -157,6 +134,12 @@
   --t-slow: 420ms;
 
   --focus: 0 0 0 2px var(--paper), 0 0 0 5px var(--gold-deep);
+
+  /* Une seule colonne de contenu : barre de l'en-tête, sections et pied de page tombent à l'aplomb */
+  --page: 1240px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --column: min(100% - 2 * var(--gutter), var(--page) - 2 * var(--gutter));
+  --ornament: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 12'%3E%3Cg fill='none' stroke='%23c8912b' stroke-width='1.5'%3E%3Cpath d='M0 6h52M80 6h52'/%3E%3Cpath d='M66 1l5 5-5 5-5-5z' fill='%23e7b552'/%3E%3Ccircle cx='56' cy='6' r='1.6' fill='%23c8912b' stroke='none'/%3E%3Ccircle cx='76' cy='6' r='1.6' fill='%23c8912b' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
 
   /* Bords déchirés de la carte ancienne (assets/img/bord-dechire-*.png), intégrés pour marcher aussi en file:// */
   --bord-dechire-bas: url("data:image/png;base64,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vhYSeHUTWiflU7wJf1s3RheBXLF9s+kxUu3xqAEJb8GHN/kk7+VryA8I2VjLfgZm7CACAKwr1h57PhL3PdKM3YqlizF1m//WcP9WZ6fA0pMdTHoACUyAAOW8HMUjHstK7aQo2f7Zclx2EKRly+aMFFizgwdbYyR2XlLvN7k0AQA2oK4dsE7l7JZOvcQGLW20zc1d2naNzuc9S81xjpgI0bGaPJZXyFuvxqzR+3kCAOwlVQtDBsFTbVuu3zvCjAWRLTXPdBvd0+aXtN2xCZ9crNYTV5XU2ANg/D77AIAL0Q1Lb6qnVF2LVANWsqLCPrbNhWkf3xbUbK25MWOQRI4r9Xpa6QGg1EQLeTMBALVqCyun2rZH4vb6/6nb650lNRP3V+lU155rez7+RG4nYudafpd632rP4SrF3gEA6+jZXaHTQ43YCalrTAg7pjBCa59f0orKrtCX4I9xpNrp3teT2jU741wByGAHCHAPsoOhJB9kT8Eu7/FnBEIjAje7Y8VLJ0LObQBACdt2tg5UxNpg+3g6HYZue1/Dz1QZM2p07caedxk0sedV/07E0pG1nnf7eLx/AIAS3qI+L36o3VFh1ewkrT1++//WPn9J21kzRgLg4pgAAWDZwKM3BdXISYTZ+bu99BUAAJTQg+itbV+qBkfN49nBfOS1njM94DSiJph9PCY/AAClYmk0tZ4Fj/pxR06CjEh9bdtL4h8A/2ECBEBOTeGxt/A1SSHbYkd23luKvtp8pwwmAABm6Ul7pFc62nbKG7x4BOpQHUnHN94iCk3iJp2Co/a5QsP9AAAooSdBWuuDjCx6LscjxyJtZ+niRzI3AEhiAgRAKRt82M75EYMwNTtAvKKxMiFDcAQAWJHOUU17dT28fwCAK5D2yusvl/a1j+z/y7/lue1xAEASEyAAWuhVqkfnzNSrZFMpq1pWXAIAAAAAcEe2jlgspdbRfe0zxx8AbIAJEABXRc0OAAAAAADmKKkpAgDLYwIEAAAAAAAAAABs539nHwAAAAAAAAAAAMBoTIAAAAAAAAAAAIDtMAECAAAAAAAAAAC2wwQIAAAAAAAAAADYzv8B+BVJpaflTigAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjYtMTEtMjRUMTk6MTA6MTkrMDA6MDBOwyo/AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI2LTExLTI0VDE5OjEwOjE5KzAwOjAwP56SgwAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNi0xMS0yNFQxOToxMDoxOSswMDowMGiLs1wAAAChdEVYdGltcGVjY2FibGU6cHJvbXB0AERlcml2ZWQgb3JnYW5pYyB0b3JuLXBhcmNobWVudCBib3R0b20tZWRnZSBhbHBoYSBtYXNrIGV4dHJhY3RlZCBmcm9tIFRob21hcydzIHYxIGJhbm5lci13b3JsZC53ZWJwIHRvcm4gcGFyY2htZW50IHNpbGhvdWV0dGUsIFJHQkEgUE5HIDE2MDB4NjIuoW3k8QAAAABJRU5ErkJggg==");
@@ -199,11 +182,13 @@ h1, h2, h3, h4, p, ul, ol, dl, dd, figure {
   margin: 0;
 }
 
+/* Les titres sont gravés : une seule graisse, jamais de gras simulé */
 h1, h2, h3 {
   font-family: var(--font-display);
-  font-variation-settings: "SOFT" 100, "WONK" 0;
-  line-height: 1.12;
-  letter-spacing: -0.01em;
+  font-weight: 400;
+  font-synthesis: none;
+  line-height: 1.1;
+  letter-spacing: 0;
   text-wrap: balance;
 }
 
@@ -314,10 +299,14 @@ a {
   letter-spacing: 0;
 }
 
-.script {
-  font-family: var(--font-script);
-  font-weight: 400;
-  letter-spacing: 0.01em;
+/* Filet de cartographe : deux traits dorés et un losange, sous un titre */
+.ornament,
+.section-title::after {
+  content: "";
+  display: block;
+  width: 132px;
+  height: 12px;
+  background: var(--ornament) center / 132px 12px no-repeat;
 }
 
 /* Bandeau « carte ancienne » : en-tête, pied de page, barre des cartes */
@@ -357,7 +346,7 @@ a {
   min-height: 46px;
   padding: 0 20px;
   border: 1.5px solid var(--btn-line);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--btn-bg);
   color: var(--btn-fg);
   font-weight: 700;
@@ -419,10 +408,10 @@ a {
 }
 
 .btn--lg {
-  min-height: 54px;
-  padding: 0 26px;
-  font-size: var(--step-1);
-  border-radius: 16px;
+  min-height: 52px;
+  padding: 0 24px;
+  font-size: 1.0625rem;
+  border-radius: 14px;
 }
 
 .btn:disabled,
@@ -621,53 +610,175 @@ a.chip:hover {
   stroke: var(--gold-deep);
 }
 
-/* Pied de page : la carte ancienne, bord déchiré en haut */
+/* Pied de page : une bande courte de carte ancienne, bord déchiré fin en haut. Une rangée (nom, liens, signature),
+   puis une ligne de mentions. */
 .site-footer {
   position: relative;
-  margin-top: clamp(48px, 7vw, 88px);
-  padding: 72px clamp(20px, 4vw, 48px) 30px;
-  color: #fff;
-  -webkit-mask: var(--bord-dechire-haut) top center / 1600px 71px repeat-x, linear-gradient(#000 0 0) bottom / 100% calc(100% - 60px) no-repeat;
-  mask: var(--bord-dechire-haut) top center / 1600px 71px repeat-x, linear-gradient(#000 0 0) bottom / 100% calc(100% - 60px) no-repeat;
+  margin-top: clamp(56px, 7vw, 96px);
+  padding: 50px 0 20px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: var(--step--1);
+  text-shadow: 0 1px 2px rgba(15, 23, 42, 0.55);
+  -webkit-mask: var(--bord-dechire-haut) top center / max(1100px, 100%) 36px no-repeat, linear-gradient(#000 0 0) bottom / 100% calc(100% - 30px) no-repeat;
+  mask: var(--bord-dechire-haut) top center / max(1100px, 100%) 36px no-repeat, linear-gradient(#000 0 0) bottom / 100% calc(100% - 30px) no-repeat;
 }
 
-.site-footer__inner {
+/* Le voile de l'en-tête, plus appuyé : la gravure reste miel et chaque texte garde 4,5:1 sur ses zones les plus claires
+   (mesuré sur le fond réel) ; le bas, où se lisent les mentions, s'assombrit encore un peu */
+.site-footer.banner {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0) 40%, rgba(15, 23, 42, 0.4) 100%),
+    radial-gradient(135% 120% at 50% 40%, rgba(15, 23, 42, 0.52) 0%, rgba(15, 23, 42, 0.65) 55%, rgba(15, 23, 42, 0.76) 85%),
+    url("../img/carte-ancienne.webp");
+  background-blend-mode: multiply, multiply, normal;
+  background-size: 100% 100%, 100% 100%, cover;
+  background-position: center, center, center 62%;
+}
+
+@media (max-width: 760px) {
+  .site-footer.banner {
+    background-image:
+      linear-gradient(rgba(15, 23, 42, 0) 40%, rgba(15, 23, 42, 0.4) 100%),
+      radial-gradient(135% 120% at 50% 40%, rgba(15, 23, 42, 0.52) 0%, rgba(15, 23, 42, 0.65) 55%, rgba(15, 23, 42, 0.76) 85%),
+      url("../img/carte-ancienne-720.webp");
+  }
+}
+
+.site-footer__bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 14px 40px;
-  max-width: 1360px;
+  gap: 14px 32px;
+  width: var(--column);
   margin: 0 auto;
-  font-size: var(--step--1);
-  font-weight: 600;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 }
 
-.site-footer__sources {
-  color: rgba(255, 255, 255, 0.86);
-  font-weight: 500;
-}
-
-.site-footer a {
+.site-footer .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.site-footer .brand img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.site-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 22px;
+}
+
+.site-footer__nav a {
+  padding: 6px 0;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--t-fast) var(--ease);
+}
+
+.site-footer__nav a:hover {
+  color: #f7e0a6;
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
 }
 
 .made-by {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
   text-decoration: none;
 }
 
 .made-by img {
-  height: 30px;
+  height: 26px;
   width: auto;
-  transition: transform var(--t-med) var(--ease-bounce);
+  transition: transform var(--t-med) var(--ease);
 }
 
 .made-by:hover img {
-  transform: scale(1.06);
+  transform: translateY(-2px);
+}
+
+/* Mentions : droit d'usage à gauche, sources à droite, alignées à gauche dans leur colonne */
+.site-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 32px;
+  width: var(--column);
+  margin: 14px auto 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.site-footer__legal p:last-child {
+  max-width: 86ch;
+  text-wrap: pretty;
+}
+
+/* Tablette : les liens internes restent dans la barre de l'en-tête ; la rangée du pied de page ne garde que les cartes */
+@media (max-width: 1000px) {
+  .site-footer__page {
+    display: none;
+  }
+}
+
+/* La signature reste entière, en petite légende posée sur le logo */
+@media (max-width: 860px) {
+  .made-by {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+  }
+
+  .made-by__text {
+    font-size: 0.6875rem;
+    line-height: 1.2;
+  }
+
+  .made-by img {
+    height: 22px;
+  }
+}
+
+/* Téléphone : une seule rangée, les trois cartes et la signature (le nom et la rose des vents sont déjà dans
+   l'en-tête) ; la bande reste courte */
+@media (max-width: 760px) {
+  .site-footer {
+    padding-top: 46px;
+  }
+
+  .site-footer__bar {
+    gap: 10px 16px;
+  }
+
+  .site-footer .brand {
+    display: none;
+  }
+
+  .site-footer__nav {
+    gap: 2px 16px;
+  }
+
+  .site-footer__legal {
+    margin-top: 10px;
+    padding-top: 10px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

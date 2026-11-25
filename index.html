@@ -18,47 +18,49 @@
 <body class="home">
 <!--
 THESIS: un carnet d'explorateur, pas une page produit : la carte ancienne de Thomas ouvre et ferme la page, sa carte pixelisée tient lieu de papier, et l'on joue dès le premier écran ; refuse la vitrine sobre en blanc et gris.
-OWN-WORLD: parchemin et carte ancienne (bandeaux à bord déchiré), papier crème sur carte du monde pixelisée, encre bleu marine, laiton doré, titres en écriture (Parisienne) et en Fraunces arrondi ; atlas d'école en couleurs pastel, timbres de gravures anciennes.
+OWN-WORLD: parchemin et carte ancienne (bandeaux à bord déchiré), papier crème sur carte du monde pixelisée, encre bleu marine, laiton doré, titres gravés en IM Fell (caractères du XVIIe siècle) et petites capitales, filet doré à losange ; atlas d'école en couleurs pastel, timbres de gravures anciennes.
 STORY: on reconnaît le monde de la v1, on trouve un pays sur la planche jouable, on choisit une carte, on comprend le voyage en trois timbres, puis on part explorer.
-FIRST VIEWPORT: bandeau carte ancienne plein large, titre en écriture centré ; dessous, « Bienvenue à bord ! » et deux boutons à gauche, planche Europe jouable à droite qui chevauche le bord déchiré.
+FIRST VIEWPORT: bande courte de carte ancienne (rose des vents, titre gravé et devise à gauche, liens à droite, bord déchiré) ; dessous, « Bienvenue à bord ! » et deux boutons à gauche, planche Europe jouable à droite qui chevauche le bord déchiré.
 FORM: monde épinglé par Thomas le 2026-11-24 (sa v1 : carte ancienne en tête et en pied, carte pixelisée en fond) ; pas de tirage, le précédent (734cc3ef) est abandonné.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 -->
   <a class="skip-link" href="#cartes">Aller aux cartes</a>
 
   <header class="hero banner">
-    <nav class="hero__nav" aria-label="Sections">
-      <a class="brand" href="./" aria-label="Cartes interactives, accueil">
-        <img src="assets/img/boussole.webp" alt="" width="44" height="44">
-        <span>Cartes interactives</span>
-      </a>
-      <div class="hero__links">
+    <div class="hero__bar">
+      <div class="hero__brand">
+        <a class="hero__emblem" href="./" aria-label="Cartes interactives, accueil">
+          <img src="assets/img/boussole.webp" alt="" width="48" height="48">
+        </a>
+        <div class="hero__title">
+          <h1>Cartes interactives</h1>
+          <p class="hero__tagline">Explorez le monde de manière interactive</p>
+        </div>
+      </div>
+      <nav class="hero__links" aria-label="Sections">
         <a href="#cartes">Les cartes</a>
         <a href="#fonctionnement">Comment ça marche</a>
         <a href="#classe">En classe</a>
-      </div>
-    </nav>
-    <div class="hero__title">
-      <h1 class="script">Cartes interactives</h1>
-      <p class="script hero__tagline">Explorez le monde de manière interactive</p>
+      </nav>
     </div>
   </header>
 
   <main>
     <section class="welcome" aria-labelledby="welcome-title">
       <div class="welcome__text">
-        <h2 id="welcome-title">Bienvenue à bord !</h2>
-        <p class="welcome__lead">Découvre les pays d'Europe, les cantons suisses et les départements français. Zoome dans la carte, passe d'une région à sa voisine et ouvre sa fiche, avec son drapeau et ses chiffres. Puis relève le défi : chaque erreur est corrigée sur la carte.</p>
+        <h2 id="welcome-title">Bienvenue à bord&nbsp;!</h2>
+        <p class="welcome__lead">Découvre les pays d'Europe, les cantons suisses et les départements français.</p>
+        <p class="welcome__more">Zoome dans la carte, passe d'une région à sa voisine et ouvre sa fiche, avec son drapeau et ses chiffres. Puis relève le défi&nbsp;: chaque erreur est corrigée sur la carte.</p>
         <div class="welcome__actions">
           <a class="btn btn--primary btn--lg" href="#cartes">Choisir une carte</a>
-          <a class="btn btn--gold btn--lg" href="maps/france/index.html">Nouveau : la France</a>
+          <a class="btn btn--gold btn--lg" href="maps/france/index.html">Nouveau&nbsp;: la France</a>
         </div>
         <p class="welcome__note">Gratuit, sans compte et sans publicité.</p>
       </div>
 
       <figure class="teaser" aria-label="Essai : trois pays d'Europe à trouver sur la carte">
         <figcaption class="teaser__bar">
-          <span class="teaser__prompt" aria-live="polite"><span class="teaser__ask">Trouve :</span> <strong data-teaser-target>…</strong></span>
+          <span class="teaser__prompt" aria-live="polite"><span class="teaser__ask">Trouve&nbsp;:</span> <strong data-teaser-target>…</strong></span>
           <span class="teaser__count" data-teaser-count>0 / 3</span>
         </figcaption>
         <div class="teaser__map">
@@ -84,12 +86,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               <h3 id="plate-europe">Carte de l'Europe</h3>
               <p class="plate__text">Explore les 47 pays d'Europe, leurs capitales et leurs drapeaux.</p>
               <ul class="plate__features">
-                <li data-icon="check">47 pays</li>
-                <li data-icon="check">Capitales</li>
-                <li data-icon="check">Drapeaux</li>
+                <li><span class="num">47</span> pays</li>
+                <li>Capitales</li>
+                <li>Drapeaux</li>
               </ul>
               <p class="plate__record" data-record="europe" hidden></p>
-              <a class="btn btn--primary btn--block" href="maps/europe/index.html">Ouvrir la carte</a>
+              <a class="btn btn--block plate__open" href="maps/europe/index.html">Ouvrir la carte<span data-icon="next" aria-hidden="true"></span></a>
             </div>
           </article>
         </li>
@@ -103,12 +105,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               <h3 id="plate-suisse">Carte de la Suisse</h3>
               <p class="plate__text">Découvre les 26 cantons, leurs chefs-lieux et leurs drapeaux.</p>
               <ul class="plate__features">
-                <li data-icon="check">26 cantons</li>
-                <li data-icon="check">Chefs-lieux</li>
-                <li data-icon="check">Drapeaux</li>
+                <li><span class="num">26</span> cantons</li>
+                <li>Chefs-lieux</li>
+                <li>Drapeaux</li>
               </ul>
               <p class="plate__record" data-record="suisse" hidden></p>
-              <a class="btn btn--primary btn--block" href="maps/suisse/index.html">Ouvrir la carte</a>
+              <a class="btn btn--block plate__open" href="maps/suisse/index.html">Ouvrir la carte<span data-icon="next" aria-hidden="true"></span></a>
             </div>
           </article>
         </li>
@@ -123,12 +125,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               <h3 id="plate-france">Carte de la France</h3>
               <p class="plate__text">Parcours les 96 départements de métropole, leurs numéros et leurs préfectures.</p>
               <ul class="plate__features">
-                <li data-icon="check">96 départements</li>
-                <li data-icon="check">Numéros</li>
-                <li data-icon="check">Préfectures</li>
+                <li><span class="num">96</span> départements</li>
+                <li>Numéros</li>
+                <li>Préfectures</li>
               </ul>
               <p class="plate__record" data-record="france" hidden></p>
-              <a class="btn btn--primary btn--block" href="maps/france/index.html">Ouvrir la carte</a>
+              <a class="btn btn--block plate__open" href="maps/france/index.html">Ouvrir la carte<span data-icon="next" aria-hidden="true"></span></a>
             </div>
           </article>
         </li>
@@ -142,8 +144,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               <h3 id="plate-monde">Carte du monde</h3>
               <p class="plate__text">Les continents et les pays du monde entier arrivent bientôt.</p>
               <ul class="plate__features">
-                <li data-icon="compass">Continents</li>
-                <li data-icon="compass">Pays du monde</li>
+                <li>Continents</li>
+                <li>Pays du monde</li>
               </ul>
               <span class="btn btn--block" aria-disabled="true" data-icon="lock">En préparation</span>
             </div>
@@ -163,12 +165,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <li class="route__step">
           <figure class="stamp stamp--b"><span class="stamp__paper"><img src="assets/img/monstre-marin.webp" alt="" width="467" height="276" loading="lazy"></span></figure>
           <h3>Découvre</h3>
-          <p>Chaque région a sa fiche : capitale, population, superficie, langues et voisins. Un clic sur un voisin t'y emmène directement.</p>
+          <p>Chaque région a sa fiche&nbsp;: capitale, population, superficie, langues et voisins. Un clic sur un voisin t'y emmène directement.</p>
         </li>
         <li class="route__step">
-          <figure class="stamp stamp--c"><span class="stamp__paper"><img src="assets/img/serpent-de-mer.webp" alt="" width="425" height="375" loading="lazy"></span></figure>
+          <figure class="stamp stamp--c"><span class="stamp__paper"><img src="assets/img/navire-victoria.webp" alt="" width="360" height="360" loading="lazy"></span></figure>
           <h3>Relève le défi</h3>
-          <p>Retrouve les régions sur la carte muette : trois essais par question, puis la carte montre la réponse. Gagne jusqu'à trois étoiles et rejoue tes erreurs.</p>
+          <p>Retrouve les régions sur la carte muette&nbsp;: trois essais par question, puis la carte montre la réponse. Gagne jusqu'à trois étoiles et rejoue tes erreurs.</p>
         </li>
       </ol>
     </section>
@@ -185,7 +187,6 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <div><dt data-icon="keyboard">Au clavier</dt><dd>Recherche, déplacement et choix des régions sans souris.</dd></div>
           <div><dt data-icon="lock">Sans compte</dt><dd>Ni inscription, ni publicité, ni suivi. Les records restent dans le navigateur.</dd></div>
         </dl>
-        <img class="notebook__monster" src="assets/img/serpent-vert.webp" alt="" width="900" height="223" loading="lazy">
       </div>
     </section>
   </main>
@@ -193,10 +194,23 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <svg class="legend-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><pattern id="hatch-legend" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect class="pattern-bg" width="6" height="6"/><rect class="pattern-ink" width="2.2" height="6"/></pattern><pattern id="dots-legend" width="5" height="5" patternUnits="userSpaceOnUse"><rect class="pattern-bg" width="5" height="5"/><circle class="pattern-ink" cx="2.5" cy="2.5" r="1"/></pattern></defs></svg>
 
   <footer class="site-footer banner">
-    <div class="site-footer__inner">
+    <div class="site-footer__bar">
+      <a class="brand" href="./" aria-label="Cartes interactives, accueil">
+        <img src="assets/img/boussole.webp" alt="" width="36" height="36" loading="lazy">
+        <span>Cartes interactives</span>
+      </a>
+      <nav class="site-footer__nav" aria-label="Liens du site">
+        <a href="maps/europe/index.html">Europe</a>
+        <a href="maps/suisse/index.html">Suisse</a>
+        <a href="maps/france/index.html">France</a>
+        <a class="site-footer__page" href="#fonctionnement">Comment ça marche</a>
+        <a class="site-footer__page" href="#classe">En classe</a>
+      </nav>
+      <a class="made-by" href="https://www.lecagibi.ch" rel="noopener"><span class="made-by__text">Conçu et propulsé par</span> <img src="assets/lecagibi_logo_Cff.png" alt="Le Cagibi" width="306" height="92" loading="lazy"></a>
+    </div>
+    <div class="site-footer__legal">
       <p>© <span data-year>2026</span> Cartes interactives · usage pédagogique autorisé</p>
-      <p class="site-footer__sources">Fonds de carte : Natural Earth, OFS et swisstopo, IGN. Données : Banque mondiale, Eurostat, OFS, Insee. Gravures : Olaus Magnus, Sebastian Münster, Emanuel Bowen (domaine public, Wikimedia Commons).</p>
-      <a class="made-by" href="https://www.lecagibi.ch" rel="noopener">Conçu et propulsé par <img src="assets/lecagibi_logo_Cff.png" alt="Le Cagibi" width="306" height="92"></a>
+      <p>Fonds de carte&nbsp;: Natural Earth, OFS, swisstopo, IGN. Données&nbsp;: Banque mondiale, Eurostat, OFS, Insee. Gravures du domaine public&nbsp;: Bowen, Münster, Ortelius.</p>
     </div>
   </footer>
 
